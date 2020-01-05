@@ -36,7 +36,7 @@ module.exports = {
         // This is field under which it's accessible
         fieldName: `latin`,
         // Url to query from
-        // url: `http://localhost:8080/graphql`,
+        url: ``,
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
