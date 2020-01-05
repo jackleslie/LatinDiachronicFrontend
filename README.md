@@ -1,97 +1,48 @@
-<!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
-<p align="center">
-  <a href="https://www.gatsbyjs.org">
-    <img alt="Gatsby" src="https://www.gatsbyjs.org/monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby's default starter
-</h1>
+# Latin Diachronic Frontend
 
-Kick off your project with this default boilerplate. This starter ships with the main Gatsby configuration files you might need to get up and running blazing fast with the blazing fast app generator for React.
+[![Netlify Status](https://api.netlify.com/api/v1/badges/5d6be334-38cd-44f5-b5cb-915105d3d787/deploy-status)](https://app.netlify.com/sites/latin/deploys)
 
-_Have another more specific idea? You may want to check out our vibrant collection of [official and community-created starters](https://www.gatsbyjs.org/docs/gatsby-starters/)._
+The Latin Diachronic Database is a project of Digital Humanities invented by Tommaso Spinelli (Ph.D. candidate, Classics, St. Andrews University) and co-developed with Giacomo Fenzi (Computer Science and Mathematics student, St. Andrews University). This project aims to create an innovative toolkit for the quantitative computational analysis of the Latin language as well as to support and further enhance the digital study of ancient intertextuality.
 
-## 🚀 Quick start
+For more information on the toolkit view the [original repository](https://github.com/WizardOfMenlo/LatinDiachronicDatabase).
 
-1.  **Create a Gatsby site.**
+This project is an intuitive and easy to use front-end for the toolkit, developed by **Jack Leslie** in conjunction with the original authors **Tommaso Spinelli** and **Giacomo Fenzi**.
 
-    Use the Gatsby CLI to create a new site, specifying the default starter.
+## Using the live web application
 
-    ```shell
-    # create a new Gatsby site using the default starter
-    gatsby new my-default-starter https://github.com/gatsbyjs/gatsby-starter-default
-    ```
+Currently the latest build of the `master` branch is deployed via [Netlify](https://www.netlify.com) and is available at the link [latin.netlify.com](https://latin.netlify.com). You can also run and develop it locally by cloning this repository and starting a development server.
 
-1.  **Start developing.**
+## Developing locally
 
-    Navigate into your new site’s directory and start it up.
+Ensure you have [Node](https://nodejs.org) and [Yarn](https://yarnpkg.com) installed. To run the development server fun the following commands:
 
-    ```shell
-    cd my-default-starter/
-    gatsby develop
-    ```
+```
+# This command will install dependencies
+yarn
 
-1.  **Open the source code and start editing!**
+# This command will run the development server
+yarn start
+```
 
-    Your site is now running at `http://localhost:8000`!
+## Using Docker
 
-    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.org/tutorial/part-five/#introducing-graphiql)._
+You can use the web app in conjunction with the database using Docker, provided you have the database
+files necessary in a top level folder called `data/`. You'll also need Docker Compose installed. To
+use both the web app and the database, run the following command:
 
-    Open the `my-default-starter` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
+```
+docker-compose up
+```
 
-## 🧐 What's inside?
+To rebuild the frontend without restarting the database, run:
 
-A quick look at the top-level files and directories you'll see in a Gatsby project.
+```
+docker-compose build latin-diachronic-frontend
+docker-compose up -d
+```
 
-    .
-    ├── node_modules
-    ├── src
-    ├── .gitignore
-    ├── .prettierrc
-    ├── gatsby-browser.js
-    ├── gatsby-config.js
-    ├── gatsby-node.js
-    ├── gatsby-ssr.js
-    ├── LICENSE
-    ├── package-lock.json
-    ├── package.json
-    └── README.md
+## Authors
 
-1.  **`/node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages) are automatically installed.
-
-2.  **`/src`**: This directory will contain all of the code related to what you will see on the front-end of your site (what you see in the browser) such as your site header or a page template. `src` is a convention for “source code”.
-
-3.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
-
-4.  **`.prettierrc`**: This is a configuration file for [Prettier](https://prettier.io/). Prettier is a tool to help keep the formatting of your code consistent.
-
-5.  **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.org/docs/browser-apis/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
-
-6.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.org/docs/gatsby-config/) for more detail).
-
-7.  **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.org/docs/node-apis/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
-
-8.  **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.org/docs/ssr-apis/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
-
-9.  **`LICENSE`**: Gatsby is licensed under the MIT license.
-
-10. **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
-
-11. **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
-
-12. **`README.md`**: A text file containing useful reference information about your project.
-
-## 🎓 Learning Gatsby
-
-Looking for more guidance? Full documentation for Gatsby lives [on the website](https://www.gatsbyjs.org/). Here are some places to start:
-
-- **For most developers, we recommend starting with our [in-depth tutorial for creating a site with Gatsby](https://www.gatsbyjs.org/tutorial/).** It starts with zero assumptions about your level of ability and walks through every step of the process.
-
-- **To dive straight into code samples, head [to our documentation](https://www.gatsbyjs.org/docs/).** In particular, check out the _Guides_, _API Reference_, and _Advanced Tutorials_ sections in the sidebar.
-
-## 💫 Deploy
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-default)
-
-<!-- AUTO-GENERATED-CONTENT:END -->
+- **Jack Leslie** - _Developer_ - [jackleslie](https://github.com/jackleslie)
+- **Giacomo Fenzi** - _Developer_ - [WizardOfMenlo](https://github.com/WizardOfMenlo)
+- **Tommaso Spinelli** - _Inventor/Latinist_ - [tommasospinelli](https://github.com/tommasospinelli)

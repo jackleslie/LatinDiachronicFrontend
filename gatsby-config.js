@@ -1,10 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: `Latin Diachronic Frontend`,
+    description: `Quantitative analysis of Latin literature.`,
+    author: `@jackleslie`,
   },
   plugins: [
+    `gatsby-plugin-chakra-ui`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -25,6 +26,17 @@ module.exports = {
         theme_color: `#663399`,
         display: `minimal-ui`,
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+      },
+    },
+    {
+      resolve: `gatsby-source-graphql`,
+      options: {
+        // This type will contain remote schema Query type
+        typeName: `LATIN`,
+        // This is field under which it's accessible
+        fieldName: `latin`,
+        // Url to query from
+        url: `http://localhost:8080/graphql`,
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
