@@ -13,7 +13,8 @@ import gql from "graphql-tag"
 import { useQuery } from "@apollo/react-hooks"
 
 function ResultsPage({ location }) {
-  const { authors = [], lemma = "" } = location.state
+  const authors = location && location.state && location.state.authors
+  const lemma = location && location.state && location.state.lemma
   const APOLLO_QUERY = gql`
     {
       latin {
