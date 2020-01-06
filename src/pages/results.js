@@ -1,10 +1,33 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
-import { Flex, Box, Text, Heading, Spinner } from "@chakra-ui/core"
+import {
+  Flex,
+  Box,
+  Text,
+  Heading,
+  Spinner,
+  Alert,
+  AlertIcon,
+} from "@chakra-ui/core"
+import gql from "graphql-tag"
+import { useQuery } from "@apollo/react-hooks"
 
 function ResultsPage({ location }) {
   const { authors, lemma } = location.state
-  console.log(authors, lemma)
+  const APOLLO_QUERY = gql`
+    {
+      latin {
+        lemma(lemma: "${lemma}") {
+          count
+          occurrences {
+            line
+          }
+        }
+      }
+    }
+  `
+  const { loading, error, data } = useQuery(APOLLO_QUERY)
+  console.log(error)
   return (
     <Flex justify="center">
       <Box p={8} maxWidth="480px">
@@ -12,13 +35,27 @@ function ResultsPage({ location }) {
           <Link to="/">Latin Diachronic Analysis</Link>
         </Heading>
         <Flex justify="center">
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-          />
+          {loading && (
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+            />
+          )}
+          {data && (
+            <Alert status="success">
+              <AlertIcon />
+              Successful query!
+            </Alert>
+          )}
+          {error && (
+            <Alert status="error">
+              <AlertIcon />
+              There was an error processing your request
+            </Alert>
+          )}
         </Flex>
       </Box>
     </Flex>
