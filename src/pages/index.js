@@ -10,6 +10,7 @@ import {
   Heading,
   Button,
 } from "@chakra-ui/core"
+import { Link } from "gatsby"
 
 import { AuthorSearch } from "../components"
 
@@ -17,13 +18,13 @@ function IndexPage({ data }) {
   const { authors } = data.latin
   const [authorsToSearch, setAuthorsToSearch] = useState([])
   const [lemmaToSearch, setLemmaToSearch] = useState("")
-  console.log(authorsToSearch)
-  console.log(lemmaToSearch)
+  const [clicked, setClicked] = useState(false)
+
   return (
     <Flex justify="center">
-      <Box p={8} maxWidth="480px">
-        <Heading mb={6} textAlign="center" fontSize={["24px", "30px"]}>
-          Latin Diachronic Analysis
+      <Box p={8} maxWidth="400px">
+        <Heading mb={6} textAlign="center" fontSize={["24px", "27px"]}>
+          <Link to="/">Latin Diachronic Analysis</Link>
         </Heading>
         <Stack spacing={3}>
           <FormControl>
@@ -34,7 +35,7 @@ function IndexPage({ data }) {
               authors.
             </FormHelperText>
           </FormControl>
-          <FormControl>
+          <FormControl isRequired>
             <FormLabel htmlFor="lemma">Lemma</FormLabel>
             <Input
               type="lemma"
@@ -42,6 +43,8 @@ function IndexPage({ data }) {
               aria-describedby="lemma-helper-text"
               value={lemmaToSearch}
               onChange={e => setLemmaToSearch(e.target.value)}
+              onFocus={() => setClicked(false)}
+              isInvalid={clicked}
             />
             <FormHelperText id="lemma-helper-text">
               Enter any lemma or a wordform.
@@ -49,9 +52,21 @@ function IndexPage({ data }) {
           </FormControl>
         </Stack>
         <Flex justify="center">
-          <Button mt={6} width={["100%", "60%"]} disabled={!lemmaToSearch}>
-            Search
-          </Button>
+          {lemmaToSearch ? (
+            <Link
+              to="/results"
+              state={{ authors: authorsToSearch, lemma: lemmaToSearch }}
+              style={{ width: "100%" }}
+            >
+              <Button mt={6} width="100%">
+                Search
+              </Button>
+            </Link>
+          ) : (
+            <Button mt={6} width="100%" onClick={() => setClicked(true)}>
+              Search
+            </Button>
+          )}
         </Flex>
       </Box>
     </Flex>
