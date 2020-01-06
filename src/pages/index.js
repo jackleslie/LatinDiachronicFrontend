@@ -49,7 +49,7 @@ function IndexPage({ data }) {
           </FormControl>
         </Stack>
         <Flex justify="center">
-          <Button mt={6} width={["80%", "50%"]} disabled={!lemmaToSearch}>
+          <Button mt={6} width={["100%", "60%"]} disabled={!lemmaToSearch}>
             Search
           </Button>
         </Flex>

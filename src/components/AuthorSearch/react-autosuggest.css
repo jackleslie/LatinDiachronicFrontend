@@ -58,3 +58,9 @@
 .react-autosuggest__section-container {
   border-radius: 10px;
 }
+
+/* Chakra overwrites */
+input {
+  -webkit-appearance: none;
+  line-height: normal !important;
+}
