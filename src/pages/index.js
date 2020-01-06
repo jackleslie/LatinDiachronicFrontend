@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   Flex,
   Box,
@@ -11,21 +11,24 @@ import {
   Button,
 } from "@chakra-ui/core"
 
-function IndexPage() {
+import { AuthorSearch } from "../components"
+
+function IndexPage({ data }) {
+  const { authors } = data.latin
+  const [authorsToSearch, setAuthorsToSearch] = useState([])
+  const [lemmaToSearch, setLemmaToSearch] = useState("")
+  console.log(authorsToSearch)
+  console.log(lemmaToSearch)
   return (
     <Flex justify="center">
-      <Box p={8}>
-        <Heading mb={4} textAlign="center">
-          Latin Diachronic Frontend
+      <Box p={8} maxWidth="480px">
+        <Heading mb={6} textAlign="center" fontSize={["24px", "30px"]}>
+          Latin Diachronic Analysis
         </Heading>
         <Stack spacing={3}>
           <FormControl>
             <FormLabel htmlFor="author">Author</FormLabel>
-            <Input
-              type="author"
-              id="author"
-              aria-describedby="author-helper-text"
-            />
+            <AuthorSearch authors={authors} onUpdate={setAuthorsToSearch} />
             <FormHelperText id="author-helper-text">
               Enter as many authors as you'd like, or leave blank to search all
               authors.
@@ -37,14 +40,16 @@ function IndexPage() {
               type="lemma"
               id="lemma"
               aria-describedby="lemma-helper-text"
+              value={lemmaToSearch}
+              onChange={e => setLemmaToSearch(e.target.value)}
             />
             <FormHelperText id="lemma-helper-text">
-              Enter a lemma or a wordform.
+              Enter any lemma or a wordform.
             </FormHelperText>
           </FormControl>
         </Stack>
         <Flex justify="center">
-          <Button mt={6} width={["80%", "50%"]}>
+          <Button mt={6} width={["80%", "50%"]} disabled={!lemmaToSearch}>
             Search
           </Button>
         </Flex>
@@ -54,3 +59,13 @@ function IndexPage() {
 }
 
 export default IndexPage
+
+export const query = graphql`
+  query {
+    latin {
+      authors {
+        name
+      }
+    }
+  }
+`
