@@ -9,26 +9,24 @@ import {
   Alert,
   AlertIcon,
 } from "@chakra-ui/core"
-import gql from "graphql-tag"
+import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
 
 function ResultsPage({ location }) {
   const authors = location && location.state && location.state.authors
   const lemma = location && location.state && location.state.lemma
   const APOLLO_QUERY = gql`
-    {
-      latin {
-        lemma(lemma: "${lemma}") {
-          count
-          occurrences {
-            line
-          }
-        }
+  {
+    lemma(lemma: "${lemma}") {
+      count
+      occurrences {
+        line
       }
     }
+  }
   `
   const { loading, error, data } = useQuery(APOLLO_QUERY)
-  console.log(error)
+  console.log(data)
   return (
     <Flex justify="center">
       <Box p={8} maxWidth="480px">

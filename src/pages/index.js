@@ -35,7 +35,7 @@ function IndexPage({ data }) {
               authors.
             </FormHelperText>
           </FormControl>
-          <FormControl isRequired>
+          <FormControl isRequired mt={1}>
             <FormLabel htmlFor="lemma">Lemma</FormLabel>
             <Input
               type="lemma"
