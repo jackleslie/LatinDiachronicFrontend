@@ -8,6 +8,7 @@
     "@chakra-ui/core": "^0.5.2",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
+    "dotenv": "^8.2.0",
     "emotion-theming": "^10.0.27",
     "gatsby": "^2.18.12",
     "gatsby-image": "^2.2.34",
@@ -34,6 +35,7 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
+    "develop:host": "gatsby develop -H 0.0.0.0",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
