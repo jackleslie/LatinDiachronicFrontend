@@ -89,10 +89,6 @@ function ResultsPage({ location }) {
               line: occurrence.line,
               source: sourceName,
             }
-            const sourcesEntry = {
-              line: occurrence.line,
-              author: authorName,
-            }
 
             if (x.authors[authorName]) {
               x.authors[authorName].push(authorsEntry)
@@ -101,9 +97,11 @@ function ResultsPage({ location }) {
             }
 
             if (x.sources[sourceName]) {
-              x.sources[sourceName].push(sourcesEntry)
+              x.sources[sourceName].occurrences.push(occurrence.line)
             } else {
-              x.sources[sourceName] = [sourcesEntry]
+              x.sources[sourceName] = {}
+              x.sources[sourceName].occurrences = [occurrence.line]
+              x.sources[sourceName].author = authorName
             }
 
             return x
@@ -128,10 +126,6 @@ function ResultsPage({ location }) {
               line: occurrence.line,
               source: sourceName,
             }
-            const sourcesEntry = {
-              line: occurrence.line,
-              author: authorName,
-            }
 
             if (x.authors[authorName]) {
               x.authors[authorName].push(authorsEntry)
@@ -140,9 +134,11 @@ function ResultsPage({ location }) {
             }
 
             if (x.sources[sourceName]) {
-              x.sources[sourceName].push(sourcesEntry)
+              x.sources[sourceName].occurrences.push(occurrence.line)
             } else {
-              x.sources[sourceName] = [sourcesEntry]
+              x.sources[sourceName] = {}
+              x.sources[sourceName].occurrences = [occurrence.line]
+              x.sources[sourceName].author = authorName
             }
 
             return x
@@ -189,10 +185,20 @@ function ResultsPage({ location }) {
                 <StatLabel>Occurrences</StatLabel>
                 <StatNumber>{result.count}</StatNumber>
               </Stat>
-              {authors.length ? (
+              {group && group.authors ? (
                 <Stat>
                   <StatLabel>Authors</StatLabel>
-                  <StatNumber>{authors.length}</StatNumber>
+                  <StatNumber>
+                    {Object.entries(group.authors).length}
+                  </StatNumber>
+                </Stat>
+              ) : null}
+              {group && group.sources ? (
+                <Stat>
+                  <StatLabel>Sources</StatLabel>
+                  <StatNumber>
+                    {Object.entries(group.sources).length}
+                  </StatNumber>
                 </Stat>
               ) : null}
             </Flex>
@@ -249,7 +255,7 @@ function ResultsPage({ location }) {
                               {value.map(({ line, source }) => (
                                 <Box mt={2}>
                                   <Text fontSize="sm">{line}</Text>
-                                  <FormHelperText mt={1}>
+                                  <FormHelperText mt={0}>
                                     in {source}
                                   </FormHelperText>
                                 </Box>
@@ -261,7 +267,25 @@ function ResultsPage({ location }) {
                     </Stack>
                   </TabPanel>
                   <TabPanel>
-                    <p>Oh, hello there.</p>
+                    <Stack mt={6}>
+                      {Object.entries(group.sources).map(
+                        ([key, value], index) => (
+                          <Flex align="center" key={key} mt={1}>
+                            <Box>
+                              <Text fontWeight="bold">{key}</Text>
+                              <FormHelperText mt={0}>
+                                by {value.author}
+                              </FormHelperText>
+                              {value.occurrences.map(line => (
+                                <Box mt={2}>
+                                  <Text fontSize="sm">{line}</Text>
+                                </Box>
+                              ))}
+                            </Box>
+                          </Flex>
+                        )
+                      )}
+                    </Stack>
                   </TabPanel>
                 </TabPanels>
               </Tabs>
