@@ -16,7 +16,6 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Input,
   Tabs,
   TabList,
   Tab,
@@ -56,7 +55,10 @@ function ResultsPage({ location }) {
   `
   const [query, setQuery] = useState(LEMMA_QUERY)
   const [result, setResult] = useState()
-  const [filter, setFilter] = useState("")
+  /*
+  const [authorFilter, setAuthorFilter] = useState("")
+  const [sourceFilter, setSourceFilter] = useState("")
+  */
   const [group, setGroup] = useState()
   const { loading, error, data } = useQuery(query)
 
@@ -87,6 +89,7 @@ function ResultsPage({ location }) {
         })
         const group = generateGroup(data.lemma)
         setGroup(group)
+        console.log(group)
       }
     } else if (data && data.form) {
       if (data.form.count) {
@@ -96,6 +99,7 @@ function ResultsPage({ location }) {
         })
         const group = generateGroup(data.form)
         setGroup(group)
+        console.log(group)
       } else {
         setResult({ type: "Empty" })
       }
@@ -114,9 +118,14 @@ function ResultsPage({ location }) {
         }
 
         if (x.authors[authorName]) {
-          x.authors[authorName].push(authorsEntry)
+          x.authors[authorName].occurrences.push(authorsEntry)
+          if (!x.authors[authorName].sources.includes(sourceName)) {
+            x.authors[authorName].sources.push(sourceName)
+          }
         } else {
-          x.authors[authorName] = [authorsEntry]
+          x.authors[authorName] = {}
+          x.authors[authorName].occurrences = [authorsEntry]
+          x.authors[authorName].sources = [sourceName]
         }
 
         if (x.sources[sourceName]) {
@@ -186,68 +195,55 @@ function ResultsPage({ location }) {
               ) : null}
             </Flex>
             <FormControl mt={6}>
-              <FormLabel htmlFor="filter">Filter</FormLabel>
-              <Input
-                type="filter"
-                id="filter"
-                aria-describedby="filter-helper-text"
-                value={filter}
-                onChange={e => setFilter(e.target.value)}
-              />
-              <FormHelperText id="filter-helper-text">
-                Filter by source name.
-              </FormHelperText>
-            </FormControl>
-            <FormControl mt={6}>
-              <FormLabel>Results</FormLabel>
-              <Tabs isFitted variant="soft-rounded" variantColor="gray">
+              <FormLabel>Results for "{search}"</FormLabel>
+              <Tabs isFitted variant="soft-rounded" variantColor="gray" mt={1}>
                 <TabList>
-                  <Tab>All</Tab>
                   <Tab>By author</Tab>
                   <Tab>By source</Tab>
                 </TabList>
                 <TabPanels>
                   <TabPanel>
-                    <Stack mt={6}>
-                      {result.occurrences
-                        .filter(({ source }) =>
-                          source.name
-                            .toLowerCase()
-                            .includes(filter.toLowerCase())
-                        )
-                        .map(({ line, source }, index) => (
-                          <Flex align="center" key={index} mt={1}>
-                            <Box>
-                              <Text fontWeight="bold">{source.name}</Text>
-                              <Text fontSize="sm">{line}</Text>
-                              <FormHelperText mt={1}>
-                                by {source.author.name}
-                              </FormHelperText>
-                            </Box>
-                          </Flex>
-                        ))}
-                    </Stack>
-                  </TabPanel>
-                  <TabPanel>
+                    {/*
+                    <FormControl mt={4}>
+                      <FormLabel htmlFor="author-filter">Filter</FormLabel>
+                      <Input
+                        type="author-filter"
+                        id="author-filter"
+                        aria-describedby="author-filter-helper-text"
+                        value={authorFilter}
+                        onChange={e => setAuthorFilter(e.target.value)}
+                        size="sm"
+                      />
+                      <FormHelperText id="author-filter-helper-text">
+                        Filter by author name.
+                      </FormHelperText>
+                    </FormControl>
+                    */}
                     <Accordion allowMultiple mt={8}>
                       {Object.entries(group.authors).map(
                         ([key, value], index) => (
-                          <AccordionItem>
+                          <AccordionItem key={index}>
                             <AccordionHeader>
                               <Box flex="1" textAlign="left">
-                                {key}
+                                <Text>{key}</Text>
+                                <FormHelperText mt={0}>
+                                  in {value.sources.length} source
+                                  {value.sources.length > 1 ? "s" : ""}
+                                </FormHelperText>
                               </Box>
                               <AccordionIcon />
                             </AccordionHeader>
                             <AccordionPanel pb={4}>
-                              {value.map(({ line, source }) => (
-                                <Box mt={2}>
-                                  <Text fontSize="sm">{line}</Text>
-                                  <FormHelperText mt={0}>
-                                    in {source}
-                                  </FormHelperText>
-                                </Box>
-                              ))}
+                              {value.occurrences.map(
+                                ({ line, source }, index) => (
+                                  <Box mt={2} key={index}>
+                                    <Text fontSize="sm">{line}</Text>
+                                    <FormHelperText mt={0}>
+                                      in {source}
+                                    </FormHelperText>
+                                  </Box>
+                                )
+                              )}
                             </AccordionPanel>
                           </AccordionItem>
                         )
@@ -255,25 +251,46 @@ function ResultsPage({ location }) {
                     </Accordion>
                   </TabPanel>
                   <TabPanel>
-                    <Stack mt={6}>
+                    {/*
+                    <FormControl mt={4}>
+                      <FormLabel htmlFor="source-filter">Filter</FormLabel>
+                      <Input
+                        type="source-filter"
+                        id="source-filter"
+                        aria-describedby="source-filter-helper-text"
+                        value={sourceFilter}
+                        onChange={e => setSourceFilter(e.target.value)}
+                        size="sm"
+                      />
+                      <FormHelperText id="source-filter-helper-text">
+                        Filter by source name.
+                      </FormHelperText>
+                    </FormControl>
+                    */}
+                    <Accordion allowMultiple mt={8}>
                       {Object.entries(group.sources).map(
                         ([key, value], index) => (
-                          <Flex align="center" key={key} mt={1}>
-                            <Box>
-                              <Text fontWeight="bold">{key}</Text>
-                              <FormHelperText mt={0}>
-                                by {value.author}
-                              </FormHelperText>
-                              {value.occurrences.map(line => (
-                                <Box mt={2}>
+                          <AccordionItem key={index}>
+                            <AccordionHeader>
+                              <Box flex="1" textAlign="left">
+                                <Text>{key}</Text>
+                                <FormHelperText mt={0}>
+                                  by {value.author}
+                                </FormHelperText>
+                              </Box>
+                              <AccordionIcon />
+                            </AccordionHeader>
+                            <AccordionPanel pb={4}>
+                              {value.occurrences.map((line, index) => (
+                                <Box mt={2} key={index}>
                                   <Text fontSize="sm">{line}</Text>
                                 </Box>
                               ))}
-                            </Box>
-                          </Flex>
+                            </AccordionPanel>
+                          </AccordionItem>
                         )
                       )}
-                    </Stack>
+                    </Accordion>
                   </TabPanel>
                 </TabPanels>
               </Tabs>
