@@ -17,6 +17,11 @@ import {
   FormHelperText,
   FormLabel,
   Input,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
 } from "@chakra-ui/core"
 import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
@@ -47,6 +52,7 @@ function ResultsPage({ location }) {
   const [query, setQuery] = useState(LEMMA_QUERY)
   const [result, setResult] = useState()
   const [filter, setFilter] = useState("")
+  const [group, setGroup] = useState()
   const { loading, error, data } = useQuery(query)
 
   useEffect(() => {
@@ -74,6 +80,38 @@ function ResultsPage({ location }) {
           ...data.lemma,
           type: "Lemma",
         })
+        const group = data.lemma.occurrences.reduce(
+          (x, occurrence) => {
+            const authorName = occurrence.source.author.name
+            const sourceName = occurrence.source.name
+
+            const authorsEntry = {
+              line: occurrence.line,
+              source: sourceName,
+            }
+            const sourcesEntry = {
+              line: occurrence.line,
+              author: authorName,
+            }
+
+            if (x.authors[authorName]) {
+              x.authors[authorName].push(authorsEntry)
+            } else {
+              x.authors[authorName] = [authorsEntry]
+            }
+
+            if (x.sources[sourceName]) {
+              x.sources[sourceName].push(sourcesEntry)
+            } else {
+              x.sources[sourceName] = [sourcesEntry]
+            }
+
+            return x
+          },
+          { authors: {}, sources: {} }
+        )
+        console.log(group)
+        setGroup(group)
       }
     } else if (data && data.form) {
       if (data.form.count) {
@@ -81,6 +119,38 @@ function ResultsPage({ location }) {
           ...data.form,
           type: "Form",
         })
+        const group = data.form.occurrences.reduce(
+          (x, occurrence) => {
+            const authorName = occurrence.source.author.name
+            const sourceName = occurrence.source.name
+
+            const authorsEntry = {
+              line: occurrence.line,
+              source: sourceName,
+            }
+            const sourcesEntry = {
+              line: occurrence.line,
+              author: authorName,
+            }
+
+            if (x.authors[authorName]) {
+              x.authors[authorName].push(authorsEntry)
+            } else {
+              x.authors[authorName] = [authorsEntry]
+            }
+
+            if (x.sources[sourceName]) {
+              x.sources[sourceName].push(sourcesEntry)
+            } else {
+              x.sources[sourceName] = [sourcesEntry]
+            }
+
+            return x
+          },
+          { authors: {}, sources: {} }
+        )
+        console.log(group)
+        setGroup(group)
       } else {
         setResult({ type: "Empty" })
       }
@@ -139,23 +209,63 @@ function ResultsPage({ location }) {
                 Filter by source name.
               </FormHelperText>
             </FormControl>
-            <Stack mt={6}>
-              {result.occurrences
-                .filter(({ source }) =>
-                  source.name.toLowerCase().includes(filter.toLowerCase())
-                )
-                .map(({ line, source }, index) => (
-                  <Flex align="center" key={index} mt={1}>
-                    <Box>
-                      <Text fontWeight="bold">{source.name}</Text>
-                      <Text fontSize="sm">{line}</Text>
-                      <FormHelperText mt={1}>
-                        by {source.author.name}
-                      </FormHelperText>
-                    </Box>
-                  </Flex>
-                ))}
-            </Stack>
+            <FormControl mt={6}>
+              <FormLabel>Results</FormLabel>
+              <Tabs isFitted>
+                <TabList>
+                  <Tab>All</Tab>
+                  <Tab>By author</Tab>
+                  <Tab>By source</Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    <Stack mt={6}>
+                      {result.occurrences
+                        .filter(({ source }) =>
+                          source.name
+                            .toLowerCase()
+                            .includes(filter.toLowerCase())
+                        )
+                        .map(({ line, source }, index) => (
+                          <Flex align="center" key={index} mt={1}>
+                            <Box>
+                              <Text fontWeight="bold">{source.name}</Text>
+                              <Text fontSize="sm">{line}</Text>
+                              <FormHelperText mt={1}>
+                                by {source.author.name}
+                              </FormHelperText>
+                            </Box>
+                          </Flex>
+                        ))}
+                    </Stack>
+                  </TabPanel>
+                  <TabPanel>
+                    <Stack mt={6}>
+                      {Object.entries(group.authors).map(
+                        ([key, value], index) => (
+                          <Flex align="center" key={key} mt={1}>
+                            <Box>
+                              <Text fontWeight="bold">{key}</Text>
+                              {value.map(({ line, source }) => (
+                                <Box mt={2}>
+                                  <Text fontSize="sm">{line}</Text>
+                                  <FormHelperText mt={1}>
+                                    in {source}
+                                  </FormHelperText>
+                                </Box>
+                              ))}
+                            </Box>
+                          </Flex>
+                        )
+                      )}
+                    </Stack>
+                  </TabPanel>
+                  <TabPanel>
+                    <p>Oh, hello there.</p>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </FormControl>
           </Box>
         )}
         {result && result.type && result.type === "Empty" && (
