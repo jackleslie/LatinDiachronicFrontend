@@ -24,7 +24,7 @@ import { useQuery } from "@apollo/react-hooks"
 function ResultsPage({ location }) {
   const authors = location && location.state && location.state.authors
   const search = location && location.state && location.state.search
-  const AUTHOR_QUERY = authors
+  const AUTHOR_QUERY = authors.length
     ? `, authors: { list: "${authors.toString()}", useAll: false }`
     : ""
   const LEMMA_QUERY = gql`
@@ -35,6 +35,9 @@ function ResultsPage({ location }) {
         line
         source {
           name
+          author {
+            name
+          }
         }
       }
     }
@@ -49,18 +52,21 @@ function ResultsPage({ location }) {
     if (data && data.lemma) {
       if (!data.lemma.count) {
         const FORM_QUERY = gql`
-      {
-        form(form: "${search}"${AUTHOR_QUERY}) {
-          count
-          occurrences {
-            line
-            source {
-              name
+        {
+          form(form: "${search}"${AUTHOR_QUERY}) {
+            count
+            occurrences {
+              line
+              source {
+                name
+                author {
+                  name
+                }
+              }
             }
           }
         }
-      }
-      `
+        `
         setQuery(FORM_QUERY)
       } else {
         setResult({
@@ -81,12 +87,12 @@ function ResultsPage({ location }) {
   }, [data, search, AUTHOR_QUERY])
   return (
     <Flex justify="center">
-      <Box p={8} maxWidth="400px">
+      <Box p={8} maxWidth="400px" width="400px">
         <Heading mb={6} textAlign="center" fontSize={["24px", "27px"]}>
           <Link to="/">Latin Diachronic Analysis</Link>
         </Heading>
 
-        {loading && (
+        {(loading || !result) && (
           <Flex justify="center">
             <Spinner
               thickness="4px"
@@ -108,6 +114,12 @@ function ResultsPage({ location }) {
                 <StatLabel>Occurrences</StatLabel>
                 <StatNumber>{result.count}</StatNumber>
               </Stat>
+              {authors.length ? (
+                <Stat>
+                  <StatLabel>Authors</StatLabel>
+                  <StatNumber>{authors.length}</StatNumber>
+                </Stat>
+              ) : null}
             </Flex>
             <FormControl mt={6}>
               <FormLabel htmlFor="filter">Filter</FormLabel>
@@ -119,7 +131,7 @@ function ResultsPage({ location }) {
                 onChange={e => setFilter(e.target.value)}
               />
               <FormHelperText id="filter-helper-text">
-                Filter by source.
+                Filter by source name.
               </FormHelperText>
             </FormControl>
             <Stack mt={6}>
@@ -127,8 +139,8 @@ function ResultsPage({ location }) {
                 .filter(({ source }) =>
                   source.name.toLowerCase().includes(filter)
                 )
-                .map(({ line, source }) => (
-                  <Flex>
+                .map(({ line, source }, index) => (
+                  <Flex align="center" key={index} mt={1}>
                     <Box>
                       <Text fontWeight="bold">{source.name}</Text>
                       <Text fontSize="sm">
@@ -142,6 +154,9 @@ function ResultsPage({ location }) {
                           return ` ${word} `
                         })}
                       </Text>
+                      <FormHelperText mt={1}>
+                        by {source.author.name}
+                      </FormHelperText>
                     </Box>
                   </Flex>
                 ))}
