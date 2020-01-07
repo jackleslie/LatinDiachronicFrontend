@@ -168,19 +168,19 @@ function ResultsPage({ location }) {
         )}
         {result && result.type !== "Empty" && (
           <Box>
-            <Flex>
+            <Flex flexWrap="wrap">
               <Stat>
                 <StatLabel>Type</StatLabel>
-                <StatNumber>{result.type}</StatNumber>
+                <StatNumber fontSize={["lg", "2xl"]}>{result.type}</StatNumber>
               </Stat>
               <Stat>
                 <StatLabel>Occurrences</StatLabel>
-                <StatNumber>{result.count}</StatNumber>
+                <StatNumber fontSize={["lg", "2xl"]}>{result.count}</StatNumber>
               </Stat>
               {group && group.authors ? (
                 <Stat>
                   <StatLabel>Authors</StatLabel>
-                  <StatNumber>
+                  <StatNumber fontSize={["lg", "2xl"]}>
                     {Object.entries(group.authors).length}
                   </StatNumber>
                 </Stat>
@@ -188,7 +188,7 @@ function ResultsPage({ location }) {
               {group && group.sources ? (
                 <Stat>
                   <StatLabel>Sources</StatLabel>
-                  <StatNumber>
+                  <StatNumber fontSize={["lg", "2xl"]}>
                     {Object.entries(group.sources).length}
                   </StatNumber>
                 </Stat>
