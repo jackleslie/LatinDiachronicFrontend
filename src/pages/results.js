@@ -145,7 +145,7 @@ function ResultsPage({ location }) {
   return (
     <Flex justify="center">
       <Box p={8} maxWidth="400px" width="400px">
-        <Heading mb={6} textAlign="center" fontSize={["24px", "27px"]}>
+        <Heading mb={3} textAlign="center" fontSize={["24px", "27px"]}>
           <Link to="/">Latin Diachronic Analysis</Link>
         </Heading>
 
@@ -169,16 +169,16 @@ function ResultsPage({ location }) {
         {result && result.type !== "Empty" && (
           <Box>
             <Flex flexWrap="wrap">
-              <Stat>
+              <Stat mt={3}>
                 <StatLabel>Type</StatLabel>
                 <StatNumber fontSize={["lg", "2xl"]}>{result.type}</StatNumber>
               </Stat>
-              <Stat>
+              <Stat mt={3}>
                 <StatLabel>Occurrences</StatLabel>
                 <StatNumber fontSize={["lg", "2xl"]}>{result.count}</StatNumber>
               </Stat>
               {group && group.authors ? (
-                <Stat>
+                <Stat mt={3}>
                   <StatLabel>Authors</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {Object.entries(group.authors).length}
@@ -186,7 +186,7 @@ function ResultsPage({ location }) {
                 </Stat>
               ) : null}
               {group && group.sources ? (
-                <Stat>
+                <Stat mt={3}>
                   <StatLabel>Sources</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {Object.entries(group.sources).length}
