@@ -94,7 +94,7 @@ function ResultsPage({ location }) {
         </Heading>
 
         {(loading || !result) && (
-          <Flex justify="center">
+          <Stack align="center">
             <Spinner
               thickness="4px"
               speed="0.65s"
@@ -102,7 +102,11 @@ function ResultsPage({ location }) {
               color="blue.500"
               size="xl"
             />
-          </Flex>
+            <Text mt={1}>
+              Finding "{search}"{" "}
+              {authors.length ? `for ${authors.toString()}` : "for all authors"}
+            </Text>
+          </Stack>
         )}
         {result && result.type !== "Empty" && (
           <Box>
@@ -144,17 +148,7 @@ function ResultsPage({ location }) {
                   <Flex align="center" key={index} mt={1}>
                     <Box>
                       <Text fontWeight="bold">{source.name}</Text>
-                      <Text fontSize="sm">
-                        {" "}
-                        {line.split(" ").map(word => {
-                          if (
-                            word.toLowerCase().includes(search.toLowerCase())
-                          ) {
-                            return <b> {word} </b>
-                          }
-                          return ` ${word} `
-                        })}
-                      </Text>
+                      <Text fontSize="sm">{line}</Text>
                       <FormHelperText mt={1}>
                         by {source.author.name}
                       </FormHelperText>
