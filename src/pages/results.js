@@ -24,9 +24,10 @@ import { useQuery } from "@apollo/react-hooks"
 function ResultsPage({ location }) {
   const authors = location && location.state && location.state.authors
   const search = location && location.state && location.state.search
-  const AUTHOR_QUERY = authors.length
-    ? `, authors: { list: "${authors.toString()}", useAll: false }`
-    : ""
+  const AUTHOR_QUERY =
+    authors && authors.length
+      ? `, authors: { list: "${authors.toString()}", useAll: false }`
+      : ""
   const LEMMA_QUERY = gql`
   {
     lemma(lemma: "${search}"${AUTHOR_QUERY}) {
