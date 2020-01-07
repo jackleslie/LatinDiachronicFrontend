@@ -138,7 +138,7 @@ function ResultsPage({ location }) {
             <Stack mt={6}>
               {result.occurrences
                 .filter(({ source }) =>
-                  source.name.toLowerCase().includes(filter)
+                  source.name.toLowerCase().includes(filter.toLowerCase())
                 )
                 .map(({ line, source }, index) => (
                   <Flex align="center" key={index} mt={1}>
