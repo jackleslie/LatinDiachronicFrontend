@@ -102,7 +102,7 @@ function ResultsPage({ location }) {
               color="blue.500"
               size="xl"
             />
-            <Text mt={1}>
+            <Text mt={3}>
               Finding "{search}"{" "}
               {authors.length ? `for ${authors.toString()}` : "for all authors"}
             </Text>
