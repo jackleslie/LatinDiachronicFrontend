@@ -22,6 +22,11 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionIcon,
+  AccordionPanel,
 } from "@chakra-ui/core"
 import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
@@ -193,7 +198,7 @@ function ResultsPage({ location }) {
             </FormControl>
             <FormControl mt={6}>
               <FormLabel>Results</FormLabel>
-              <Tabs isFitted>
+              <Tabs isFitted variant="soft-rounded" variantColor="gray">
                 <TabList>
                   <Tab>All</Tab>
                   <Tab>By author</Tab>
@@ -222,12 +227,17 @@ function ResultsPage({ location }) {
                     </Stack>
                   </TabPanel>
                   <TabPanel>
-                    <Stack mt={6}>
+                    <Accordion allowMultiple mt={8}>
                       {Object.entries(group.authors).map(
                         ([key, value], index) => (
-                          <Flex align="center" key={key} mt={1}>
-                            <Box>
-                              <Text fontWeight="bold">{key}</Text>
+                          <AccordionItem>
+                            <AccordionHeader>
+                              <Box flex="1" textAlign="left">
+                                {key}
+                              </Box>
+                              <AccordionIcon />
+                            </AccordionHeader>
+                            <AccordionPanel pb={4}>
                               {value.map(({ line, source }) => (
                                 <Box mt={2}>
                                   <Text fontSize="sm">{line}</Text>
@@ -236,11 +246,11 @@ function ResultsPage({ location }) {
                                   </FormHelperText>
                                 </Box>
                               ))}
-                            </Box>
-                          </Flex>
+                            </AccordionPanel>
+                          </AccordionItem>
                         )
                       )}
-                    </Stack>
+                    </Accordion>
                   </TabPanel>
                   <TabPanel>
                     <Stack mt={6}>
