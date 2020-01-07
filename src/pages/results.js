@@ -80,35 +80,7 @@ function ResultsPage({ location }) {
           ...data.lemma,
           type: "Lemma",
         })
-        const group = data.lemma.occurrences.reduce(
-          (x, occurrence) => {
-            const authorName = occurrence.source.author.name
-            const sourceName = occurrence.source.name
-
-            const authorsEntry = {
-              line: occurrence.line,
-              source: sourceName,
-            }
-
-            if (x.authors[authorName]) {
-              x.authors[authorName].push(authorsEntry)
-            } else {
-              x.authors[authorName] = [authorsEntry]
-            }
-
-            if (x.sources[sourceName]) {
-              x.sources[sourceName].occurrences.push(occurrence.line)
-            } else {
-              x.sources[sourceName] = {}
-              x.sources[sourceName].occurrences = [occurrence.line]
-              x.sources[sourceName].author = authorName
-            }
-
-            return x
-          },
-          { authors: {}, sources: {} }
-        )
-        console.log(group)
+        const group = generateGroup(data.lemma)
         setGroup(group)
       }
     } else if (data && data.form) {
@@ -117,41 +89,45 @@ function ResultsPage({ location }) {
           ...data.form,
           type: "Form",
         })
-        const group = data.form.occurrences.reduce(
-          (x, occurrence) => {
-            const authorName = occurrence.source.author.name
-            const sourceName = occurrence.source.name
-
-            const authorsEntry = {
-              line: occurrence.line,
-              source: sourceName,
-            }
-
-            if (x.authors[authorName]) {
-              x.authors[authorName].push(authorsEntry)
-            } else {
-              x.authors[authorName] = [authorsEntry]
-            }
-
-            if (x.sources[sourceName]) {
-              x.sources[sourceName].occurrences.push(occurrence.line)
-            } else {
-              x.sources[sourceName] = {}
-              x.sources[sourceName].occurrences = [occurrence.line]
-              x.sources[sourceName].author = authorName
-            }
-
-            return x
-          },
-          { authors: {}, sources: {} }
-        )
-        console.log(group)
+        const group = generateGroup(data.form)
         setGroup(group)
       } else {
         setResult({ type: "Empty" })
       }
     }
   }, [data, search, AUTHOR_QUERY])
+
+  function generateGroup(result) {
+    return result.occurrences.reduce(
+      (x, occurrence) => {
+        const authorName = occurrence.source.author.name
+        const sourceName = occurrence.source.name
+
+        const authorsEntry = {
+          line: occurrence.line,
+          source: sourceName,
+        }
+
+        if (x.authors[authorName]) {
+          x.authors[authorName].push(authorsEntry)
+        } else {
+          x.authors[authorName] = [authorsEntry]
+        }
+
+        if (x.sources[sourceName]) {
+          x.sources[sourceName].occurrences.push(occurrence.line)
+        } else {
+          x.sources[sourceName] = {}
+          x.sources[sourceName].occurrences = [occurrence.line]
+          x.sources[sourceName].author = authorName
+        }
+
+        return x
+      },
+      { authors: {}, sources: {} }
+    )
+  }
+
   return (
     <Flex justify="center">
       <Box p={8} maxWidth="400px" width="400px">
