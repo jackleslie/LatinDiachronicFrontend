@@ -10,6 +10,13 @@ import {
   Stat,
   StatLabel,
   StatNumber,
+  Icon,
+  Stack,
+  Text,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
 } from "@chakra-ui/core"
 import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
@@ -17,18 +24,25 @@ import { useQuery } from "@apollo/react-hooks"
 function ResultsPage({ location }) {
   const authors = location && location.state && location.state.authors
   const search = location && location.state && location.state.search
+  const AUTHOR_QUERY = authors
+    ? `, authors: { list: "${authors.toString()}", useAll: false }`
+    : ""
   const LEMMA_QUERY = gql`
   {
-    lemma(lemma: "${search}") {
+    lemma(lemma: "${search}"${AUTHOR_QUERY}) {
       count
       occurrences {
         line
+        source {
+          name
+        }
       }
     }
   }
   `
   const [query, setQuery] = useState(LEMMA_QUERY)
   const [result, setResult] = useState()
+  const [filter, setFilter] = useState("")
   const { loading, error, data } = useQuery(query)
 
   useEffect(() => {
@@ -36,10 +50,13 @@ function ResultsPage({ location }) {
       if (!data.lemma.count) {
         const FORM_QUERY = gql`
       {
-        form(form: "${search}") {
+        form(form: "${search}"${AUTHOR_QUERY}) {
           count
           occurrences {
             line
+            source {
+              name
+            }
           }
         }
       }
@@ -61,8 +78,7 @@ function ResultsPage({ location }) {
         setResult({ type: "Empty" })
       }
     }
-  }, [data, search])
-  console.log(data)
+  }, [data, search, AUTHOR_QUERY])
   return (
     <Flex justify="center">
       <Box p={8} maxWidth="400px">
@@ -82,22 +98,63 @@ function ResultsPage({ location }) {
           </Flex>
         )}
         {result && result.type !== "Empty" && (
-          <Flex>
-            <Stat>
-              <StatLabel>Type</StatLabel>
-              <StatNumber>{result.type}</StatNumber>
-            </Stat>
-            <Stat>
-              <StatLabel>Occurrences</StatLabel>
-              <StatNumber>{result.count}</StatNumber>
-            </Stat>
-          </Flex>
+          <Box>
+            <Flex>
+              <Stat>
+                <StatLabel>Type</StatLabel>
+                <StatNumber>{result.type}</StatNumber>
+              </Stat>
+              <Stat>
+                <StatLabel>Occurrences</StatLabel>
+                <StatNumber>{result.count}</StatNumber>
+              </Stat>
+            </Flex>
+            <FormControl mt={6}>
+              <FormLabel htmlFor="filter">Filter</FormLabel>
+              <Input
+                type="filter"
+                id="filter"
+                aria-describedby="filter-helper-text"
+                value={filter}
+                onChange={e => setFilter(e.target.value)}
+              />
+              <FormHelperText id="filter-helper-text">
+                Filter by source.
+              </FormHelperText>
+            </FormControl>
+            <Stack mt={6}>
+              {result.occurrences
+                .filter(({ source }) =>
+                  source.name.toLowerCase().includes(filter)
+                )
+                .map(({ line, source }) => (
+                  <Flex>
+                    <Box>
+                      <Text fontWeight="bold">{source.name}</Text>
+                      <Text fontSize="sm">
+                        {" "}
+                        {line.split(" ").map(word => {
+                          if (
+                            word.toLowerCase().includes(search.toLowerCase())
+                          ) {
+                            return <b> {word} </b>
+                          }
+                          return ` ${word} `
+                        })}
+                      </Text>
+                    </Box>
+                  </Flex>
+                ))}
+            </Stack>
+          </Box>
         )}
         {result && result.type && result.type === "Empty" && (
           <Alert status="warning">
             <AlertIcon />
-            The lemma or wordform you entered is incorrect or doesn't exist in
-            our database, please try again.
+            Search yielded no results in our database, please try again.
+            <Link to="/">
+              <Icon name="repeat" size="1.5em" />
+            </Link>
           </Alert>
         )}
         {error && (
