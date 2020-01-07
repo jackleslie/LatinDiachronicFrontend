@@ -151,7 +151,9 @@ function ResultsPage({ location }) {
             />
             <Text mt={3}>
               Finding "{search}"{" "}
-              {authors.length ? `for ${authors.toString()}` : "for all authors"}
+              {authors && authors.length
+                ? `for ${authors.toString()}`
+                : "for all authors"}
             </Text>
           </Stack>
         )}
