@@ -15,7 +15,6 @@ import {
   Text,
   FormControl,
   FormHelperText,
-  FormLabel,
   Tabs,
   TabList,
   Tab,
