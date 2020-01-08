@@ -294,7 +294,7 @@ function ResultsPage({ location }) {
                                 <Box flex="1" textAlign="left">
                                   <Text>{key}</Text>
                                   <FormHelperText mt={0}>
-                                    by {value.author} (x
+                                    by {value.author} (
                                     {value.occurrences.length})
                                   </FormHelperText>
                                 </Box>
