@@ -150,7 +150,7 @@ function ResultsPage({ location }) {
           <Link to="/">Latin Diachronic Analysis</Link>
         </Heading>
 
-        {(loading || !result) && (
+        {(loading || !result) && !error && (
           <Stack align="center" mt={6} width="100%">
             <Spinner
               thickness="4px"
