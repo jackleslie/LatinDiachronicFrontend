@@ -143,6 +143,19 @@ function ResultsPage({ location }) {
     )
   }
 
+  function asc([a], [b]) {
+    var nameA = a.toUpperCase()
+    var nameB = b.toUpperCase()
+    if (nameA < nameB) {
+      return -1
+    }
+    if (nameA > nameB) {
+      return 1
+    }
+
+    return 0
+  }
+
   return (
     <Flex justify="center">
       <Box p={8} maxWidth="500px" width="500px">
@@ -180,20 +193,20 @@ function ResultsPage({ location }) {
             </Text>
             <Box mt={4}>
               <Flex flexWrap="wrap">
-                <Stat mt={3} mb={2}>
+                <Stat mt={3} mb={2} pr={0} textAlign="center">
                   <StatLabel>Type</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {result.type}
                   </StatNumber>
                 </Stat>
-                <Stat mt={3} mb={2}>
+                <Stat mt={3} mb={2} pr={0} textAlign="center">
                   <StatLabel>Occurrences</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {result.count}
                   </StatNumber>
                 </Stat>
                 {group && group.authors ? (
-                  <Stat mt={3} mb={2}>
+                  <Stat mt={3} mb={2} pr={0} textAlign="center">
                     <StatLabel>Authors</StatLabel>
                     <StatNumber fontSize={["lg", "2xl"]}>
                       {Object.entries(group.authors).length}
@@ -201,7 +214,7 @@ function ResultsPage({ location }) {
                   </Stat>
                 ) : null}
                 {group && group.sources ? (
-                  <Stat mt={3} mb={2}>
+                  <Stat mt={3} mb={2} pr={0} textAlign="center">
                     <StatLabel>Sources</StatLabel>
                     <StatNumber fontSize={["lg", "2xl"]}>
                       {Object.entries(group.sources).length}
@@ -239,8 +252,11 @@ function ResultsPage({ location }) {
                     </FormControl>
                     */}
                       <Accordion allowMultiple mt={8}>
-                        {Object.entries(group.authors).map(
-                          ([key, value], index) => (
+                        {Object.entries(group.authors)
+                          .sort(([a], [b]) =>
+                            a.toUpperCase() > b.toUpperCase() ? 1 : -1
+                          )
+                          .map(([key, value], index) => (
                             <AccordionItem key={index}>
                               <AccordionHeader>
                                 <Box flex="1" textAlign="left">
@@ -265,8 +281,7 @@ function ResultsPage({ location }) {
                                 )}
                               </AccordionPanel>
                             </AccordionItem>
-                          )
-                        )}
+                          ))}
                       </Accordion>
                     </TabPanel>
                     <TabPanel>
@@ -287,8 +302,11 @@ function ResultsPage({ location }) {
                     </FormControl>
                     */}
                       <Accordion allowMultiple mt={8}>
-                        {Object.entries(group.sources).map(
-                          ([key, value], index) => (
+                        {Object.entries(group.sources)
+                          .sort(([a], [b]) =>
+                            a.toUpperCase() > b.toUpperCase() ? 1 : -1
+                          )
+                          .map(([key, value], index) => (
                             <AccordionItem key={index}>
                               <AccordionHeader>
                                 <Box flex="1" textAlign="left">
@@ -308,8 +326,7 @@ function ResultsPage({ location }) {
                                 ))}
                               </AccordionPanel>
                             </AccordionItem>
-                          )
-                        )}
+                          ))}
                       </Accordion>
                     </TabPanel>
                   </TabPanels>
