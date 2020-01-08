@@ -10,7 +10,7 @@ import {
   Stat,
   StatLabel,
   StatNumber,
-  Icon,
+  Button,
   Stack,
   Text,
   FormControl,
@@ -149,7 +149,7 @@ function ResultsPage({ location }) {
         </Heading>
 
         {(loading || !result) && (
-          <Stack align="center" mt={6}>
+          <Stack align="center" mt={6} width="100%">
             <Spinner
               thickness="4px"
               speed="0.65s"
@@ -158,10 +158,16 @@ function ResultsPage({ location }) {
               size="xl"
             />
             <Text mt={3}>
-              Searching "{search}"{" "}
-              {authors && authors.length
-                ? `for ${authors.toString()}`
-                : "for all authors"}
+              Searching <Text as="b">{search} </Text>
+              {authors && authors.length ? (
+                <Text>
+                  by <Text as="b">{authors.toString()}</Text>
+                </Text>
+              ) : (
+                <Text>
+                  by <Text as="b">all authors</Text>
+                </Text>
+              )}
             </Text>
           </Stack>
         )}
@@ -310,13 +316,29 @@ function ResultsPage({ location }) {
           </Box>
         )}
         {result && result.type && result.type === "Empty" && (
-          <Alert status="warning" mt={6}>
-            <AlertIcon />
-            Search yielded no results in our database, please try again.
-            <Link to="/">
-              <Icon name="repeat" size="1.5em" />
+          <Stack>
+            <Alert status="warning" mt={6}>
+              <AlertIcon />
+              <Stack>
+                <Text>Your search for</Text>
+                <Text as="b" wordBreak="break-all">
+                  {search}{" "}
+                  <Text fontWeight="normal" as="span">
+                    by{" "}
+                  </Text>
+                  {authors && authors.length
+                    ? authors.toString()
+                    : "all authors"}
+                </Text>
+                <Text>yielded no results in our database</Text>
+              </Stack>
+            </Alert>
+            <Link to="/" style={{ width: "100%" }}>
+              <Button mt={5} width="100%">
+                Search again
+              </Button>
             </Link>
-          </Alert>
+          </Stack>
         )}
         {error && (
           <Alert status="error">

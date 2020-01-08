@@ -22,8 +22,8 @@ function IndexPage({ data }) {
 
   return (
     <Flex justify="center">
-      <Box p={8} maxWidth="400px">
-        <Heading mb={6} textAlign="center" fontSize={["24px", "27px"]}>
+      <Box p={8} maxWidth="500px">
+        <Heading mb={6} textAlign="center" fontSize={["24px", "36px"]}>
           <Link to="/">Latin Diachronic Analysis</Link>
         </Heading>
         <Stack spacing={3}>
@@ -31,11 +31,11 @@ function IndexPage({ data }) {
             <FormLabel htmlFor="author">Author</FormLabel>
             <AuthorSearch authors={authors} onUpdate={setAuthorsToSearch} />
             <FormHelperText id="author-helper-text">
-              Enter as many authors as you'd like, or leave blank to search all
+              Enter as many authors as you like, or leave blank to search all
               authors.
             </FormHelperText>
           </FormControl>
-          <FormControl isRequired mt={1}>
+          <FormControl isRequired mt={[1, 3]}>
             <FormLabel htmlFor="lemma">Lemma</FormLabel>
             <Input
               type="lemma"
@@ -47,7 +47,7 @@ function IndexPage({ data }) {
               isInvalid={clicked}
             />
             <FormHelperText id="lemma-helper-text">
-              Enter any lemma or a wordform.
+              Search for any lemma or form.
             </FormHelperText>
           </FormControl>
         </Stack>
@@ -58,12 +58,12 @@ function IndexPage({ data }) {
               state={{ authors: authorsToSearch, search: lemmaToSearch }}
               style={{ width: "100%" }}
             >
-              <Button mt={6} width="100%">
+              <Button mt={[6, 8]} width="100%">
                 Search
               </Button>
             </Link>
           ) : (
-            <Button mt={6} width="100%" onClick={() => setClicked(true)}>
+            <Button mt={[6, 8]} width="100%" onClick={() => setClicked(true)}>
               Search
             </Button>
           )}
