@@ -30,6 +30,7 @@ import {
 } from "@chakra-ui/core"
 import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
+import { SEO } from "../components"
 
 function ResultsPage({ location }) {
   const authors = location && location.state && location.state.authors
@@ -143,21 +144,9 @@ function ResultsPage({ location }) {
     )
   }
 
-  function asc([a], [b]) {
-    var nameA = a.toUpperCase()
-    var nameB = b.toUpperCase()
-    if (nameA < nameB) {
-      return -1
-    }
-    if (nameA > nameB) {
-      return 1
-    }
-
-    return 0
-  }
-
   return (
     <Flex justify="center">
+      <SEO title="Results" />
       <Box p={8} maxWidth="500px" width="500px">
         <Heading textAlign="center" fontSize={["24px", "36px"]}>
           <Link to="/">Latin Diachronic Analysis</Link>

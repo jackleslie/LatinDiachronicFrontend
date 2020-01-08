@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "latin-frontend",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "Quantitative analysis of Latin literature.",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Jack Leslie <jjdl@st-andrews.ac.uk>",
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
     "@chakra-ui/core": "^0.5.2",
@@ -18,10 +18,7 @@
     "gatsby-plugin-manifest": "^2.2.31",
     "gatsby-plugin-offline": "^3.0.27",
     "gatsby-plugin-react-helmet": "^3.1.16",
-    "gatsby-plugin-sharp": "^2.3.5",
-    "gatsby-source-filesystem": "^2.1.40",
     "gatsby-source-graphql": "^2.1.29",
-    "gatsby-transformer-sharp": "^2.3.7",
     "isomorphic-fetch": "^2.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
@@ -33,7 +30,10 @@
     "prettier": "^1.19.1"
   },
   "keywords": [
-    "gatsby"
+    "latin",
+    "gatsby",
+    "react",
+    "graphql"
   ],
   "license": "MIT",
   "scripts": {
@@ -43,14 +43,13 @@
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
-    "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "clean": "gatsby clean"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/jackleslie/LatinDiachronicFrontend"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/jackleslie/LatinDiachronicFrontend/issues"
   }
 }

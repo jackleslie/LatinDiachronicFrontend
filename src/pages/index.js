@@ -10,9 +10,9 @@ import {
   Heading,
   Button,
 } from "@chakra-ui/core"
-import { Link } from "gatsby"
+import { Link, graphql } from "gatsby"
 
-import { AuthorSearch } from "../components"
+import { AuthorSearch, SEO } from "../components"
 
 function IndexPage({ data }) {
   const { authors } = data.latin
@@ -22,6 +22,7 @@ function IndexPage({ data }) {
 
   return (
     <Flex justify="center">
+      <SEO title="Search" />
       <Box p={8} maxWidth="500px">
         <Heading mb={6} textAlign="center" fontSize={["24px", "36px"]}>
           <Link to="/">Latin Diachronic Analysis</Link>
