@@ -7,6 +7,8 @@ import {
   Spinner,
   Alert,
   AlertIcon,
+  AlertTitle,
+  AlertDescription,
   Stat,
   StatLabel,
   StatNumber,
@@ -143,8 +145,8 @@ function ResultsPage({ location }) {
 
   return (
     <Flex justify="center">
-      <Box p={8} maxWidth="400px" width="400px">
-        <Heading textAlign="center" fontSize={["24px", "27px"]}>
+      <Box p={8} maxWidth="500px" width="500px">
+        <Heading textAlign="center" fontSize={["24px", "36px"]}>
           <Link to="/">Latin Diachronic Analysis</Link>
         </Heading>
 
@@ -157,14 +159,14 @@ function ResultsPage({ location }) {
               color="blue.500"
               size="xl"
             />
-            <Text mt={3}>
+            <Text mt={4}>
               Searching <Text as="b">{search} </Text>
               {authors && authors.length ? (
-                <Text>
-                  by <Text as="b">{authors.toString()}</Text>
+                <Text as="span">
+                  by <Text as="b">{authors.join(", ")}</Text>
                 </Text>
               ) : (
-                <Text>
+                <Text as="span">
                   by <Text as="b">all authors</Text>
                 </Text>
               )}
@@ -317,33 +319,57 @@ function ResultsPage({ location }) {
         )}
         {result && result.type && result.type === "Empty" && (
           <Stack>
-            <Alert status="warning" mt={6}>
-              <AlertIcon />
-              <Stack>
-                <Text>Your search for</Text>
-                <Text as="b" wordBreak="break-all">
+            <Alert
+              status="warning"
+              variant="subtle"
+              flexDirection="column"
+              justifyContent="center"
+              textAlign="center"
+              height="200px"
+              mt={6}
+            >
+              <AlertIcon size="40px" mr={0} />
+              <AlertTitle mt={4} mb={1} fontSize="lg">
+                No results
+              </AlertTitle>
+              <AlertDescription maxWidth="sm">
+                Your search for{" "}
+                <Text as="b" wordBreak="break-word">
                   {search}{" "}
                   <Text fontWeight="normal" as="span">
                     by{" "}
                   </Text>
                   {authors && authors.length
-                    ? authors.toString()
+                    ? authors.join(", ")
                     : "all authors"}
                 </Text>
-                <Text>yielded no results in our database</Text>
-              </Stack>
+                <Text as="span"> yielded no results in our database.</Text>
+              </AlertDescription>
             </Alert>
             <Link to="/" style={{ width: "100%" }}>
-              <Button mt={5} width="100%">
+              <Button mt={[5, 6]} width="100%">
                 Search again
               </Button>
             </Link>
           </Stack>
         )}
         {error && (
-          <Alert status="error">
-            <AlertIcon />
-            There was an error processing your request
+          <Alert
+            status="error"
+            variant="subtle"
+            flexDirection="column"
+            justifyContent="center"
+            textAlign="center"
+            height="200px"
+            mt={6}
+          >
+            <AlertIcon size="40px" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              Error
+            </AlertTitle>
+            <AlertDescription maxWidth="sm">
+              There was a problem submitting your query, please try again later.
+            </AlertDescription>
           </Alert>
         )}
       </Box>
