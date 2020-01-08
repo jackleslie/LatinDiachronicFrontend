@@ -176,7 +176,7 @@ function ResultsPage({ location }) {
         {result && result.type !== "Empty" && (
           <Box>
             <Text textAlign="center" fontSize={["18px", "22px"]}>
-              Results for "{search}"
+              Results for <b>{search}</b>
             </Text>
             <Box mt={4}>
               <Flex flexWrap="wrap">
