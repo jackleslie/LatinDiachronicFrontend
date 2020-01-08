@@ -26,6 +26,10 @@
   box-sizing: border-box;
 }
 
+.dark-mode .react-autosuggest__suggestions-container--open {
+  background-color: #1a202c;
+}
+
 .react-autosuggest__suggestions-list {
   margin: 0;
   padding: 0;
@@ -55,8 +59,16 @@
   background-color: #edf2f7;
 }
 
+.dark-mode .react-autosuggest__suggestion--highlighted {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
 .react-autosuggest__section-container {
   border-radius: 10px;
+}
+
+.dark-mode .react-autosuggest__section-container {
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 /* Chakra overwrites */

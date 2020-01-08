@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import Autosuggest from "react-autosuggest"
-import { Input } from "@chakra-ui/core"
+import { Input, Box, Text } from "@chakra-ui/core"
 
 import "./react-autosuggest.css"
 // import styles from "./authorSearch.module.css"
@@ -36,11 +36,11 @@ function getSuggestionValue(suggestion) {
 }
 
 function renderSuggestion(suggestion) {
-  return <span>{suggestion.name}</span>
+  return <Text>{suggestion.name}</Text>
 }
 
 function renderSuggestionsContainer({ containerProps, children, query }) {
-  return <div {...containerProps}>{children}</div>
+  return <Box {...containerProps}>{children}</Box>
 }
 
 function renderSectionTitle(section) {
@@ -49,14 +49,12 @@ function renderSectionTitle(section) {
 
 function renderInputComponent(inputProps) {
   return (
-    <div className="inputContainer">
-      <Input
-        type="author"
-        id="author"
-        aria-describedby="author-helper-text"
-        {...inputProps}
-      />
-    </div>
+    <Input
+      type="author"
+      id="author"
+      aria-describedby="author-helper-text"
+      {...inputProps}
+    />
   )
 }
 
@@ -103,7 +101,7 @@ const AuthorSearch = ({ authors, onUpdate }) => {
   }
 
   return (
-    <div>
+    <Box>
       <Autosuggest
         multiSection={true}
         suggestions={suggestions}
@@ -119,15 +117,15 @@ const AuthorSearch = ({ authors, onUpdate }) => {
         renderInputComponent={renderInputComponent}
       />
       {chosen.size > 0 && (
-        <div>
+        <Box>
           {[...chosen].map(author => (
             <Author key={author} close={() => chosenDelete(author)}>
               {author}
             </Author>
           ))}
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   )
 }
 
