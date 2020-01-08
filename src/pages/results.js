@@ -145,12 +145,15 @@ function ResultsPage({ location }) {
   return (
     <Flex justify="center">
       <Box p={8} maxWidth="400px" width="400px">
-        <Heading mb={3} textAlign="center" fontSize={["24px", "27px"]}>
+        <Heading textAlign="center" fontSize={["24px", "27px"]}>
           <Link to="/">Latin Diachronic Analysis</Link>
         </Heading>
+        <Text textAlign="center" fontSize={["18px", "22px"]}>
+          Results for "{search}"
+        </Text>
 
         {(loading || !result) && (
-          <Stack align="center">
+          <Stack align="center" mt={6}>
             <Spinner
               thickness="4px"
               speed="0.65s"
@@ -159,7 +162,7 @@ function ResultsPage({ location }) {
               size="xl"
             />
             <Text mt={3}>
-              Finding "{search}"{" "}
+              Searching "{search}"{" "}
               {authors && authors.length
                 ? `for ${authors.toString()}`
                 : "for all authors"}
@@ -167,18 +170,18 @@ function ResultsPage({ location }) {
           </Stack>
         )}
         {result && result.type !== "Empty" && (
-          <Box>
+          <Box mt={4}>
             <Flex flexWrap="wrap">
-              <Stat mt={3}>
+              <Stat mt={3} mb={2}>
                 <StatLabel>Type</StatLabel>
                 <StatNumber fontSize={["lg", "2xl"]}>{result.type}</StatNumber>
               </Stat>
-              <Stat mt={3}>
+              <Stat mt={3} mb={2}>
                 <StatLabel>Occurrences</StatLabel>
                 <StatNumber fontSize={["lg", "2xl"]}>{result.count}</StatNumber>
               </Stat>
               {group && group.authors ? (
-                <Stat mt={3}>
+                <Stat mt={3} mb={2}>
                   <StatLabel>Authors</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {Object.entries(group.authors).length}
@@ -186,7 +189,7 @@ function ResultsPage({ location }) {
                 </Stat>
               ) : null}
               {group && group.sources ? (
-                <Stat mt={3}>
+                <Stat mt={3} mb={2}>
                   <StatLabel>Sources</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {Object.entries(group.sources).length}
@@ -195,7 +198,6 @@ function ResultsPage({ location }) {
               ) : null}
             </Flex>
             <FormControl mt={6}>
-              <FormLabel>Results for "{search}"</FormLabel>
               <Tabs isFitted variant="soft-rounded" variantColor="gray" mt={1}>
                 <TabList>
                   <Tab>By author</Tab>
@@ -298,7 +300,7 @@ function ResultsPage({ location }) {
           </Box>
         )}
         {result && result.type && result.type === "Empty" && (
-          <Alert status="warning">
+          <Alert status="warning" mt={6}>
             <AlertIcon />
             Search yielded no results in our database, please try again.
             <Link to="/">
