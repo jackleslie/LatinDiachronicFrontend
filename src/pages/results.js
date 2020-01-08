@@ -147,9 +147,6 @@ function ResultsPage({ location }) {
         <Heading textAlign="center" fontSize={["24px", "27px"]}>
           <Link to="/">Latin Diachronic Analysis</Link>
         </Heading>
-        <Text textAlign="center" fontSize={["18px", "22px"]}>
-          Results for "{search}"
-        </Text>
 
         {(loading || !result) && (
           <Stack align="center" mt={6}>
@@ -169,42 +166,55 @@ function ResultsPage({ location }) {
           </Stack>
         )}
         {result && result.type !== "Empty" && (
-          <Box mt={4}>
-            <Flex flexWrap="wrap">
-              <Stat mt={3} mb={2}>
-                <StatLabel>Type</StatLabel>
-                <StatNumber fontSize={["lg", "2xl"]}>{result.type}</StatNumber>
-              </Stat>
-              <Stat mt={3} mb={2}>
-                <StatLabel>Occurrences</StatLabel>
-                <StatNumber fontSize={["lg", "2xl"]}>{result.count}</StatNumber>
-              </Stat>
-              {group && group.authors ? (
+          <Box>
+            <Text textAlign="center" fontSize={["18px", "22px"]}>
+              Results for "{search}"
+            </Text>
+            <Box mt={4}>
+              <Flex flexWrap="wrap">
                 <Stat mt={3} mb={2}>
-                  <StatLabel>Authors</StatLabel>
+                  <StatLabel>Type</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
-                    {Object.entries(group.authors).length}
+                    {result.type}
                   </StatNumber>
                 </Stat>
-              ) : null}
-              {group && group.sources ? (
                 <Stat mt={3} mb={2}>
-                  <StatLabel>Sources</StatLabel>
+                  <StatLabel>Occurrences</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
-                    {Object.entries(group.sources).length}
+                    {result.count}
                   </StatNumber>
                 </Stat>
-              ) : null}
-            </Flex>
-            <FormControl mt={6}>
-              <Tabs isFitted variant="soft-rounded" variantColor="gray" mt={1}>
-                <TabList>
-                  <Tab>By author</Tab>
-                  <Tab>By source</Tab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel>
-                    {/*
+                {group && group.authors ? (
+                  <Stat mt={3} mb={2}>
+                    <StatLabel>Authors</StatLabel>
+                    <StatNumber fontSize={["lg", "2xl"]}>
+                      {Object.entries(group.authors).length}
+                    </StatNumber>
+                  </Stat>
+                ) : null}
+                {group && group.sources ? (
+                  <Stat mt={3} mb={2}>
+                    <StatLabel>Sources</StatLabel>
+                    <StatNumber fontSize={["lg", "2xl"]}>
+                      {Object.entries(group.sources).length}
+                    </StatNumber>
+                  </Stat>
+                ) : null}
+              </Flex>
+              <FormControl mt={6}>
+                <Tabs
+                  isFitted
+                  variant="soft-rounded"
+                  variantColor="gray"
+                  mt={1}
+                >
+                  <TabList>
+                    <Tab>By author</Tab>
+                    <Tab>By source</Tab>
+                  </TabList>
+                  <TabPanels>
+                    <TabPanel>
+                      {/*
                     <FormControl mt={4}>
                       <FormLabel htmlFor="author-filter">Filter</FormLabel>
                       <Input
@@ -220,39 +230,39 @@ function ResultsPage({ location }) {
                       </FormHelperText>
                     </FormControl>
                     */}
-                    <Accordion allowMultiple mt={8}>
-                      {Object.entries(group.authors).map(
-                        ([key, value], index) => (
-                          <AccordionItem key={index}>
-                            <AccordionHeader>
-                              <Box flex="1" textAlign="left">
-                                <Text>{key}</Text>
-                                <FormHelperText mt={0}>
-                                  in {value.sources.length} source
-                                  {value.sources.length > 1 ? "s" : ""}
-                                </FormHelperText>
-                              </Box>
-                              <AccordionIcon />
-                            </AccordionHeader>
-                            <AccordionPanel pb={4}>
-                              {value.occurrences.map(
-                                ({ line, source }, index) => (
-                                  <Box mt={2} key={index}>
-                                    <Text fontSize="sm">{line}</Text>
-                                    <FormHelperText mt={0}>
-                                      in {source}
-                                    </FormHelperText>
-                                  </Box>
-                                )
-                              )}
-                            </AccordionPanel>
-                          </AccordionItem>
-                        )
-                      )}
-                    </Accordion>
-                  </TabPanel>
-                  <TabPanel>
-                    {/*
+                      <Accordion allowMultiple mt={8}>
+                        {Object.entries(group.authors).map(
+                          ([key, value], index) => (
+                            <AccordionItem key={index}>
+                              <AccordionHeader>
+                                <Box flex="1" textAlign="left">
+                                  <Text>{key}</Text>
+                                  <FormHelperText mt={0}>
+                                    in {value.sources.length} source
+                                    {value.sources.length > 1 ? "s" : ""}
+                                  </FormHelperText>
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionHeader>
+                              <AccordionPanel pb={4}>
+                                {value.occurrences.map(
+                                  ({ line, source }, index) => (
+                                    <Box mt={2} key={index}>
+                                      <Text fontSize="sm">{line}</Text>
+                                      <FormHelperText mt={0}>
+                                        in {source}
+                                      </FormHelperText>
+                                    </Box>
+                                  )
+                                )}
+                              </AccordionPanel>
+                            </AccordionItem>
+                          )
+                        )}
+                      </Accordion>
+                    </TabPanel>
+                    <TabPanel>
+                      {/*
                     <FormControl mt={4}>
                       <FormLabel htmlFor="source-filter">Filter</FormLabel>
                       <Input
@@ -268,34 +278,35 @@ function ResultsPage({ location }) {
                       </FormHelperText>
                     </FormControl>
                     */}
-                    <Accordion allowMultiple mt={8}>
-                      {Object.entries(group.sources).map(
-                        ([key, value], index) => (
-                          <AccordionItem key={index}>
-                            <AccordionHeader>
-                              <Box flex="1" textAlign="left">
-                                <Text>{key}</Text>
-                                <FormHelperText mt={0}>
-                                  by {value.author}
-                                </FormHelperText>
-                              </Box>
-                              <AccordionIcon />
-                            </AccordionHeader>
-                            <AccordionPanel pb={4}>
-                              {value.occurrences.map((line, index) => (
-                                <Box mt={2} key={index}>
-                                  <Text fontSize="sm">{line}</Text>
+                      <Accordion allowMultiple mt={8}>
+                        {Object.entries(group.sources).map(
+                          ([key, value], index) => (
+                            <AccordionItem key={index}>
+                              <AccordionHeader>
+                                <Box flex="1" textAlign="left">
+                                  <Text>{key}</Text>
+                                  <FormHelperText mt={0}>
+                                    by {value.author}
+                                  </FormHelperText>
                                 </Box>
-                              ))}
-                            </AccordionPanel>
-                          </AccordionItem>
-                        )
-                      )}
-                    </Accordion>
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </FormControl>
+                                <AccordionIcon />
+                              </AccordionHeader>
+                              <AccordionPanel pb={4}>
+                                {value.occurrences.map((line, index) => (
+                                  <Box mt={2} key={index}>
+                                    <Text fontSize="sm">{line}</Text>
+                                  </Box>
+                                ))}
+                              </AccordionPanel>
+                            </AccordionItem>
+                          )
+                        )}
+                      </Accordion>
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </FormControl>
+            </Box>
           </Box>
         )}
         {result && result.type && result.type === "Empty" && (
