@@ -37,7 +37,7 @@ function ResultsPage({ location }) {
   const search = location && location.state && location.state.search
   const AUTHOR_QUERY =
     authors && authors.length
-      ? `, authors: { list: "${authors.toString()}", useAll: false }`
+      ? `, authors: { list: ${JSON.stringify(authors)}, useAll: false }`
       : ""
   const LEMMA_QUERY = gql`
   {
@@ -249,7 +249,9 @@ function ResultsPage({ location }) {
                             <AccordionItem key={index}>
                               <AccordionHeader>
                                 <Box flex="1" textAlign="left">
-                                  <Text>{key}</Text>
+                                  <Text>
+                                    {key} ({value.occurrences.length})
+                                  </Text>
                                   <FormHelperText mt={0}>
                                     in {value.sources.length} source
                                     {value.sources.length > 1 ? "s" : ""}
@@ -299,10 +301,11 @@ function ResultsPage({ location }) {
                             <AccordionItem key={index}>
                               <AccordionHeader>
                                 <Box flex="1" textAlign="left">
-                                  <Text>{key}</Text>
+                                  <Text>
+                                    {key} ({value.occurrences.length})
+                                  </Text>
                                   <FormHelperText mt={0}>
-                                    by {value.author} (
-                                    {value.occurrences.length})
+                                    by {value.author}
                                   </FormHelperText>
                                 </Box>
                                 <AccordionIcon />
