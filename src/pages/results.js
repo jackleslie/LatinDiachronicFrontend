@@ -161,7 +161,7 @@ function ResultsPage({ location }) {
               color="blue.500"
               size="xl"
             />
-            <Text mt={4}>
+            <Text mt={4} textAlign="center">
               Searching <Text as="b">{search} </Text>
               {authors && authors.length ? (
                 <Text as="span">
