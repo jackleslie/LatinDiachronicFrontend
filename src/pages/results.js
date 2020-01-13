@@ -52,6 +52,10 @@ function ResultsPage({ location }) {
           name
           author {
             name
+            timeSpan {
+              end
+              start
+            }
           }
         }
       }
@@ -80,6 +84,10 @@ function ResultsPage({ location }) {
                 name
                 author {
                   name
+                  timeSpan {
+                    end
+                    start
+                  }
                 }
               }
             }
@@ -116,12 +124,15 @@ function ResultsPage({ location }) {
       (x, occurrence) => {
         const authorName = occurrence.source.author.name
         const sourceName = occurrence.source.name
+        const start = occurrence.source.author.timeSpan.start
+        const end = occurrence.source.author.timeSpan.end
 
         const authorsEntry = {
           line: occurrence.line,
           source: sourceName,
         }
 
+        // authors
         if (x.authors[authorName]) {
           x.authors[authorName].occurrences.push(authorsEntry)
           if (!x.authors[authorName].sources.includes(sourceName)) {
@@ -133,6 +144,7 @@ function ResultsPage({ location }) {
           x.authors[authorName].sources = [sourceName]
         }
 
+        // sources
         if (x.sources[sourceName]) {
           x.sources[sourceName].occurrences.push(occurrence.line)
         } else {
@@ -141,9 +153,31 @@ function ResultsPage({ location }) {
           x.sources[sourceName].author = authorName
         }
 
+        const centuriesEntry = {
+          line: occurrence.line,
+          source: sourceName,
+          author: authorName,
+        }
+
+        // centuries (start)
+        if (x.centuries[start]) {
+          x.centuries[start].occurrences.push(centuriesEntry)
+        } else {
+          x.centuries[start] = {}
+          x.centuries[start].occurrences = [centuriesEntry]
+        }
+
+        // centuries (end)
+        if (x.centuries[end]) {
+          x.centuries[end].occurrences.push(centuriesEntry)
+        } else {
+          x.centuries[end] = {}
+          x.centuries[end].occurrences = [centuriesEntry]
+        }
+
         return x
       },
-      { authors: {}, sources: {} }
+      { authors: {}, sources: {}, centuries: {} }
     )
   }
 
@@ -234,6 +268,7 @@ function ResultsPage({ location }) {
                   <TabList>
                     <Tab>By author</Tab>
                     <Tab>By source</Tab>
+                    <Tab>By century</Tab>
                   </TabList>
                   <TabPanels>
                     <TabPanel>
@@ -329,6 +364,36 @@ function ResultsPage({ location }) {
                                     <Text fontSize="sm">{line}</Text>
                                   </Box>
                                 ))}
+                              </AccordionPanel>
+                            </AccordionItem>
+                          ))}
+                      </Accordion>
+                    </TabPanel>
+                    <TabPanel>
+                      <Accordion allowMultiple mt={8}>
+                        {Object.entries(group.centuries)
+                          .sort(([a], [b]) =>
+                            a.toUpperCase() > b.toUpperCase() ? 1 : -1
+                          )
+                          .map(([key, value], index) => (
+                            <AccordionItem key={index}>
+                              <AccordionHeader>
+                                <Box flex="1" textAlign="left">
+                                  <Text>{yearLabel(key)}</Text>
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionHeader>
+                              <AccordionPanel pb={4}>
+                                {value.occurrences.map(
+                                  ({ line, source, author }, index) => (
+                                    <Box mt={2} key={index}>
+                                      <Text fontSize="sm">{line}</Text>
+                                      <FormHelperText mt={0}>
+                                        in {source} by {author}
+                                      </FormHelperText>
+                                    </Box>
+                                  )
+                                )}
                               </AccordionPanel>
                             </AccordionItem>
                           ))}
