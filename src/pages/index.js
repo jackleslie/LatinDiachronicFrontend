@@ -19,6 +19,7 @@ function IndexPage({ data }) {
   const [authorsToSearch, setAuthorsToSearch] = useState([])
   const [lemmaToSearch, setLemmaToSearch] = useState("")
   const [clicked, setClicked] = useState(false)
+  const [timeSpan, setTimeSpan] = useState([-500, 600])
 
   return (
     <Flex justify="center">
@@ -38,7 +39,7 @@ function IndexPage({ data }) {
           </FormControl>
           <FormControl>
             <FormLabel htmlFor="century">Century</FormLabel>
-            <Slider />
+            <Slider value={timeSpan} setValue={setTimeSpan} />
             <FormHelperText id="century-helper-text">
               Search between a specific time span.
             </FormHelperText>

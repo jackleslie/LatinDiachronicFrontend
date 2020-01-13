@@ -90,12 +90,10 @@ const marks = [
   },
 ]
 
-export default function RangeSlider() {
+export default function RangeSlider({ value, setValue }) {
   const { root, rail, track, thumb, valueLabel, mark } = useStyles()
-  const [value, setValue] = React.useState([-500, 600])
 
   const handleChange = (event, newValue) => {
-    console.log(newValue)
     setValue(newValue)
   }
 
