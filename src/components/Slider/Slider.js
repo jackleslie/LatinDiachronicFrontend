@@ -1,6 +1,7 @@
 import React from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Slider from "@material-ui/core/Slider"
+import { yearLabel } from "../../utils"
 
 const useStyles = makeStyles({
   root: {
@@ -46,13 +47,6 @@ const useStyles = makeStyles({
     color: "rgb(49, 130, 206)",
   },
 })
-
-function valuetext(value) {
-  if (value < 0) {
-    return `${Math.abs(value) / 100} BCE`
-  }
-  return `${Math.abs(value) / 100} CE`
-}
 
 const marks = [
   {
@@ -111,12 +105,12 @@ export default function RangeSlider({ value, setValue }) {
         onChange={handleChange}
         valueLabelDisplay="auto"
         aria-labelledby="range-slider"
-        getAriaValueText={valuetext}
+        getAriaValueText={yearLabel}
         marks={marks}
         step={null}
         min={-500}
         max={600}
-        valueLabelFormat={valuetext}
+        valueLabelFormat={yearLabel}
       />
     </div>
   )

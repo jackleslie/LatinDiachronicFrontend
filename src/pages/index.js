@@ -64,7 +64,11 @@ function IndexPage({ data }) {
           {lemmaToSearch ? (
             <Link
               to="/results"
-              state={{ authors: authorsToSearch, search: lemmaToSearch }}
+              state={{
+                authors: authorsToSearch,
+                search: lemmaToSearch,
+                timeSpan,
+              }}
               style={{ width: "100%" }}
             >
               <Button mt={[6, 8]} width="100%">

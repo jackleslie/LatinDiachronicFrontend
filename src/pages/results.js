@@ -31,17 +31,20 @@ import {
 import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
 import { SEO } from "../components"
+import { yearLabel } from "../utils"
 
 function ResultsPage({ location }) {
   const authors = location && location.state && location.state.authors
   const search = location && location.state && location.state.search
+  const timeSpan = location && location.state && location.state.timeSpan
   const AUTHOR_QUERY =
     authors && authors.length
-      ? `, authors: { list: ${JSON.stringify(authors)}, useAll: false }`
-      : ""
+      ? `, authors: { list: ${JSON.stringify(authors)}, useAll: false },`
+      : ","
+  const SPAN_QUERY = `span: {useAll: false, span: {startYear: ${timeSpan[0]}, endYear: ${timeSpan[1]}}}`
   const LEMMA_QUERY = gql`
   {
-    lemma(lemma: "${search}"${AUTHOR_QUERY}) {
+    lemma(lemma: "${search}"${AUTHOR_QUERY}${SPAN_QUERY}) {
       count
       occurrences {
         line
@@ -69,7 +72,7 @@ function ResultsPage({ location }) {
       if (!data.lemma.count) {
         const FORM_QUERY = gql`
         {
-          form(form: "${search}"${AUTHOR_QUERY}) {
+          form(form: "${search}"${AUTHOR_QUERY}${SPAN_QUERY}) {
             count
             occurrences {
               line
@@ -106,7 +109,7 @@ function ResultsPage({ location }) {
         setResult({ type: "Empty" })
       }
     }
-  }, [data, search, AUTHOR_QUERY])
+  }, [data, search, AUTHOR_QUERY, SPAN_QUERY])
 
   function generateGroup(result) {
     return result.occurrences.reduce(
@@ -210,6 +213,14 @@ function ResultsPage({ location }) {
                     </StatNumber>
                   </Stat>
                 ) : null}
+                {timeSpan && (
+                  <Stat mt={3} mb={2} pr={0} textAlign="center">
+                    <StatLabel>Centuries</StatLabel>
+                    <StatNumber fontSize={["lg", "2xl"]}>
+                      {`${yearLabel(timeSpan[0])} - ${yearLabel(timeSpan[1])}`}
+                    </StatNumber>
+                  </Stat>
+                )}
               </Flex>
               <FormControl mt={6}>
                 <Tabs
