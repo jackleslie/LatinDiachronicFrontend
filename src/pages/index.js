@@ -38,7 +38,7 @@ function IndexPage({ data }) {
               authors.
             </FormHelperText>
           </FormControl>
-          <FormControl>
+          <FormControl mt={[1, 3]}>
             <FormLabel htmlFor="century">Century</FormLabel>
             <Slider value={timeSpan} setValue={setTimeSpan} />
             <FormHelperText id="century-helper-text" mt={0}>

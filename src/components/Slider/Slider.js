@@ -45,6 +45,7 @@ const useStyles = makeStyles({
     borderRadius: "2px",
     marginTop: "1px",
     color: "rgb(49, 130, 206)",
+    display: "none",
   },
 })
 
@@ -103,7 +104,7 @@ export default function RangeSlider({ value, setValue }) {
         }}
         value={value}
         onChange={handleChange}
-        valueLabelDisplay="auto"
+        valueLabelDisplay="off"
         aria-labelledby="range-slider"
         getAriaValueText={yearLabel}
         marks={marks}
