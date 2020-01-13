@@ -156,23 +156,32 @@ function ResultsPage({ location }) {
         const centuriesEntry = {
           line: occurrence.line,
           source: sourceName,
-          author: authorName,
         }
 
         // centuries (start)
-        if (x.centuries[start]) {
-          x.centuries[start].occurrences.push(centuriesEntry)
+        if (x.centuries[start] && x.centuries[start][authorName]) {
+          x.centuries[start][authorName].occurrences.push(centuriesEntry)
+          if (!x.centuries[start][authorName].sources.includes(sourceName)) {
+            x.centuries[start][authorName].sources.push(sourceName)
+          }
         } else {
           x.centuries[start] = {}
-          x.centuries[start].occurrences = [centuriesEntry]
+          x.centuries[start][authorName] = {}
+          x.centuries[start][authorName].occurrences = [centuriesEntry]
+          x.centuries[start][authorName].sources = [sourceName]
         }
 
         // centuries (end)
-        if (x.centuries[end]) {
-          x.centuries[end].occurrences.push(centuriesEntry)
+        if (x.centuries[end] && x.centuries[end][authorName]) {
+          x.centuries[end][authorName].occurrences.push(centuriesEntry)
+          if (!x.centuries[end][authorName].sources.includes(sourceName)) {
+            x.centuries[end][authorName].sources.push(sourceName)
+          }
         } else {
           x.centuries[end] = {}
-          x.centuries[end].occurrences = [centuriesEntry]
+          x.centuries[end][authorName] = {}
+          x.centuries[end][authorName].occurrences = [centuriesEntry]
+          x.centuries[end][authorName].sources = [sourceName]
         }
 
         return x
@@ -376,26 +385,41 @@ function ResultsPage({ location }) {
                             a.toUpperCase() > b.toUpperCase() ? 1 : -1
                           )
                           .map(([key, value], index) => (
-                            <AccordionItem key={index}>
-                              <AccordionHeader>
-                                <Box flex="1" textAlign="left">
-                                  <Text>{yearLabel(key)}</Text>
-                                </Box>
-                                <AccordionIcon />
-                              </AccordionHeader>
-                              <AccordionPanel pb={4}>
-                                {value.occurrences.map(
-                                  ({ line, source, author }, index) => (
-                                    <Box mt={2} key={index}>
-                                      <Text fontSize="sm">{line}</Text>
-                                      <FormHelperText mt={0}>
-                                        in {source} by {author}
-                                      </FormHelperText>
-                                    </Box>
-                                  )
-                                )}
-                              </AccordionPanel>
-                            </AccordionItem>
+                            <Box>
+                              <Heading size="sm" m={2} mt={6}>
+                                {yearLabel(key)}
+                              </Heading>
+                              {Object.entries(value).map(
+                                ([key, value], index) => (
+                                  <AccordionItem key={index}>
+                                    <AccordionHeader>
+                                      <Box flex="1" textAlign="left">
+                                        <Text>
+                                          {key} ({value.occurrences.length})
+                                        </Text>
+                                        <FormHelperText mt={0}>
+                                          in {value.sources.length} source
+                                          {value.sources.length > 1 ? "s" : ""}
+                                        </FormHelperText>
+                                      </Box>
+                                      <AccordionIcon />
+                                    </AccordionHeader>
+                                    <AccordionPanel pb={4}>
+                                      {value.occurrences.map(
+                                        ({ line, source }, index) => (
+                                          <Box mt={2} key={index}>
+                                            <Text fontSize="sm">{line}</Text>
+                                            <FormHelperText mt={0}>
+                                              in {source}
+                                            </FormHelperText>
+                                          </Box>
+                                        )
+                                      )}
+                                    </AccordionPanel>
+                                  </AccordionItem>
+                                )
+                              )}
+                            </Box>
                           ))}
                       </Accordion>
                     </TabPanel>
