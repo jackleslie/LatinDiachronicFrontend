@@ -147,6 +147,8 @@ function ResultsPage({ location }) {
     )
   }
 
+  const timeSpanLabel = `${yearLabel(timeSpan[0])} - ${yearLabel(timeSpan[1])}`
+
   return (
     <Flex justify="center">
       <SEO title="Results" />
@@ -217,7 +219,7 @@ function ResultsPage({ location }) {
                   <Stat mt={3} mb={2} pr={0} textAlign="center">
                     <StatLabel>Centuries</StatLabel>
                     <StatNumber fontSize={["lg", "2xl"]}>
-                      {`${yearLabel(timeSpan[0])} - ${yearLabel(timeSpan[1])}`}
+                      {timeSpanLabel}
                     </StatNumber>
                   </Stat>
                 )}
@@ -363,6 +365,10 @@ function ResultsPage({ location }) {
                   {authors && authors.length
                     ? authors.join(", ")
                     : "all authors"}
+                </Text>{" "}
+                in{" "}
+                <Text as="b" wordBreak="break-word">
+                  {timeSpanLabel}
                 </Text>
                 <Text as="span"> yielded no results in our database.</Text>
               </AlertDescription>
