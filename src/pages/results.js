@@ -193,7 +193,10 @@ function ResultsPage({ location }) {
     )
   }
 
-  const timeSpanLabel = `${yearLabel(timeSpan[0])} - ${yearLabel(timeSpan[1])}`
+  const timeSpanLabel =
+    timeSpan && timeSpan.length
+      ? `${yearLabel(timeSpan[0])} - ${yearLabel(timeSpan[1])}`
+      : ""
 
   return (
     <Flex justify="center">
