@@ -165,7 +165,7 @@ function ResultsPage({ location }) {
             x.centuries[start][authorName].sources.push(sourceName)
           }
         } else {
-          x.centuries[start] = {}
+          x.centuries[start] = { ...x.centuries[start] }
           x.centuries[start][authorName] = {}
           x.centuries[start][authorName].occurrences = [centuriesEntry]
           x.centuries[start][authorName].sources = [sourceName]
@@ -178,7 +178,7 @@ function ResultsPage({ location }) {
             x.centuries[end][authorName].sources.push(sourceName)
           }
         } else {
-          x.centuries[end] = {}
+          x.centuries[end] = { ...x.centuries[end] }
           x.centuries[end][authorName] = {}
           x.centuries[end][authorName].occurrences = [centuriesEntry]
           x.centuries[end][authorName].sources = [sourceName]
