@@ -9,6 +9,9 @@
     "@chakra-ui/core": "^0.5.2",
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
+    "@material-ui/core": "^4.8.3",
+    "@material-ui/styles": "^4.8.2",
+    "add": "^2.0.6",
     "apollo-boost": "^0.4.7",
     "dotenv": "^8.2.0",
     "emotion-theming": "^10.0.27",
@@ -16,6 +19,7 @@
     "gatsby-image": "^2.2.34",
     "gatsby-plugin-chakra-ui": "^0.1.2",
     "gatsby-plugin-manifest": "^2.2.31",
+    "gatsby-plugin-material-ui": "^2.1.6",
     "gatsby-plugin-offline": "^3.0.27",
     "gatsby-plugin-react-helmet": "^3.1.16",
     "gatsby-source-graphql": "^2.1.29",
@@ -24,7 +28,8 @@
     "react": "^16.12.0",
     "react-autosuggest": "^9.4.3",
     "react-dom": "^16.12.0",
-    "react-helmet": "^5.2.1"
+    "react-helmet": "^5.2.1",
+    "yarn": "^1.21.1"
   },
   "devDependencies": {
     "prettier": "^1.19.1"

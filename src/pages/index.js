@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/core"
 import { Link, graphql } from "gatsby"
 
-import { AuthorSearch, SEO } from "../components"
+import { AuthorSearch, Slider, SEO } from "../components"
 
 function IndexPage({ data }) {
   const { authors } = data.latin
@@ -34,6 +34,13 @@ function IndexPage({ data }) {
             <FormHelperText id="author-helper-text">
               Enter as many authors as you like, or leave blank to search all
               authors.
+            </FormHelperText>
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="century">Century</FormLabel>
+            <Slider />
+            <FormHelperText id="century-helper-text">
+              Search between a specific time span.
             </FormHelperText>
           </FormControl>
           <FormControl isRequired mt={[1, 3]}>
