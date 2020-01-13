@@ -225,7 +225,11 @@ function ResultsPage({ location }) {
                 <Text as="span">
                   by <Text as="b">all authors</Text>
                 </Text>
-              )}
+              )}{" "}
+              in{" "}
+              <Text as="b" wordBreak="break-word">
+                {timeSpanLabel}
+              </Text>
             </Text>
           </Stack>
         )}
