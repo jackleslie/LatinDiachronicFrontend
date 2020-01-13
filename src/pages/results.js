@@ -41,7 +41,10 @@ function ResultsPage({ location }) {
     authors && authors.length
       ? `, authors: { list: ${JSON.stringify(authors)}, useAll: false },`
       : ","
-  const SPAN_QUERY = `span: {useAll: false, span: {startYear: ${timeSpan[0]}, endYear: ${timeSpan[1]}}}`
+  const SPAN_QUERY =
+    timeSpan && timeSpan.length
+      ? `span: {useAll: false, span: {startYear: ${timeSpan[0]}, endYear: ${timeSpan[1]}}}`
+      : ""
   const LEMMA_QUERY = gql`
   {
     lemma(lemma: "${search}"${AUTHOR_QUERY}${SPAN_QUERY}) {
