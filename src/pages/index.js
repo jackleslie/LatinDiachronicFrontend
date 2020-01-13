@@ -13,6 +13,7 @@ import {
 import { Link, graphql } from "gatsby"
 
 import { AuthorSearch, Slider, SEO } from "../components"
+import { yearLabel } from "../utils"
 
 function IndexPage({ data }) {
   const { authors } = data.latin
@@ -40,8 +41,9 @@ function IndexPage({ data }) {
           <FormControl>
             <FormLabel htmlFor="century">Century</FormLabel>
             <Slider value={timeSpan} setValue={setTimeSpan} />
-            <FormHelperText id="century-helper-text">
-              Search between a specific time span.
+            <FormHelperText id="century-helper-text" mt={0}>
+              Search from {yearLabel(timeSpan[0])} until{" "}
+              {yearLabel(timeSpan[1])}.
             </FormHelperText>
           </FormControl>
           <FormControl isRequired mt={[1, 3]}>
