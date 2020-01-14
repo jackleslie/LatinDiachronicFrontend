@@ -240,20 +240,20 @@ function ResultsPage({ location }) {
             </Text>
             <Box mt={4}>
               <Flex flexWrap="wrap">
-                <Stat mt={3} mb={2} pr={0} textAlign="center">
+                <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
                   <StatLabel>Type</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {result.type}
                   </StatNumber>
                 </Stat>
-                <Stat mt={3} mb={2} pr={0} textAlign="center">
+                <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
                   <StatLabel>Occurrences</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {result.count}
                   </StatNumber>
                 </Stat>
                 {group && group.authors ? (
-                  <Stat mt={3} mb={2} pr={0} textAlign="center">
+                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
                     <StatLabel>Authors</StatLabel>
                     <StatNumber fontSize={["lg", "2xl"]}>
                       {Object.entries(group.authors).length}
@@ -261,7 +261,7 @@ function ResultsPage({ location }) {
                   </Stat>
                 ) : null}
                 {group && group.sources ? (
-                  <Stat mt={3} mb={2} pr={0} textAlign="center">
+                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
                     <StatLabel>Sources</StatLabel>
                     <StatNumber fontSize={["lg", "2xl"]}>
                       {Object.entries(group.sources).length}
@@ -269,7 +269,7 @@ function ResultsPage({ location }) {
                   </Stat>
                 ) : null}
                 {timeSpan && (
-                  <Stat mt={3} mb={2} pr={0} textAlign="center">
+                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
                     <StatLabel>Centuries</StatLabel>
                     <StatNumber fontSize={["lg", "2xl"]}>
                       {timeSpanLabel}
@@ -285,9 +285,9 @@ function ResultsPage({ location }) {
                   mt={1}
                 >
                   <TabList>
-                    <Tab>By author</Tab>
-                    <Tab>By source</Tab>
-                    <Tab>By century</Tab>
+                    <Tab fontSize={["sm", "md"]}>By author</Tab>
+                    <Tab fontSize={["sm", "md"]}>By source</Tab>
+                    <Tab fontSize={["sm", "md"]}>By century</Tab>
                   </TabList>
                   <TabPanels>
                     <TabPanel>
