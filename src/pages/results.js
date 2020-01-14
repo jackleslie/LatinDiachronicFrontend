@@ -31,17 +31,23 @@ import {
 import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
 import { SEO } from "../components"
+import { yearLabel } from "../utils"
 
 function ResultsPage({ location }) {
   const authors = location && location.state && location.state.authors
   const search = location && location.state && location.state.search
+  const timeSpan = location && location.state && location.state.timeSpan
   const AUTHOR_QUERY =
     authors && authors.length
-      ? `, authors: { list: ${JSON.stringify(authors)}, useAll: false }`
+      ? `, authors: { list: ${JSON.stringify(authors)}, useAll: false },`
+      : ","
+  const SPAN_QUERY =
+    timeSpan && timeSpan.length
+      ? `span: {useAll: false, span: {startYear: ${timeSpan[0]}, endYear: ${timeSpan[1]}}}`
       : ""
   const LEMMA_QUERY = gql`
   {
-    lemma(lemma: "${search}"${AUTHOR_QUERY}) {
+    lemma(lemma: "${search}"${AUTHOR_QUERY}${SPAN_QUERY}) {
       count
       occurrences {
         line
@@ -49,6 +55,10 @@ function ResultsPage({ location }) {
           name
           author {
             name
+            timeSpan {
+              end
+              start
+            }
           }
         }
       }
@@ -69,7 +79,7 @@ function ResultsPage({ location }) {
       if (!data.lemma.count) {
         const FORM_QUERY = gql`
         {
-          form(form: "${search}"${AUTHOR_QUERY}) {
+          form(form: "${search}"${AUTHOR_QUERY}${SPAN_QUERY}) {
             count
             occurrences {
               line
@@ -77,6 +87,10 @@ function ResultsPage({ location }) {
                 name
                 author {
                   name
+                  timeSpan {
+                    end
+                    start
+                  }
                 }
               }
             }
@@ -106,19 +120,22 @@ function ResultsPage({ location }) {
         setResult({ type: "Empty" })
       }
     }
-  }, [data, search, AUTHOR_QUERY])
+  }, [data, search, AUTHOR_QUERY, SPAN_QUERY])
 
   function generateGroup(result) {
     return result.occurrences.reduce(
       (x, occurrence) => {
         const authorName = occurrence.source.author.name
         const sourceName = occurrence.source.name
+        const start = occurrence.source.author.timeSpan.start
+        const end = occurrence.source.author.timeSpan.end
 
         const authorsEntry = {
           line: occurrence.line,
           source: sourceName,
         }
 
+        // authors
         if (x.authors[authorName]) {
           x.authors[authorName].occurrences.push(authorsEntry)
           if (!x.authors[authorName].sources.includes(sourceName)) {
@@ -130,6 +147,7 @@ function ResultsPage({ location }) {
           x.authors[authorName].sources = [sourceName]
         }
 
+        // sources
         if (x.sources[sourceName]) {
           x.sources[sourceName].occurrences.push(occurrence.line)
         } else {
@@ -138,11 +156,47 @@ function ResultsPage({ location }) {
           x.sources[sourceName].author = authorName
         }
 
+        const centuriesEntry = {
+          line: occurrence.line,
+          source: sourceName,
+        }
+
+        // centuries (start)
+        if (x.centuries[start] && x.centuries[start][authorName]) {
+          x.centuries[start][authorName].occurrences.push(centuriesEntry)
+          if (!x.centuries[start][authorName].sources.includes(sourceName)) {
+            x.centuries[start][authorName].sources.push(sourceName)
+          }
+        } else {
+          x.centuries[start] = { ...x.centuries[start] }
+          x.centuries[start][authorName] = {}
+          x.centuries[start][authorName].occurrences = [centuriesEntry]
+          x.centuries[start][authorName].sources = [sourceName]
+        }
+
+        // centuries (end)
+        if (x.centuries[end] && x.centuries[end][authorName]) {
+          x.centuries[end][authorName].occurrences.push(centuriesEntry)
+          if (!x.centuries[end][authorName].sources.includes(sourceName)) {
+            x.centuries[end][authorName].sources.push(sourceName)
+          }
+        } else {
+          x.centuries[end] = { ...x.centuries[end] }
+          x.centuries[end][authorName] = {}
+          x.centuries[end][authorName].occurrences = [centuriesEntry]
+          x.centuries[end][authorName].sources = [sourceName]
+        }
+
         return x
       },
-      { authors: {}, sources: {} }
+      { authors: {}, sources: {}, centuries: {} }
     )
   }
+
+  const timeSpanLabel =
+    timeSpan && timeSpan.length
+      ? `${yearLabel(timeSpan[0])} - ${yearLabel(timeSpan[1])}`
+      : ""
 
   return (
     <Flex justify="center">
@@ -171,7 +225,11 @@ function ResultsPage({ location }) {
                 <Text as="span">
                   by <Text as="b">all authors</Text>
                 </Text>
-              )}
+              )}{" "}
+              in{" "}
+              <Text as="b" wordBreak="break-word">
+                {timeSpanLabel}
+              </Text>
             </Text>
           </Stack>
         )}
@@ -182,20 +240,20 @@ function ResultsPage({ location }) {
             </Text>
             <Box mt={4}>
               <Flex flexWrap="wrap">
-                <Stat mt={3} mb={2} pr={0} textAlign="center">
+                <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
                   <StatLabel>Type</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {result.type}
                   </StatNumber>
                 </Stat>
-                <Stat mt={3} mb={2} pr={0} textAlign="center">
+                <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
                   <StatLabel>Occurrences</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {result.count}
                   </StatNumber>
                 </Stat>
                 {group && group.authors ? (
-                  <Stat mt={3} mb={2} pr={0} textAlign="center">
+                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
                     <StatLabel>Authors</StatLabel>
                     <StatNumber fontSize={["lg", "2xl"]}>
                       {Object.entries(group.authors).length}
@@ -203,13 +261,21 @@ function ResultsPage({ location }) {
                   </Stat>
                 ) : null}
                 {group && group.sources ? (
-                  <Stat mt={3} mb={2} pr={0} textAlign="center">
+                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
                     <StatLabel>Sources</StatLabel>
                     <StatNumber fontSize={["lg", "2xl"]}>
                       {Object.entries(group.sources).length}
                     </StatNumber>
                   </Stat>
                 ) : null}
+                {timeSpan && (
+                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
+                    <StatLabel>Centuries</StatLabel>
+                    <StatNumber fontSize={["lg", "2xl"]}>
+                      {timeSpanLabel}
+                    </StatNumber>
+                  </Stat>
+                )}
               </Flex>
               <FormControl mt={6}>
                 <Tabs
@@ -219,8 +285,9 @@ function ResultsPage({ location }) {
                   mt={1}
                 >
                   <TabList>
-                    <Tab>By author</Tab>
-                    <Tab>By source</Tab>
+                    <Tab fontSize={["sm", "md"]}>By author</Tab>
+                    <Tab fontSize={["sm", "md"]}>By source</Tab>
+                    <Tab fontSize={["sm", "md"]}>By century</Tab>
                   </TabList>
                   <TabPanels>
                     <TabPanel>
@@ -321,6 +388,51 @@ function ResultsPage({ location }) {
                           ))}
                       </Accordion>
                     </TabPanel>
+                    <TabPanel>
+                      <Accordion allowMultiple mt={8}>
+                        {Object.entries(group.centuries)
+                          .sort(([a], [b]) =>
+                            a.toUpperCase() > b.toUpperCase() ? 1 : -1
+                          )
+                          .map(([key, value], index) => (
+                            <Box>
+                              <Heading size="sm" m={2} mt={6}>
+                                {yearLabel(key)}
+                              </Heading>
+                              {Object.entries(value).map(
+                                ([key, value], index) => (
+                                  <AccordionItem key={index}>
+                                    <AccordionHeader>
+                                      <Box flex="1" textAlign="left">
+                                        <Text>
+                                          {key} ({value.occurrences.length})
+                                        </Text>
+                                        <FormHelperText mt={0}>
+                                          in {value.sources.length} source
+                                          {value.sources.length > 1 ? "s" : ""}
+                                        </FormHelperText>
+                                      </Box>
+                                      <AccordionIcon />
+                                    </AccordionHeader>
+                                    <AccordionPanel pb={4}>
+                                      {value.occurrences.map(
+                                        ({ line, source }, index) => (
+                                          <Box mt={2} key={index}>
+                                            <Text fontSize="sm">{line}</Text>
+                                            <FormHelperText mt={0}>
+                                              in {source}
+                                            </FormHelperText>
+                                          </Box>
+                                        )
+                                      )}
+                                    </AccordionPanel>
+                                  </AccordionItem>
+                                )
+                              )}
+                            </Box>
+                          ))}
+                      </Accordion>
+                    </TabPanel>
                   </TabPanels>
                 </Tabs>
               </FormControl>
@@ -352,6 +464,10 @@ function ResultsPage({ location }) {
                   {authors && authors.length
                     ? authors.join(", ")
                     : "all authors"}
+                </Text>{" "}
+                in{" "}
+                <Text as="b" wordBreak="break-word">
+                  {timeSpanLabel}
                 </Text>
                 <Text as="span"> yielded no results in our database.</Text>
               </AlertDescription>

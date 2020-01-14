@@ -12,13 +12,15 @@ import {
 } from "@chakra-ui/core"
 import { Link, graphql } from "gatsby"
 
-import { AuthorSearch, SEO } from "../components"
+import { AuthorSearch, Slider, SEO } from "../components"
+import { yearLabel } from "../utils"
 
 function IndexPage({ data }) {
   const { authors } = data.latin
   const [authorsToSearch, setAuthorsToSearch] = useState([])
   const [lemmaToSearch, setLemmaToSearch] = useState("")
   const [clicked, setClicked] = useState(false)
+  const [timeSpan, setTimeSpan] = useState([-500, 600])
 
   return (
     <Flex justify="center">
@@ -34,6 +36,14 @@ function IndexPage({ data }) {
             <FormHelperText id="author-helper-text">
               Enter as many authors as you like, or leave blank to search all
               authors.
+            </FormHelperText>
+          </FormControl>
+          <FormControl mt={[1, 3]}>
+            <FormLabel htmlFor="century">Century</FormLabel>
+            <Slider value={timeSpan} setValue={setTimeSpan} />
+            <FormHelperText id="century-helper-text" mt={0}>
+              Search from {yearLabel(timeSpan[0])} until{" "}
+              {yearLabel(timeSpan[1])}.
             </FormHelperText>
           </FormControl>
           <FormControl isRequired mt={[1, 3]}>
@@ -56,7 +66,11 @@ function IndexPage({ data }) {
           {lemmaToSearch ? (
             <Link
               to="/results"
-              state={{ authors: authorsToSearch, search: lemmaToSearch }}
+              state={{
+                authors: authorsToSearch,
+                search: lemmaToSearch,
+                timeSpan,
+              }}
               style={{ width: "100%" }}
             >
               <Button mt={[6, 8]} width="100%">
