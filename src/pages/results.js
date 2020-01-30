@@ -31,7 +31,7 @@ import {
 import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
 import { SEO } from "../components"
-import { yearLabel } from "../utils"
+import { yearLabel, countAmbiguousOccurences } from "../utils"
 
 function ResultsPage({ location }) {
   const authors = location && location.state && location.state.authors
@@ -50,6 +50,7 @@ function ResultsPage({ location }) {
     lemma(lemma: "${search}"${AUTHOR_QUERY}${SPAN_QUERY}) {
       count
       occurrences {
+        ambiguos
         line
         source {
           name
@@ -67,6 +68,7 @@ function ResultsPage({ location }) {
   `
   const [query, setQuery] = useState(LEMMA_QUERY)
   const [result, setResult] = useState()
+  const [ambiguous, setAmbiguous] = useState()
   /*
   const [authorFilter, setAuthorFilter] = useState("")
   const [sourceFilter, setSourceFilter] = useState("")
@@ -82,6 +84,7 @@ function ResultsPage({ location }) {
           form(form: "${search}"${AUTHOR_QUERY}${SPAN_QUERY}) {
             count
             occurrences {
+              ambiguos
               line
               source {
                 name
@@ -106,6 +109,10 @@ function ResultsPage({ location }) {
         const group = generateGroup(data.lemma)
         setGroup(group)
         console.log(group)
+
+        const ambiguousOccurences = countAmbiguousOccurences(data.lemma)
+        setAmbiguous(ambiguousOccurences)
+        console.log(ambiguousOccurences)
       }
     } else if (data && data.form) {
       if (data.form.count) {
@@ -116,6 +123,10 @@ function ResultsPage({ location }) {
         const group = generateGroup(data.form)
         setGroup(group)
         console.log(group)
+
+        const ambiguousOccurences = countAmbiguousOccurences(data.form)
+        setAmbiguous(ambiguousOccurences)
+        console.log(ambiguousOccurences)
       } else {
         setResult({ type: "Empty" })
       }
@@ -240,20 +251,24 @@ function ResultsPage({ location }) {
             </Text>
             <Box mt={4}>
               <Flex flexWrap="wrap">
-                <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
+                <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
                   <StatLabel>Type</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {result.type}
                   </StatNumber>
                 </Stat>
-                <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
+                <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
                   <StatLabel>Occurrences</StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>
                     {result.count}
                   </StatNumber>
                 </Stat>
+                <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
+                  <StatLabel>Ambiguous</StatLabel>
+                  <StatNumber fontSize={["lg", "2xl"]}>{ambiguous}</StatNumber>
+                </Stat>
                 {group && group.authors ? (
-                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
+                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
                     <StatLabel>Authors</StatLabel>
                     <StatNumber fontSize={["lg", "2xl"]}>
                       {Object.entries(group.authors).length}
@@ -261,7 +276,7 @@ function ResultsPage({ location }) {
                   </Stat>
                 ) : null}
                 {group && group.sources ? (
-                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
+                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
                     <StatLabel>Sources</StatLabel>
                     <StatNumber fontSize={["lg", "2xl"]}>
                       {Object.entries(group.sources).length}
@@ -269,7 +284,7 @@ function ResultsPage({ location }) {
                   </Stat>
                 ) : null}
                 {timeSpan && (
-                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="25%">
+                  <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
                     <StatLabel>Centuries</StatLabel>
                     <StatNumber fontSize={["lg", "2xl"]}>
                       {timeSpanLabel}
