@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Link } from "gatsby"
+import { Link as GatsbyLink } from "gatsby"
 import {
   Flex,
   Box,
@@ -15,6 +15,8 @@ import {
   Button,
   Stack,
   Text,
+  Link,
+  Icon,
   FormControl,
   FormHelperText,
   Tabs,
@@ -214,7 +216,7 @@ function ResultsPage({ location }) {
       <SEO title="Results" />
       <Box p={8} maxWidth="500px" width="500px">
         <Heading textAlign="center" fontSize={["24px", "36px"]}>
-          <Link to="/">Latin Diachronic Analysis</Link>
+          <GatsbyLink to="/">Latin Diachronic Analysis</GatsbyLink>
         </Heading>
 
         {(loading || !result) && !error && (
@@ -345,7 +347,14 @@ function ResultsPage({ location }) {
                                 {value.occurrences.map(
                                   ({ line, source }, index) => (
                                     <Box mt={2} key={index}>
-                                      <Text fontSize="sm">{line}</Text>
+                                      <Link
+                                        fontSize="sm"
+                                        isExternal
+                                        href={`https://latin.packhum.org/search?q=${line}`}
+                                      >
+                                        {line}
+                                        <Icon name="external-link" mx="4px" />
+                                      </Link>
                                       <FormHelperText mt={0}>
                                         in {source}
                                       </FormHelperText>
@@ -395,7 +404,14 @@ function ResultsPage({ location }) {
                               <AccordionPanel pb={4}>
                                 {value.occurrences.map((line, index) => (
                                   <Box mt={2} key={index}>
-                                    <Text fontSize="sm">{line}</Text>
+                                    <Link
+                                      fontSize="sm"
+                                      isExternal
+                                      href={`https://latin.packhum.org/search?q=${line}`}
+                                    >
+                                      {line}
+                                      <Icon name="external-link" mx="1px" />
+                                    </Link>
                                   </Box>
                                 ))}
                               </AccordionPanel>
@@ -433,7 +449,17 @@ function ResultsPage({ location }) {
                                       {value.occurrences.map(
                                         ({ line, source }, index) => (
                                           <Box mt={2} key={index}>
-                                            <Text fontSize="sm">{line}</Text>
+                                            <Link
+                                              fontSize="sm"
+                                              isExternal
+                                              href={`https://latin.packhum.org/search?q=${line}`}
+                                            >
+                                              {line}
+                                              <Icon
+                                                name="external-link"
+                                                mx="1px"
+                                              />
+                                            </Link>
                                             <FormHelperText mt={0}>
                                               in {source}
                                             </FormHelperText>
@@ -487,11 +513,11 @@ function ResultsPage({ location }) {
                 <Text as="span"> yielded no results in our database.</Text>
               </AlertDescription>
             </Alert>
-            <Link to="/" style={{ width: "100%" }}>
+            <GatsbyLink to="/" style={{ width: "100%" }}>
               <Button mt={[5, 6]} width="100%">
                 Search again
               </Button>
-            </Link>
+            </GatsbyLink>
           </Stack>
         )}
         {error && (
