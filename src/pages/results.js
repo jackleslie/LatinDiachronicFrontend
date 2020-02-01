@@ -29,6 +29,7 @@ import {
   AccordionHeader,
   AccordionIcon,
   AccordionPanel,
+  Tooltip,
 } from "@chakra-ui/core"
 import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
@@ -146,6 +147,7 @@ function ResultsPage({ location }) {
         const authorsEntry = {
           line: occurrence.line,
           source: sourceName,
+          ambiguous: occurrence.ambiguos,
         }
 
         // authors
@@ -160,18 +162,24 @@ function ResultsPage({ location }) {
           x.authors[authorName].sources = [sourceName]
         }
 
+        const sourceEntry = {
+          line: occurrence.line,
+          ambiguous: occurrence.ambiguos,
+        }
+
         // sources
         if (x.sources[sourceName]) {
-          x.sources[sourceName].occurrences.push(occurrence.line)
+          x.sources[sourceName].occurrences.push(sourceEntry)
         } else {
           x.sources[sourceName] = {}
-          x.sources[sourceName].occurrences = [occurrence.line]
+          x.sources[sourceName].occurrences = [sourceEntry]
           x.sources[sourceName].author = authorName
         }
 
         const centuriesEntry = {
           line: occurrence.line,
           source: sourceName,
+          ambiguous: occurrence.ambiguos,
         }
 
         // centuries (start)
@@ -266,7 +274,12 @@ function ResultsPage({ location }) {
                   </StatNumber>
                 </Stat>
                 <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
-                  <StatLabel>Ambiguous</StatLabel>
+                  <StatLabel>
+                    Ambiguous
+                    <Tooltip label="'Ambiguous occurrences' provides the number of occurrences out of the total, that are potentially affected by the presence of homographic forms belonging to multiple lemmas.">
+                      <Icon name="question-outline" ml="4px" />
+                    </Tooltip>
+                  </StatLabel>
                   <StatNumber fontSize={["lg", "2xl"]}>{ambiguous}</StatNumber>
                 </Stat>
                 {group && group.authors ? (
@@ -345,7 +358,7 @@ function ResultsPage({ location }) {
                               </AccordionHeader>
                               <AccordionPanel pb={4}>
                                 {value.occurrences.map(
-                                  ({ line, source }, index) => (
+                                  ({ line, source, ambiguous }, index) => (
                                     <Box mt={2} key={index}>
                                       <Link
                                         fontSize="sm"
@@ -356,7 +369,10 @@ function ResultsPage({ location }) {
                                         <Icon name="external-link" mx="3px" />
                                       </Link>
                                       <FormHelperText mt={0}>
-                                        in {source}
+                                        in {source}{" "}
+                                        {ambiguous
+                                          ? "(Ambiguous)"
+                                          : "(Certain)"}
                                       </FormHelperText>
                                     </Box>
                                   )
@@ -402,18 +418,25 @@ function ResultsPage({ location }) {
                                 <AccordionIcon />
                               </AccordionHeader>
                               <AccordionPanel pb={4}>
-                                {value.occurrences.map((line, index) => (
-                                  <Box mt={2} key={index}>
-                                    <Link
-                                      fontSize="sm"
-                                      isExternal
-                                      href={`https://latin.packhum.org/search?q=${line}`}
-                                    >
-                                      {line}
-                                      <Icon name="external-link" mx="3px" />
-                                    </Link>
-                                  </Box>
-                                ))}
+                                {value.occurrences.map(
+                                  ({ line, ambiguous }, index) => (
+                                    <Box mt={2} key={index}>
+                                      <Link
+                                        fontSize="sm"
+                                        isExternal
+                                        href={`https://latin.packhum.org/search?q=${line}`}
+                                      >
+                                        {line}
+                                        <Icon name="external-link" mx="3px" />
+                                      </Link>
+                                      <FormHelperText mt={0}>
+                                        {ambiguous
+                                          ? "(Ambiguous)"
+                                          : "(Certain)"}
+                                      </FormHelperText>
+                                    </Box>
+                                  )
+                                )}
                               </AccordionPanel>
                             </AccordionItem>
                           ))}
@@ -447,7 +470,10 @@ function ResultsPage({ location }) {
                                     </AccordionHeader>
                                     <AccordionPanel pb={4}>
                                       {value.occurrences.map(
-                                        ({ line, source }, index) => (
+                                        (
+                                          { line, source, ambiguous },
+                                          index
+                                        ) => (
                                           <Box mt={2} key={index}>
                                             <Link
                                               fontSize="sm"
@@ -461,7 +487,10 @@ function ResultsPage({ location }) {
                                               />
                                             </Link>
                                             <FormHelperText mt={0}>
-                                              in {source}
+                                              in {source}{" "}
+                                              {ambiguous
+                                                ? "(Ambiguous)"
+                                                : "(Certain)"}
                                             </FormHelperText>
                                           </Box>
                                         )
