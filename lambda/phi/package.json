@@ -1,0 +1,23 @@
+{
+  "name": "node-fetch",
+  "version": "1.0.0",
+  "description": "netlify functions:create - default template for node fetch function",
+  "main": "phi.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "netlify",
+    "serverless",
+    "js"
+  ],
+  "author": "Netlify",
+  "license": "MIT",
+  "dependencies": {
+    "chrome-aws-lambda": "^2.0.2",
+    "puppeteer-core": "^2.1.0"
+  },
+  "devDependencies": {
+    "puppeteer": "^2.1.0"
+  }
+}

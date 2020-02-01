@@ -30,6 +30,14 @@ import {
   AccordionIcon,
   AccordionPanel,
   Tooltip,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
 } from "@chakra-ui/core"
 import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
@@ -360,14 +368,33 @@ function ResultsPage({ location }) {
                                 {value.occurrences.map(
                                   ({ line, source, ambiguous }, index) => (
                                     <Box mt={2} key={index}>
-                                      <Link
-                                        fontSize="sm"
-                                        isExternal
-                                        href={`https://latin.packhum.org/search?q=${line}`}
+                                      <Popover
+                                        onOpen={async () => {
+                                          const data = await fetch(
+                                            `/.netlify/functions/phi?line=${line}`,
+                                            {
+                                              method: "GET",
+                                            }
+                                          ).then(x => x.json())
+
+                                          console.log(data)
+                                        }}
                                       >
-                                        {line}
-                                        <Icon name="external-link" mx="3px" />
-                                      </Link>
+                                        <PopoverTrigger>
+                                          <Text fontSize="sm">{line}</Text>
+                                        </PopoverTrigger>
+                                        <PopoverContent zIndex={4}>
+                                          <PopoverArrow />
+                                          <PopoverCloseButton />
+                                          <PopoverHeader>
+                                            Confirmation!
+                                          </PopoverHeader>
+                                          <PopoverBody>
+                                            Are you sure you want to have that
+                                            milkshake?
+                                          </PopoverBody>
+                                        </PopoverContent>
+                                      </Popover>
                                       <FormHelperText mt={0}>
                                         in {source}{" "}
                                         {ambiguous
