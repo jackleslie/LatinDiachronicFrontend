@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { Link as GatsbyLink } from "gatsby"
 import {
   Flex,
@@ -80,6 +80,7 @@ function ResultsPage({ location }) {
   const [query, setQuery] = useState(LEMMA_QUERY)
   const [result, setResult] = useState()
   const [ambiguous, setAmbiguous] = useState()
+  const [reference, setReference] = useState()
   /*
   const [authorFilter, setAuthorFilter] = useState("")
   const [sourceFilter, setSourceFilter] = useState("")
@@ -370,28 +371,52 @@ function ResultsPage({ location }) {
                                     <Box mt={2} key={index}>
                                       <Popover
                                         onOpen={async () => {
+                                          setReference(null)
                                           const data = await fetch(
                                             `/.netlify/functions/phi?line=${line}`,
                                             {
                                               method: "GET",
                                             }
                                           ).then(x => x.json())
-
+                                          setReference(data)
                                           console.log(data)
                                         }}
+                                        onClose={() => setReference(null)}
                                       >
                                         <PopoverTrigger>
-                                          <Text fontSize="sm">{line}</Text>
+                                          <Text fontSize="sm" cursor="pointer">
+                                            {line}
+                                          </Text>
                                         </PopoverTrigger>
                                         <PopoverContent zIndex={4}>
                                           <PopoverArrow />
                                           <PopoverCloseButton />
-                                          <PopoverHeader>
-                                            Confirmation!
-                                          </PopoverHeader>
+                                          {reference ? (
+                                            <PopoverHeader>
+                                              {reference.link}
+                                            </PopoverHeader>
+                                          ) : null}
                                           <PopoverBody>
-                                            Are you sure you want to have that
-                                            milkshake?
+                                            {reference ? (
+                                              reference.extract
+                                            ) : (
+                                              <Stack
+                                                align="center"
+                                                width="100%"
+                                              >
+                                                <Spinner
+                                                  thickness="4px"
+                                                  speed="0.65s"
+                                                  emptyColor="gray.200"
+                                                  color="blue.500"
+                                                  size="xl"
+                                                  mt={2}
+                                                />
+                                                <Text mt={1} textAlign="center">
+                                                  Loading reference...
+                                                </Text>
+                                              </Stack>
+                                            )}
                                           </PopoverBody>
                                         </PopoverContent>
                                       </Popover>
