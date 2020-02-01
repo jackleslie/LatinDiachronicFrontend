@@ -353,7 +353,7 @@ function ResultsPage({ location }) {
                                         href={`https://latin.packhum.org/search?q=${line}`}
                                       >
                                         {line}
-                                        <Icon name="external-link" mx="4px" />
+                                        <Icon name="external-link" mx="3px" />
                                       </Link>
                                       <FormHelperText mt={0}>
                                         in {source}
@@ -410,7 +410,7 @@ function ResultsPage({ location }) {
                                       href={`https://latin.packhum.org/search?q=${line}`}
                                     >
                                       {line}
-                                      <Icon name="external-link" mx="1px" />
+                                      <Icon name="external-link" mx="3px" />
                                     </Link>
                                   </Box>
                                 ))}
@@ -426,7 +426,7 @@ function ResultsPage({ location }) {
                             a.toUpperCase() > b.toUpperCase() ? 1 : -1
                           )
                           .map(([key, value], index) => (
-                            <Box>
+                            <Box key={key}>
                               <Heading size="sm" m={2} mt={6}>
                                 {yearLabel(key)}
                               </Heading>
@@ -457,7 +457,7 @@ function ResultsPage({ location }) {
                                               {line}
                                               <Icon
                                                 name="external-link"
-                                                mx="1px"
+                                                mx="3px"
                                               />
                                             </Link>
                                             <FormHelperText mt={0}>
