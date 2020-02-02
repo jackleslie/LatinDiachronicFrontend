@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect } from "react"
 import { Link as GatsbyLink } from "gatsby"
 import {
   Flex,
@@ -35,7 +35,6 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverBody,
-  PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
 } from "@chakra-ui/core"
@@ -393,12 +392,16 @@ function ResultsPage({ location }) {
                                           <PopoverCloseButton />
                                           {reference ? (
                                             <PopoverHeader>
-                                              {reference.link}
+                                              <Text as="cite">
+                                                {reference.link}
+                                              </Text>
                                             </PopoverHeader>
                                           ) : null}
                                           <PopoverBody>
                                             {reference ? (
-                                              reference.extract
+                                              <Text fontSize="sm">
+                                                {reference.extract}
+                                              </Text>
                                             ) : (
                                               <Stack
                                                 align="center"
