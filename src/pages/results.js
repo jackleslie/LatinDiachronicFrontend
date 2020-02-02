@@ -20,26 +20,17 @@ import { Lemma, Intersection } from "../containers"
 import { yearLabel, countAmbiguousOccurences } from "../utils"
 
 function ResultsPage({ location }) {
-  const authors = location && location.state && location.state.authors
-  const search = location && location.state && location.state.search
-  const timeSpan = location && location.state && location.state.timeSpan
-  const AUTHORS_ARGUMENT =
-    authors && authors.length
-      ? `authors: { list: ${JSON.stringify(authors)}, useAll: false },`
-      : ""
-  const SPAN_ARGUMENT =
-    timeSpan && timeSpan.length
-      ? `span: {useAll: false, span: {startYear: ${timeSpan[0]}, endYear: ${timeSpan[1]}}}`
-      : ""
-  const RESTOFLIT_ARGUMENT =
-    timeSpan && timeSpan.length
-      ? `restOfLit: {useAll: false, span: {startYear: ${timeSpan[0]}, endYear: ${timeSpan[1]}}}`
-      : ""
+  const {
+    state: { authors = "", search = "", timeSpan = [-500, 600] } = {},
+  } = location
   const INTERSECTION_QUERY = gql`
-    {
+    query($authors: [String!], $startYear: Int!, $endYear: Int!) {
       intersection(
-        ${AUTHORS_ARGUMENT}
-        ${RESTOFLIT_ARGUMENT}
+        authors: { list: $authors, useAll: false }
+        restOfLit: {
+          useAll: false
+          span: { startYear: $startYear, endYear: $endYear }
+        }
       ) {
         occurrences {
           ambiguos
@@ -61,8 +52,20 @@ function ResultsPage({ location }) {
     }
   `
   const LEMMA_QUERY = gql`
-    {
-      lemma(lemma: "${search}", ${AUTHORS_ARGUMENT} ${SPAN_ARGUMENT}) {
+    query(
+      $search: String!
+      $authors: [String!]
+      $startYear: Int!
+      $endYear: Int!
+    ) {
+      lemma(
+        lemma: $search
+        authors: { list: $authors, useAll: false }
+        span: {
+          useAll: false
+          span: { startYear: $startYear, endYear: $endYear }
+        }
+      ) {
         count
         occurrences {
           ambiguos
@@ -82,8 +85,20 @@ function ResultsPage({ location }) {
     }
   `
   const FORM_QUERY = gql`
-    {
-      form(form: "${search}", ${AUTHORS_ARGUMENT} ${SPAN_ARGUMENT}) {
+    query(
+      $search: String!
+      $authors: [String!]
+      $startYear: Int!
+      $endYear: Int!
+    ) {
+      form(
+        form: $search
+        authors: { list: $authors, useAll: false }
+        span: {
+          useAll: false
+          span: { startYear: $startYear, endYear: $endYear }
+        }
+      ) {
         count
         occurrences {
           ambiguos
@@ -109,7 +124,14 @@ function ResultsPage({ location }) {
   const [ambiguous, setAmbiguous] = useState()
   const [reference, setReference] = useState()
   const [group, setGroup] = useState()
-  const { loading, error, data } = useQuery(query)
+  const { loading, error, data } = useQuery(query, {
+    variables: {
+      search,
+      authors,
+      startYear: timeSpan[0],
+      endYear: timeSpan[1],
+    },
+  })
 
   useEffect(() => {
     if (data && data.intersection) {
