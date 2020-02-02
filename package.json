@@ -46,7 +46,7 @@
   "scripts": {
     "build": "npm-run-all build:*",
     "build:src": "gatsby build",
-    "build:lambda": "yarn --cwd lambda install",
+    "build:lambda": "yarn --cwd lambda/phi install",
     "develop": "gatsby develop",
     "develop:host": "gatsby develop -H 0.0.0.0",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
