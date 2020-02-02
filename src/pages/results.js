@@ -25,7 +25,7 @@ function ResultsPage({ location }) {
   const timeSpan = location && location.state && location.state.timeSpan
   const AUTHORS_ARGUMENT =
     authors && authors.length
-      ? `authors: { list: ${JSON.stringify(authors)}, useAll: false }`
+      ? `authors: { list: ${JSON.stringify(authors)}, useAll: false },`
       : ""
   const SPAN_ARGUMENT =
     timeSpan && timeSpan.length
@@ -38,7 +38,7 @@ function ResultsPage({ location }) {
   const INTERSECTION_QUERY = gql`
     {
       intersection(
-        ${AUTHORS_ARGUMENT},
+        ${AUTHORS_ARGUMENT}
         ${RESTOFLIT_ARGUMENT}
       ) {
         occurrences {
@@ -62,7 +62,7 @@ function ResultsPage({ location }) {
   `
   const LEMMA_QUERY = gql`
     {
-      lemma(lemma: "${search}", ${AUTHORS_ARGUMENT}, ${SPAN_ARGUMENT}) {
+      lemma(lemma: "${search}", ${AUTHORS_ARGUMENT} ${SPAN_ARGUMENT}) {
         count
         occurrences {
           ambiguos
@@ -83,7 +83,7 @@ function ResultsPage({ location }) {
   `
   const FORM_QUERY = gql`
     {
-      form(form: "${search}", ${AUTHORS_ARGUMENT}, ${SPAN_ARGUMENT}) {
+      form(form: "${search}", ${AUTHORS_ARGUMENT} ${SPAN_ARGUMENT}) {
         count
         occurrences {
           ambiguos
