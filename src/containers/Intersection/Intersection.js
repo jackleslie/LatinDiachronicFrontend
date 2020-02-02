@@ -50,10 +50,6 @@ export default function Intersection({
       <Box mt={4}>
         <Flex flexWrap="wrap">
           <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
-            <StatLabel>Type</StatLabel>
-            <StatNumber fontSize={["lg", "2xl"]}>{result.type}</StatNumber>
-          </Stat>
-          <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
             <StatLabel>Intersections</StatLabel>
             <StatNumber fontSize={["lg", "2xl"]}>
               {result.intersections.length}
