@@ -5,6 +5,6 @@ export function yearLabel(value) {
   return `${Math.abs(value) / 100} CE`
 }
 
-export function countAmbiguousOccurences(result) {
-  return result.occurrences.reduce((total, occ) => (total += occ.ambiguos), 0)
+export function countAmbiguousOccurences(occurrences) {
+  return occurrences.reduce((total, occ) => (total += occ.ambiguos), 0)
 }

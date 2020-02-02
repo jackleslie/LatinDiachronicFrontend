@@ -32,7 +32,12 @@ function IndexPage({ data }) {
         <Stack spacing={3}>
           <FormControl>
             <FormLabel htmlFor="author">Author</FormLabel>
-            <AuthorSearch authors={authors} onUpdate={setAuthorsToSearch} />
+            <AuthorSearch
+              authors={authors}
+              onUpdate={setAuthorsToSearch}
+              isInvalid={clicked}
+              onFocus={() => setClicked(false)}
+            />
             <FormHelperText id="author-helper-text">
               Enter as many authors as you like, or leave blank to search all
               authors.
@@ -46,7 +51,7 @@ function IndexPage({ data }) {
               {yearLabel(timeSpan[1])}.
             </FormHelperText>
           </FormControl>
-          <FormControl isRequired mt={[1, 3]}>
+          <FormControl mt={[1, 3]}>
             <FormLabel htmlFor="lemma">Lemma</FormLabel>
             <Input
               type="email"
@@ -63,7 +68,7 @@ function IndexPage({ data }) {
           </FormControl>
         </Stack>
         <Flex justify="center">
-          {lemmaToSearch ? (
+          {lemmaToSearch || authorsToSearch.length ? (
             <Link
               to="/results"
               state={{

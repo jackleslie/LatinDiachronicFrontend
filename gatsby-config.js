@@ -1,7 +1,5 @@
 const proxy = require("http-proxy-middleware")
-require("dotenv").config({
-  path: `.env.${process.env.NODE_ENV}`,
-})
+require("dotenv").config()
 
 module.exports = {
   siteMetadata: {
@@ -56,7 +54,10 @@ module.exports = {
         // This is field under which it's accessible
         fieldName: `latin`,
         // Url to query from
-        url: process.env.GATSBY_API_URL,
+        url:
+          process.env.NODE_ENV === "production"
+            ? process.env.GATSBY_API_URL
+            : process.env.GATSBY_API_URL_DEV,
       },
     },
 

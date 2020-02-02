@@ -64,7 +64,7 @@ function getSectionSuggestions(section) {
   return section.data
 }
 
-const AuthorSearch = ({ authors, onUpdate }) => {
+const AuthorSearch = ({ authors, onUpdate, isInvalid, onFocus }) => {
   const [value, setValue] = useState("")
   const [suggestions, setSuggestions] = useState([])
   const [chosen, chosenAdd, chosenDelete] = useSet()
@@ -100,6 +100,8 @@ const AuthorSearch = ({ authors, onUpdate }) => {
   const inputProps = {
     value,
     onChange,
+    isInvalid,
+    onFocus,
   }
 
   return (
