@@ -383,9 +383,14 @@ function ResultsPage({ location }) {
                                         onClose={() => setReference(null)}
                                       >
                                         <PopoverTrigger>
-                                          <Text fontSize="sm" cursor="pointer">
+                                          <Link fontSize="sm">
                                             {line}
-                                          </Text>
+                                            <Icon
+                                              name="search"
+                                              mx="3px"
+                                              size="0.75em"
+                                            />
+                                          </Link>
                                         </PopoverTrigger>
                                         <PopoverContent zIndex={4}>
                                           <PopoverArrow />
