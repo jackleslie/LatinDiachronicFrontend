@@ -2,7 +2,6 @@ import React from "react"
 import {
   Flex,
   Box,
-  Heading,
   Spinner,
   Stat,
   StatLabel,
@@ -11,13 +10,7 @@ import {
   Text,
   Link,
   Icon,
-  FormControl,
   FormHelperText,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
   Accordion,
   AccordionItem,
   AccordionHeader,
@@ -32,12 +25,11 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from "@chakra-ui/core"
-import { yearLabel, countAmbiguousOccurences } from "../../utils"
+import { countAmbiguousOccurences } from "../../utils"
 
 export default function Intersection({
   search,
   result,
-  group,
   timeSpan,
   timeSpanLabel,
   reference,
@@ -84,14 +76,6 @@ export default function Intersection({
             <StatLabel>Authors</StatLabel>
             <StatNumber fontSize={["lg", "2xl"]}>{authors.length}</StatNumber>
           </Stat>
-          {group && group.sources ? (
-            <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
-              <StatLabel>Sources</StatLabel>
-              <StatNumber fontSize={["lg", "2xl"]}>
-                {Object.entries(group.sources).length}
-              </StatNumber>
-            </Stat>
-          ) : null}
           {timeSpan && (
             <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
               <StatLabel>Centuries</StatLabel>

@@ -313,7 +313,6 @@ function ResultsPage({ location }) {
             search={search}
             authors={authors}
             result={result}
-            group={group}
             timeSpan={timeSpan}
             timeSpanLabel={timeSpanLabel}
             reference={reference}
