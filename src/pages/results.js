@@ -222,6 +222,15 @@ function ResultsPage({ location }) {
     )
   }
 
+  async function handlePopoverOpen(line) {
+    setReference(null)
+    const data = await fetch(`/.netlify/functions/phi?line=${line}`, {
+      method: "GET",
+    }).then(x => x.json())
+    setReference(data)
+    console.log(data)
+  }
+
   const timeSpanLabel =
     timeSpan && timeSpan.length
       ? `${yearLabel(timeSpan[0])} - ${yearLabel(timeSpan[1])}`
@@ -369,17 +378,7 @@ function ResultsPage({ location }) {
                                   ({ line, source, ambiguous }, index) => (
                                     <Box mt={2} key={index}>
                                       <Popover
-                                        onOpen={async () => {
-                                          setReference(null)
-                                          const data = await fetch(
-                                            `/.netlify/functions/phi?line=${line}`,
-                                            {
-                                              method: "GET",
-                                            }
-                                          ).then(x => x.json())
-                                          setReference(data)
-                                          console.log(data)
-                                        }}
+                                        onOpen={() => handlePopoverOpen(line)}
                                         onClose={() => setReference(null)}
                                       >
                                         <PopoverTrigger>
@@ -482,17 +481,7 @@ function ResultsPage({ location }) {
                                   ({ line, ambiguous }, index) => (
                                     <Box mt={2} key={index}>
                                       <Popover
-                                        onOpen={async () => {
-                                          setReference(null)
-                                          const data = await fetch(
-                                            `/.netlify/functions/phi?line=${line}`,
-                                            {
-                                              method: "GET",
-                                            }
-                                          ).then(x => x.json())
-                                          setReference(data)
-                                          console.log(data)
-                                        }}
+                                        onOpen={() => handlePopoverOpen(line)}
                                         onClose={() => setReference(null)}
                                       >
                                         <PopoverTrigger>
@@ -588,17 +577,9 @@ function ResultsPage({ location }) {
                                         ) => (
                                           <Box mt={2} key={index}>
                                             <Popover
-                                              onOpen={async () => {
-                                                setReference(null)
-                                                const data = await fetch(
-                                                  `/.netlify/functions/phi?line=${line}`,
-                                                  {
-                                                    method: "GET",
-                                                  }
-                                                ).then(x => x.json())
-                                                setReference(data)
-                                                console.log(data)
-                                              }}
+                                              onOpen={() =>
+                                                handlePopoverOpen(line)
+                                              }
                                               onClose={() => setReference(null)}
                                             >
                                               <PopoverTrigger>
