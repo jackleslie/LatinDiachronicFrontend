@@ -51,10 +51,10 @@ function ResultsPage({ location }) {
         }
         lemma
         count
-        #forms {
-        #  count
-        #  form
-        #}
+        forms {
+          count
+          form
+        }
       }
     }
   `
@@ -93,10 +93,10 @@ function ResultsPage({ location }) {
   const { loading, error, data } = useQuery(query)
 
   useEffect(() => {
-    if (data && data.intersectionHist) {
-      if (data.intersectionHist.length) {
+    if (data && data.intersection) {
+      if (data.intersection.length) {
         setResult({
-          intersections: data.intersectionHist,
+          intersections: data.intersection,
           type: "Intersection",
         })
         console.log(data)
@@ -274,9 +274,9 @@ function ResultsPage({ location }) {
             />
             <Text mt={4} textAlign="center">
               {search ? (
-                <Box>
+                <Text as="span">
                   Searching <Text as="b">{search} </Text>
-                </Box>
+                </Text>
               ) : (
                 "Calculating intersection "
               )}

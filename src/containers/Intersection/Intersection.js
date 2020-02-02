@@ -88,19 +88,17 @@ export default function Intersection({
             .sort((a, b) =>
               a.lemma.toUpperCase() > b.lemma.toUpperCase() ? 1 : -1
             )
-            .map(({ occurrences, lemma, count }, index) => (
+            .map(({ occurrences, lemma, count, forms }, index) => (
               <AccordionItem key={index}>
                 <AccordionHeader>
                   <Box flex="1" textAlign="left">
                     <Text>
                       {lemma} ({count})
                     </Text>
-                    {/*
                     <FormHelperText mt={0}>
-                      with {forms.length} form
+                      in {forms.length} form
                       {forms.length > 1 ? "s" : ""}
                     </FormHelperText>
-                    */}
                   </Box>
                   <AccordionIcon />
                 </AccordionHeader>
