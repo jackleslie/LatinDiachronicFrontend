@@ -23,21 +23,23 @@ function ResultsPage({ location }) {
   const authors = location && location.state && location.state.authors
   const search = location && location.state && location.state.search
   const timeSpan = location && location.state && location.state.timeSpan
-  const AUTHOR_QUERY =
+  const AUTHORS_ARGUMENT =
     authors && authors.length
-      ? `, authors: { list: ${JSON.stringify(authors)}, useAll: false },`
-      : ","
-  const SPAN_QUERY =
+      ? `authors: { list: ${JSON.stringify(authors)}, useAll: false }`
+      : ""
+  const SPAN_ARGUMENT =
     timeSpan && timeSpan.length
       ? `span: {useAll: false, span: {startYear: ${timeSpan[0]}, endYear: ${timeSpan[1]}}}`
+      : ""
+  const RESTOFLIT_ARGUMENT =
+    timeSpan && timeSpan.length
+      ? `restOfLit: {useAll: false, span: {startYear: ${timeSpan[0]}, endYear: ${timeSpan[1]}}}`
       : ""
   const INTERSECTION_QUERY = gql`
     {
       intersection(
-        authors: { useAll: false, list: ${JSON.stringify(authors)} },
-        restOfLit: { useAll: false, span: { startYear: ${
-          timeSpan[0]
-        }, endYear: ${timeSpan[1]} } }
+        ${AUTHORS_ARGUMENT},
+        ${RESTOFLIT_ARGUMENT}
       ) {
         occurrences {
           ambiguos
@@ -59,25 +61,46 @@ function ResultsPage({ location }) {
     }
   `
   const LEMMA_QUERY = gql`
-  {
-    lemma(lemma: "${search}"${AUTHOR_QUERY}${SPAN_QUERY}) {
-      count
-      occurrences {
-        ambiguos
-        line
-        source {
-          name
-          author {
+    {
+      lemma(lemma: "${search}", ${AUTHORS_ARGUMENT}, ${SPAN_ARGUMENT}) {
+        count
+        occurrences {
+          ambiguos
+          line
+          source {
             name
-            timeSpan {
-              end
-              start
+            author {
+              name
+              timeSpan {
+                end
+                start
+              }
             }
           }
         }
       }
     }
-  }
+  `
+  const FORM_QUERY = gql`
+    {
+      form(form: "${search}", ${AUTHORS_ARGUMENT}, ${SPAN_ARGUMENT}) {
+        count
+        occurrences {
+          ambiguos
+          line
+          source {
+            name
+            author {
+              name
+              timeSpan {
+                end
+                start
+              }
+            }
+          }
+        }
+      }
+    }
   `
   // if there's no lemma entered then there must be authors to intersect
   const initialQuery = search ? LEMMA_QUERY : INTERSECTION_QUERY
@@ -85,10 +108,6 @@ function ResultsPage({ location }) {
   const [result, setResult] = useState()
   const [ambiguous, setAmbiguous] = useState()
   const [reference, setReference] = useState()
-  /*
-  const [authorFilter, setAuthorFilter] = useState("")
-  const [sourceFilter, setSourceFilter] = useState("")
-  */
   const [group, setGroup] = useState()
   const { loading, error, data } = useQuery(query)
 
@@ -105,27 +124,6 @@ function ResultsPage({ location }) {
       }
     } else if (data && data.lemma) {
       if (!data.lemma.count) {
-        const FORM_QUERY = gql`
-        {
-          form(form: "${search}"${AUTHOR_QUERY}${SPAN_QUERY}) {
-            count
-            occurrences {
-              ambiguos
-              line
-              source {
-                name
-                author {
-                  name
-                  timeSpan {
-                    end
-                    start
-                  }
-                }
-              }
-            }
-          }
-        }
-        `
         setQuery(FORM_QUERY)
       } else {
         setResult({
@@ -161,7 +159,7 @@ function ResultsPage({ location }) {
         setResult({ type: "Empty" })
       }
     }
-  }, [data, search, AUTHOR_QUERY, SPAN_QUERY])
+  }, [data, search, FORM_QUERY])
 
   function generateGroup(result) {
     return result.occurrences.reduce(
