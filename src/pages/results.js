@@ -481,14 +481,66 @@ function ResultsPage({ location }) {
                                 {value.occurrences.map(
                                   ({ line, ambiguous }, index) => (
                                     <Box mt={2} key={index}>
-                                      <Link
-                                        fontSize="sm"
-                                        isExternal
-                                        href={`https://latin.packhum.org/search?q=${line}`}
+                                      <Popover
+                                        onOpen={async () => {
+                                          setReference(null)
+                                          const data = await fetch(
+                                            `/.netlify/functions/phi?line=${line}`,
+                                            {
+                                              method: "GET",
+                                            }
+                                          ).then(x => x.json())
+                                          setReference(data)
+                                          console.log(data)
+                                        }}
+                                        onClose={() => setReference(null)}
                                       >
-                                        {line}
-                                        <Icon name="external-link" mx="3px" />
-                                      </Link>
+                                        <PopoverTrigger>
+                                          <Link fontSize="sm">
+                                            {line}
+                                            <Icon
+                                              name="search"
+                                              mx="3px"
+                                              size="0.75em"
+                                            />
+                                          </Link>
+                                        </PopoverTrigger>
+                                        <PopoverContent zIndex={4}>
+                                          <PopoverArrow />
+                                          <PopoverCloseButton />
+                                          {reference ? (
+                                            <PopoverHeader>
+                                              <Text as="cite">
+                                                {reference.link}
+                                              </Text>
+                                            </PopoverHeader>
+                                          ) : null}
+                                          <PopoverBody>
+                                            {reference ? (
+                                              <Text fontSize="sm">
+                                                {reference.extract}
+                                              </Text>
+                                            ) : (
+                                              <Stack
+                                                align="center"
+                                                width="100%"
+                                              >
+                                                <Spinner
+                                                  thickness="4px"
+                                                  speed="0.65s"
+                                                  emptyColor="gray.200"
+                                                  color="blue.500"
+                                                  size="xl"
+                                                  mt={2}
+                                                />
+                                                <Text mt={1} textAlign="center">
+                                                  Loading reference...
+                                                </Text>
+                                              </Stack>
+                                            )}
+                                          </PopoverBody>
+                                        </PopoverContent>
+                                      </Popover>
                                       <FormHelperText mt={0}>
                                         {ambiguous
                                           ? "(Ambiguous)"
@@ -535,17 +587,69 @@ function ResultsPage({ location }) {
                                           index
                                         ) => (
                                           <Box mt={2} key={index}>
-                                            <Link
-                                              fontSize="sm"
-                                              isExternal
-                                              href={`https://latin.packhum.org/search?q=${line}`}
+                                            <Popover
+                                              onOpen={async () => {
+                                                setReference(null)
+                                                const data = await fetch(
+                                                  `/.netlify/functions/phi?line=${line}`,
+                                                  {
+                                                    method: "GET",
+                                                  }
+                                                ).then(x => x.json())
+                                                setReference(data)
+                                                console.log(data)
+                                              }}
+                                              onClose={() => setReference(null)}
                                             >
-                                              {line}
-                                              <Icon
-                                                name="external-link"
-                                                mx="3px"
-                                              />
-                                            </Link>
+                                              <PopoverTrigger>
+                                                <Link fontSize="sm">
+                                                  {line}
+                                                  <Icon
+                                                    name="search"
+                                                    mx="3px"
+                                                    size="0.75em"
+                                                  />
+                                                </Link>
+                                              </PopoverTrigger>
+                                              <PopoverContent zIndex={4}>
+                                                <PopoverArrow />
+                                                <PopoverCloseButton />
+                                                {reference ? (
+                                                  <PopoverHeader>
+                                                    <Text as="cite">
+                                                      {reference.link}
+                                                    </Text>
+                                                  </PopoverHeader>
+                                                ) : null}
+                                                <PopoverBody>
+                                                  {reference ? (
+                                                    <Text fontSize="sm">
+                                                      {reference.extract}
+                                                    </Text>
+                                                  ) : (
+                                                    <Stack
+                                                      align="center"
+                                                      width="100%"
+                                                    >
+                                                      <Spinner
+                                                        thickness="4px"
+                                                        speed="0.65s"
+                                                        emptyColor="gray.200"
+                                                        color="blue.500"
+                                                        size="xl"
+                                                        mt={2}
+                                                      />
+                                                      <Text
+                                                        mt={1}
+                                                        textAlign="center"
+                                                      >
+                                                        Loading reference...
+                                                      </Text>
+                                                    </Stack>
+                                                  )}
+                                                </PopoverBody>
+                                              </PopoverContent>
+                                            </Popover>
                                             <FormHelperText mt={0}>
                                               in {source}{" "}
                                               {ambiguous
