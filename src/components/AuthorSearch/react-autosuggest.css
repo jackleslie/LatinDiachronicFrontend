@@ -64,3 +64,8 @@ input {
   -webkit-appearance: none;
   line-height: normal !important;
 }
+
+/* PHI overwrites */
+.hit {
+  font-weight: bolder;
+}

@@ -23,6 +23,7 @@
     "gatsby-plugin-offline": "^3.0.27",
     "gatsby-plugin-react-helmet": "^3.1.16",
     "gatsby-source-graphql": "^2.1.29",
+    "http-proxy-middleware": "^0.20.0",
     "isomorphic-fetch": "^2.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
@@ -32,6 +33,7 @@
     "yarn": "^1.21.1"
   },
   "devDependencies": {
+    "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1"
   },
   "keywords": [
@@ -42,7 +44,9 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "gatsby build",
+    "build": "npm-run-all build:*",
+    "build:src": "gatsby build",
+    "build:lambda": "yarn --cwd lambda/phi install",
     "develop": "gatsby develop",
     "develop:host": "gatsby develop -H 0.0.0.0",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",

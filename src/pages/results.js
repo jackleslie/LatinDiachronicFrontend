@@ -30,6 +30,13 @@ import {
   AccordionIcon,
   AccordionPanel,
   Tooltip,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
 } from "@chakra-ui/core"
 import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
@@ -72,6 +79,7 @@ function ResultsPage({ location }) {
   const [query, setQuery] = useState(LEMMA_QUERY)
   const [result, setResult] = useState()
   const [ambiguous, setAmbiguous] = useState()
+  const [reference, setReference] = useState()
   /*
   const [authorFilter, setAuthorFilter] = useState("")
   const [sourceFilter, setSourceFilter] = useState("")
@@ -212,6 +220,15 @@ function ResultsPage({ location }) {
       },
       { authors: {}, sources: {}, centuries: {} }
     )
+  }
+
+  async function handlePopoverOpen(line) {
+    setReference(null)
+    const data = await fetch(`/.netlify/functions/phi?line=${line}`, {
+      method: "GET",
+    }).then(x => x.json())
+    setReference(data)
+    console.log(data)
   }
 
   const timeSpanLabel =
@@ -360,14 +377,65 @@ function ResultsPage({ location }) {
                                 {value.occurrences.map(
                                   ({ line, source, ambiguous }, index) => (
                                     <Box mt={2} key={index}>
-                                      <Link
-                                        fontSize="sm"
-                                        isExternal
-                                        href={`https://latin.packhum.org/search?q=${line}`}
+                                      <Popover
+                                        onOpen={() => handlePopoverOpen(line)}
+                                        onClose={() => setReference(null)}
                                       >
-                                        {line}
-                                        <Icon name="external-link" mx="3px" />
-                                      </Link>
+                                        <PopoverTrigger>
+                                          <Link
+                                            fontSize="sm"
+                                            title="Click to retrieve reference"
+                                          >
+                                            {line}
+                                            <Icon
+                                              name="search"
+                                              mx="3px"
+                                              size="0.75em"
+                                            />
+                                          </Link>
+                                        </PopoverTrigger>
+                                        <PopoverContent zIndex={4}>
+                                          <PopoverArrow />
+                                          <PopoverCloseButton />
+                                          {reference ? (
+                                            <PopoverHeader>
+                                              <Text as="cite">
+                                                {reference.link ||
+                                                  "Reference unavailable"}
+                                              </Text>
+                                            </PopoverHeader>
+                                          ) : null}
+                                          <PopoverBody>
+                                            {reference ? (
+                                              <Text
+                                                fontSize="sm"
+                                                dangerouslySetInnerHTML={{
+                                                  __html:
+                                                    reference.extract ||
+                                                    reference.msg,
+                                                }}
+                                              />
+                                            ) : (
+                                              <Stack
+                                                align="center"
+                                                width="100%"
+                                              >
+                                                <Spinner
+                                                  thickness="4px"
+                                                  speed="0.65s"
+                                                  emptyColor="gray.200"
+                                                  color="blue.500"
+                                                  size="xl"
+                                                  mt={2}
+                                                />
+                                                <Text mt={1} textAlign="center">
+                                                  Loading reference...
+                                                </Text>
+                                              </Stack>
+                                            )}
+                                          </PopoverBody>
+                                        </PopoverContent>
+                                      </Popover>
                                       <FormHelperText mt={0}>
                                         in {source}{" "}
                                         {ambiguous
@@ -421,14 +489,62 @@ function ResultsPage({ location }) {
                                 {value.occurrences.map(
                                   ({ line, ambiguous }, index) => (
                                     <Box mt={2} key={index}>
-                                      <Link
-                                        fontSize="sm"
-                                        isExternal
-                                        href={`https://latin.packhum.org/search?q=${line}`}
+                                      <Popover
+                                        onOpen={() => handlePopoverOpen(line)}
+                                        onClose={() => setReference(null)}
                                       >
-                                        {line}
-                                        <Icon name="external-link" mx="3px" />
-                                      </Link>
+                                        <PopoverTrigger>
+                                          <Link
+                                            fontSize="sm"
+                                            title="Click to retrieve reference"
+                                          >
+                                            {line}
+                                            <Icon
+                                              name="search"
+                                              mx="3px"
+                                              size="0.75em"
+                                            />
+                                          </Link>
+                                        </PopoverTrigger>
+                                        <PopoverContent zIndex={4}>
+                                          <PopoverArrow />
+                                          <PopoverCloseButton />
+                                          {reference ? (
+                                            <PopoverHeader>
+                                              <Text as="cite">
+                                                {reference.link}
+                                              </Text>
+                                            </PopoverHeader>
+                                          ) : null}
+                                          <PopoverBody>
+                                            {reference ? (
+                                              <Text
+                                                fontSize="sm"
+                                                dangerouslySetInnerHTML={{
+                                                  __html: reference.extract,
+                                                }}
+                                              />
+                                            ) : (
+                                              <Stack
+                                                align="center"
+                                                width="100%"
+                                              >
+                                                <Spinner
+                                                  thickness="4px"
+                                                  speed="0.65s"
+                                                  emptyColor="gray.200"
+                                                  color="blue.500"
+                                                  size="xl"
+                                                  mt={2}
+                                                />
+                                                <Text mt={1} textAlign="center">
+                                                  Loading reference...
+                                                </Text>
+                                              </Stack>
+                                            )}
+                                          </PopoverBody>
+                                        </PopoverContent>
+                                      </Popover>
                                       <FormHelperText mt={0}>
                                         {ambiguous
                                           ? "(Ambiguous)"
@@ -475,17 +591,68 @@ function ResultsPage({ location }) {
                                           index
                                         ) => (
                                           <Box mt={2} key={index}>
-                                            <Link
-                                              fontSize="sm"
-                                              isExternal
-                                              href={`https://latin.packhum.org/search?q=${line}`}
+                                            <Popover
+                                              onOpen={() =>
+                                                handlePopoverOpen(line)
+                                              }
+                                              onClose={() => setReference(null)}
                                             >
-                                              {line}
-                                              <Icon
-                                                name="external-link"
-                                                mx="3px"
-                                              />
-                                            </Link>
+                                              <PopoverTrigger>
+                                                <Link
+                                                  fontSize="sm"
+                                                  title="Click to retrieve reference"
+                                                >
+                                                  {line}
+                                                  <Icon
+                                                    name="search"
+                                                    mx="3px"
+                                                    size="0.75em"
+                                                  />
+                                                </Link>
+                                              </PopoverTrigger>
+                                              <PopoverContent zIndex={4}>
+                                                <PopoverArrow />
+                                                <PopoverCloseButton />
+                                                {reference ? (
+                                                  <PopoverHeader>
+                                                    <Text as="cite">
+                                                      {reference.link}
+                                                    </Text>
+                                                  </PopoverHeader>
+                                                ) : null}
+                                                <PopoverBody>
+                                                  {reference ? (
+                                                    <Text
+                                                      fontSize="sm"
+                                                      dangerouslySetInnerHTML={{
+                                                        __html:
+                                                          reference.extract,
+                                                      }}
+                                                    />
+                                                  ) : (
+                                                    <Stack
+                                                      align="center"
+                                                      width="100%"
+                                                    >
+                                                      <Spinner
+                                                        thickness="4px"
+                                                        speed="0.65s"
+                                                        emptyColor="gray.200"
+                                                        color="blue.500"
+                                                        size="xl"
+                                                        mt={2}
+                                                      />
+                                                      <Text
+                                                        mt={1}
+                                                        textAlign="center"
+                                                      >
+                                                        Loading reference...
+                                                      </Text>
+                                                    </Stack>
+                                                  )}
+                                                </PopoverBody>
+                                              </PopoverContent>
+                                            </Popover>
                                             <FormHelperText mt={0}>
                                               in {source}{" "}
                                               {ambiguous

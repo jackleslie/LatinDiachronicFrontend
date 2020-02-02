@@ -49,7 +49,7 @@ function IndexPage({ data }) {
           <FormControl isRequired mt={[1, 3]}>
             <FormLabel htmlFor="lemma">Lemma</FormLabel>
             <Input
-              type="lemma"
+              type="email"
               id="lemma"
               aria-describedby="lemma-helper-text"
               value={lemmaToSearch}

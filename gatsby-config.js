@@ -1,3 +1,4 @@
+const proxy = require("http-proxy-middleware")
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })
@@ -7,6 +8,17 @@ module.exports = {
     title: `Latin Diachronic Frontend`,
     description: `Quantitative analysis of Latin literature.`,
     author: `@jackleslie`,
+  },
+  developMiddleware: app => {
+    app.use(
+      "/.netlify/functions/",
+      proxy({
+        target: "http://localhost:4000",
+        pathRewrite: {
+          "/.netlify/functions/": "",
+        },
+      })
+    )
   },
   plugins: [
     `gatsby-plugin-react-helmet`,

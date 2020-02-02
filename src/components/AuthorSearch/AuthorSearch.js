@@ -51,10 +51,10 @@ function renderInputComponent(inputProps) {
   return (
     <div className="inputContainer">
       <Input
-        type="author"
         id="author"
         aria-describedby="author-helper-text"
         {...inputProps}
+        type="email"
       />
     </div>
   )
