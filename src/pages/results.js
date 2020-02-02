@@ -403,9 +403,12 @@ function ResultsPage({ location }) {
                                           ) : null}
                                           <PopoverBody>
                                             {reference ? (
-                                              <Text fontSize="sm">
-                                                {reference.extract}
-                                              </Text>
+                                              <Text
+                                                fontSize="sm"
+                                                dangerouslySetInnerHTML={{
+                                                  __html: reference.extract,
+                                                }}
+                                              />
                                             ) : (
                                               <Stack
                                                 align="center"
@@ -506,9 +509,12 @@ function ResultsPage({ location }) {
                                           ) : null}
                                           <PopoverBody>
                                             {reference ? (
-                                              <Text fontSize="sm">
-                                                {reference.extract}
-                                              </Text>
+                                              <Text
+                                                fontSize="sm"
+                                                dangerouslySetInnerHTML={{
+                                                  __html: reference.extract,
+                                                }}
+                                              />
                                             ) : (
                                               <Stack
                                                 align="center"
@@ -604,9 +610,13 @@ function ResultsPage({ location }) {
                                                 ) : null}
                                                 <PopoverBody>
                                                   {reference ? (
-                                                    <Text fontSize="sm">
-                                                      {reference.extract}
-                                                    </Text>
+                                                    <Text
+                                                      fontSize="sm"
+                                                      dangerouslySetInnerHTML={{
+                                                        __html:
+                                                          reference.extract,
+                                                      }}
+                                                    />
                                                   ) : (
                                                     <Stack
                                                       align="center"
