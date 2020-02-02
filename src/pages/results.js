@@ -382,7 +382,10 @@ function ResultsPage({ location }) {
                                         onClose={() => setReference(null)}
                                       >
                                         <PopoverTrigger>
-                                          <Link fontSize="sm">
+                                          <Link
+                                            fontSize="sm"
+                                            title="Click to retrieve reference"
+                                          >
                                             {line}
                                             <Icon
                                               name="search"
@@ -488,7 +491,10 @@ function ResultsPage({ location }) {
                                         onClose={() => setReference(null)}
                                       >
                                         <PopoverTrigger>
-                                          <Link fontSize="sm">
+                                          <Link
+                                            fontSize="sm"
+                                            title="Click to retrieve reference"
+                                          >
                                             {line}
                                             <Icon
                                               name="search"
@@ -589,7 +595,10 @@ function ResultsPage({ location }) {
                                               onClose={() => setReference(null)}
                                             >
                                               <PopoverTrigger>
-                                                <Link fontSize="sm">
+                                                <Link
+                                                  fontSize="sm"
+                                                  title="Click to retrieve reference"
+                                                >
                                                   {line}
                                                   <Icon
                                                     name="search"
