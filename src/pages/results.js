@@ -16,7 +16,7 @@ import {
 import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
 import { SEO } from "../components"
-import { Lemma } from "../containers"
+import { Lemma, Intersection } from "../containers"
 import { yearLabel, countAmbiguousOccurences } from "../utils"
 
 function ResultsPage({ location }) {
@@ -29,6 +29,7 @@ function ResultsPage({ location }) {
         authors: { useAll: false, list: ${JSON.stringify(authors)} }
       ) {
         occurrences {
+          ambiguos
           line
           source {
             name
@@ -39,6 +40,10 @@ function ResultsPage({ location }) {
         }
         lemma
         count
+        #forms {
+        #  count
+        #  form
+        #}
       }
     }
   `
@@ -88,7 +93,7 @@ function ResultsPage({ location }) {
     if (data && data.intersectionHist) {
       if (data.intersectionHist.length) {
         setResult({
-          ...data.intersectionHist,
+          intersections: data.intersectionHist,
           type: "Intersection",
         })
         console.log(data)
@@ -128,7 +133,9 @@ function ResultsPage({ location }) {
         setGroup(group)
         console.log(group)
 
-        const ambiguousOccurences = countAmbiguousOccurences(data.lemma)
+        const ambiguousOccurences = countAmbiguousOccurences(
+          data.lemma.occurrences
+        )
         setAmbiguous(ambiguousOccurences)
         console.log(ambiguousOccurences)
       }
@@ -142,7 +149,9 @@ function ResultsPage({ location }) {
         setGroup(group)
         console.log(group)
 
-        const ambiguousOccurences = countAmbiguousOccurences(data.form)
+        const ambiguousOccurences = countAmbiguousOccurences(
+          data.form.occurrences
+        )
         setAmbiguous(ambiguousOccurences)
         console.log(ambiguousOccurences)
       } else {
@@ -261,7 +270,13 @@ function ResultsPage({ location }) {
               size="xl"
             />
             <Text mt={4} textAlign="center">
-              Searching <Text as="b">{search} </Text>
+              {search ? (
+                <Box>
+                  Searching <Text as="b">{search} </Text>
+                </Box>
+              ) : (
+                "Calculating intersection "
+              )}
               {authors && authors.length ? (
                 <Text as="span">
                   by <Text as="b">{authors.join(", ")}</Text>
@@ -279,8 +294,8 @@ function ResultsPage({ location }) {
           </Stack>
         )}
         {result &&
-          result.type !== "Empty" &&
-          result.type !== "Intersection" && (
+          result.type &&
+          (result.type === "Lemma" || result.type === "Form") && (
             <Lemma
               search={search}
               result={result}
@@ -293,6 +308,19 @@ function ResultsPage({ location }) {
               setReference={setReference}
             />
           )}
+        {result && result.type && result.type === "Intersection" && (
+          <Intersection
+            search={search}
+            authors={authors}
+            result={result}
+            group={group}
+            timeSpan={timeSpan}
+            timeSpanLabel={timeSpanLabel}
+            reference={reference}
+            handlePopoverOpen={handlePopoverOpen}
+            setReference={setReference}
+          />
+        )}
         {result && result.type && result.type === "Empty" && (
           <Stack>
             <Alert
