@@ -121,7 +121,7 @@ export default function Intersection({
                   <AccordionIcon />
                 </AccordionHeader>
                 <AccordionPanel pb={4}>
-                  {occurrences.map(({ line, source, ambiguous }, index) => (
+                  {occurrences.map(({ line, source, ambiguos }, index) => (
                     <Box mt={2} key={index}>
                       <Popover
                         onOpen={() => handlePopoverOpen(line)}
@@ -174,7 +174,7 @@ export default function Intersection({
                       </Popover>
                       <FormHelperText mt={0}>
                         in {source.name} by {source.author.name}{" "}
-                        {ambiguous ? "(Ambiguous)" : "(Certain)"}
+                        {ambiguos ? "(Ambiguous)" : "(Certain)"}
                       </FormHelperText>
                     </Box>
                   ))}
