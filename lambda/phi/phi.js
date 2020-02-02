@@ -3,7 +3,12 @@ const chromium = require("chrome-aws-lambda")
 exports.handler = async function(event, context) {
   try {
     const { line } = await event.queryStringParameters
-    const browser = await chromium.puppeteer.launch()
+    const browser = await chromium.puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+    })
     const page = await browser.newPage()
     // page.waitForSelector("#results")
     await page.goto(`https://latin.packhum.org/search?q=${line}`, {
