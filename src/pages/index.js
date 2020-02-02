@@ -56,6 +56,7 @@ function IndexPage({ data }) {
               onChange={e => setLemmaToSearch(e.target.value)}
               onFocus={() => setClicked(false)}
               isInvalid={clicked}
+              autocapitalize="none"
             />
             <FormHelperText id="lemma-helper-text">
               Search for any lemma or form.
