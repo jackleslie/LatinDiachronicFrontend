@@ -400,7 +400,8 @@ function ResultsPage({ location }) {
                                           {reference ? (
                                             <PopoverHeader>
                                               <Text as="cite">
-                                                {reference.link}
+                                                {reference.link ||
+                                                  "Reference unavailable"}
                                               </Text>
                                             </PopoverHeader>
                                           ) : null}
@@ -409,7 +410,9 @@ function ResultsPage({ location }) {
                                               <Text
                                                 fontSize="sm"
                                                 dangerouslySetInnerHTML={{
-                                                  __html: reference.extract,
+                                                  __html:
+                                                    reference.extract ||
+                                                    reference.msg,
                                                 }}
                                               />
                                             ) : (

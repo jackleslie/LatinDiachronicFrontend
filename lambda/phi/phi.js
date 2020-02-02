@@ -10,12 +10,11 @@ exports.handler = async function(event, context) {
       headless: chromium.headless,
     })
     const page = await browser.newPage()
-    // page.waitForSelector("#results")
     await page.goto(`https://latin.packhum.org/search?q=${line}`, {
       waitUntil: ["domcontentloaded", "networkidle0"],
     })
     const link = await page.$eval("#match .tlink", elem => elem.innerText)
-    const extract = await page.$eval("#match .extr", elem => elem.innerText)
+    const extract = await page.$eval("#match .slink", elem => elem.innerHTML)
     const result = {
       link,
       extract,
@@ -26,10 +25,12 @@ exports.handler = async function(event, context) {
       body: JSON.stringify(result),
     }
   } catch (err) {
-    console.log(err) // output to netlify function log
+    console.log(err)
     return {
       statusCode: 500,
-      body: JSON.stringify({ msg: err.message }), // Could be a custom message or object i.e. JSON.stringify(err)
+      body: JSON.stringify({
+        msg: "Please try again later, or use a separate reference tool.",
+      }),
     }
   }
 }
