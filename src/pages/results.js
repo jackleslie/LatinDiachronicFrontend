@@ -23,10 +23,21 @@ function ResultsPage({ location }) {
   const authors = location && location.state && location.state.authors
   const search = location && location.state && location.state.search
   const timeSpan = location && location.state && location.state.timeSpan
+  const AUTHOR_QUERY =
+    authors && authors.length
+      ? `, authors: { list: ${JSON.stringify(authors)}, useAll: false },`
+      : ","
+  const SPAN_QUERY =
+    timeSpan && timeSpan.length
+      ? `span: {useAll: false, span: {startYear: ${timeSpan[0]}, endYear: ${timeSpan[1]}}}`
+      : ""
   const INTERSECTION_QUERY = gql`
     {
-      intersectionHist(
-        authors: { useAll: false, list: ${JSON.stringify(authors)} }
+      intersection(
+        authors: { useAll: false, list: ${JSON.stringify(authors)} },
+        restOfLit: { useAll: false, span: { startYear: ${
+          timeSpan[0]
+        }, endYear: ${timeSpan[1]} } }
       ) {
         occurrences {
           ambiguos
@@ -47,14 +58,6 @@ function ResultsPage({ location }) {
       }
     }
   `
-  const AUTHOR_QUERY =
-    authors && authors.length
-      ? `, authors: { list: ${JSON.stringify(authors)}, useAll: false },`
-      : ","
-  const SPAN_QUERY =
-    timeSpan && timeSpan.length
-      ? `span: {useAll: false, span: {startYear: ${timeSpan[0]}, endYear: ${timeSpan[1]}}}`
-      : ""
   const LEMMA_QUERY = gql`
   {
     lemma(lemma: "${search}"${AUTHOR_QUERY}${SPAN_QUERY}) {
