@@ -87,6 +87,11 @@ export function generateGroup(result) {
 
       return x
     },
-    { authors: {}, sources: {}, centuries: {} }
+    {
+      authors: {},
+      sources: {},
+      centuries: {},
+      ambiguous: countAmbiguousOccurences(result.occurrences),
+    }
   )
 }

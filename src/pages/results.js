@@ -16,11 +16,7 @@ import {
 import { useQuery } from "@apollo/react-hooks"
 import { SEO } from "../components"
 import { Lemma, Intersection } from "../containers"
-import {
-  timeSpanLabel,
-  countAmbiguousOccurences,
-  generateGroup,
-} from "../utils"
+import { timeSpanLabel, generateGroup } from "../utils"
 import { INTERSECTION_QUERY, LEMMA_QUERY, FORM_QUERY } from "../data"
 
 function ResultsPage({ location }) {
@@ -31,7 +27,6 @@ function ResultsPage({ location }) {
   const initialQuery = search ? LEMMA_QUERY : INTERSECTION_QUERY
   const [query, setQuery] = useState(initialQuery)
   const [result, setResult] = useState()
-  const [ambiguous, setAmbiguous] = useState()
   const [reference, setReference] = useState()
   const [group, setGroup] = useState()
   const { loading, error, data } = useQuery(query, {
@@ -50,7 +45,6 @@ function ResultsPage({ location }) {
           intersections: data.intersection,
           type: "Intersection",
         })
-        console.log(data)
       } else {
         setResult({ type: "Empty" })
       }
@@ -64,13 +58,6 @@ function ResultsPage({ location }) {
         })
         const group = generateGroup(data.lemma)
         setGroup(group)
-        console.log(group)
-
-        const ambiguousOccurences = countAmbiguousOccurences(
-          data.lemma.occurrences
-        )
-        setAmbiguous(ambiguousOccurences)
-        console.log(ambiguousOccurences)
       }
     } else if (data && data.form) {
       if (data.form.count) {
@@ -80,18 +67,11 @@ function ResultsPage({ location }) {
         })
         const group = generateGroup(data.form)
         setGroup(group)
-        console.log(group)
-
-        const ambiguousOccurences = countAmbiguousOccurences(
-          data.form.occurrences
-        )
-        setAmbiguous(ambiguousOccurences)
-        console.log(ambiguousOccurences)
       } else {
         setResult({ type: "Empty" })
       }
     }
-  }, [data, search])
+  }, [data])
 
   async function handlePopoverOpen(line) {
     setReference(null)
@@ -99,7 +79,6 @@ function ResultsPage({ location }) {
       method: "GET",
     }).then(x => x.json())
     setReference(data)
-    console.log(data)
   }
 
   return (
@@ -149,7 +128,6 @@ function ResultsPage({ location }) {
             <Lemma
               search={search}
               result={result}
-              ambiguous={ambiguous}
               group={group}
               timeSpan={timeSpan}
               reference={reference}

@@ -37,7 +37,6 @@ import { yearLabel, timeSpanLabel } from "../../utils"
 export default function Lemma({
   search,
   result,
-  ambiguous,
   group,
   timeSpan,
   reference,
@@ -67,7 +66,7 @@ export default function Lemma({
                 <Icon name="question-outline" ml="4px" />
               </Tooltip>
             </StatLabel>
-            <StatNumber fontSize={["lg", "2xl"]}>{ambiguous}</StatNumber>
+            <StatNumber fontSize={["lg", "2xl"]}>{group.ambiguous}</StatNumber>
           </Stat>
           {group && group.authors ? (
             <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
@@ -103,22 +102,6 @@ export default function Lemma({
             </TabList>
             <TabPanels>
               <TabPanel>
-                {/*
-                    <FormControl mt={4}>
-                      <FormLabel htmlFor="author-filter">Filter</FormLabel>
-                      <Input
-                        type="author-filter"
-                        id="author-filter"
-                        aria-describedby="author-filter-helper-text"
-                        value={authorFilter}
-                        onChange={e => setAuthorFilter(e.target.value)}
-                        size="sm"
-                      />
-                      <FormHelperText id="author-filter-helper-text">
-                        Filter by author name.
-                      </FormHelperText>
-                    </FormControl>
-                    */}
                 <Accordion allowMultiple mt={8}>
                   {Object.entries(group.authors)
                     .sort(([a], [b]) =>
@@ -211,22 +194,6 @@ export default function Lemma({
                 </Accordion>
               </TabPanel>
               <TabPanel>
-                {/*
-                    <FormControl mt={4}>
-                      <FormLabel htmlFor="source-filter">Filter</FormLabel>
-                      <Input
-                        type="source-filter"
-                        id="source-filter"
-                        aria-describedby="source-filter-helper-text"
-                        value={sourceFilter}
-                        onChange={e => setSourceFilter(e.target.value)}
-                        size="sm"
-                      />
-                      <FormHelperText id="source-filter-helper-text">
-                        Filter by source name.
-                      </FormHelperText>
-                    </FormControl>
-                    */}
                 <Accordion allowMultiple mt={8}>
                   {Object.entries(group.sources)
                     .sort(([a], [b]) =>
