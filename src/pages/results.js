@@ -165,7 +165,6 @@ function ResultsPage({ location }) {
                 Your search for{" "}
                 <Text as="b" wordBreak="break-word">
                   {search ? `${search} ` : "the intersection "}
-                  {search}{" "}
                   <Text fontWeight="normal" as="span">
                     by{" "}
                   </Text>
