@@ -8,38 +8,9 @@ For more information on the toolkit view the [original repository](https://githu
 
 This project is an intuitive and easy to use front-end for the toolkit, developed by **Jack Leslie** in conjunction with the original authors **Tommaso Spinelli** and **Giacomo Fenzi**.
 
-## Using the live web application
+## Using the application
 
-Currently the latest build of the `master` branch is deployed via [Netlify](https://www.netlify.com) and is available at the link [latin.netlify.com](https://latin.netlify.com). You can also run and develop it locally by cloning this repository and starting a development server.
-
-## Developing locally
-
-Ensure you have [Node](https://nodejs.org) and [Yarn](https://yarnpkg.com) installed. To run the development server fun the following commands:
-
-```
-# This command will install dependencies
-yarn
-
-# This command will run the development server
-yarn start
-```
-
-## Using Docker
-
-You can use the web app in conjunction with the database using Docker, provided you have the database
-files necessary in a top level folder called `data/`. You'll also need Docker Compose installed. To
-use both the web app and the database, run the following command:
-
-```
-docker-compose up
-```
-
-To rebuild the frontend without restarting the database, run:
-
-```
-docker-compose build latin-diachronic-frontend
-docker-compose up -d
-```
+Currently the latest build of the `master` branch is deployed via [Netlify](https://www.netlify.com) and is available at the link [latin.netlify.com](https://latin.netlify.com). Local development can be done with [Netlify Dev](https://www.netlify.com/products/dev/).
 
 ## Authors
 
