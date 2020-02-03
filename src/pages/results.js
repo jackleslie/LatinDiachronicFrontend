@@ -164,6 +164,7 @@ function ResultsPage({ location }) {
               <AlertDescription maxWidth="sm">
                 Your search for{" "}
                 <Text as="b" wordBreak="break-word">
+                  {search ? `${search} ` : "the intersection "}
                   {search}{" "}
                   <Text fontWeight="normal" as="span">
                     by{" "}
