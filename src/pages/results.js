@@ -35,6 +35,7 @@ function ResultsPage({ location }) {
       authors,
       startYear: timeSpan[0],
       endYear: timeSpan[1],
+      useAll: authors.length === 0,
     },
   })
 

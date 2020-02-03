@@ -1,9 +1,14 @@
 import { gql } from "apollo-boost"
 
 export const INTERSECTION_QUERY = gql`
-  query($authors: [String!], $startYear: Int!, $endYear: Int!) {
+  query(
+    $authors: [String!]
+    $startYear: Int!
+    $endYear: Int!
+    $useAll: Boolean!
+  ) {
     intersection(
-      authors: { list: $authors, useAll: false }
+      authors: { list: $authors, useAll: $useAll }
       restOfLit: {
         useAll: false
         span: { startYear: $startYear, endYear: $endYear }
@@ -35,10 +40,11 @@ export const LEMMA_QUERY = gql`
     $authors: [String!]
     $startYear: Int!
     $endYear: Int!
+    $useAll: Boolean!
   ) {
     lemma(
       lemma: $search
-      authors: { list: $authors, useAll: false }
+      authors: { list: $authors, useAll: $useAll }
       span: {
         useAll: false
         span: { startYear: $startYear, endYear: $endYear }
@@ -69,10 +75,11 @@ export const FORM_QUERY = gql`
     $authors: [String!]
     $startYear: Int!
     $endYear: Int!
+    $useAll: Boolean!
   ) {
     form(
       form: $search
-      authors: { list: $authors, useAll: false }
+      authors: { list: $authors, useAll: $useAll }
       span: {
         useAll: false
         span: { startYear: $startYear, endYear: $endYear }
