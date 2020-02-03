@@ -25,13 +25,12 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from "@chakra-ui/core"
-import { countAmbiguousOccurences } from "../../utils"
+import { countAmbiguousOccurences, timeSpanLabel } from "../../utils"
 
 export default function Intersection({
   search,
   result,
   timeSpan,
-  timeSpanLabel,
   reference,
   handlePopoverOpen,
   setReference,
@@ -75,7 +74,9 @@ export default function Intersection({
           {timeSpan && (
             <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
               <StatLabel>Centuries</StatLabel>
-              <StatNumber fontSize={["lg", "2xl"]}>{timeSpanLabel}</StatNumber>
+              <StatNumber fontSize={["lg", "2xl"]}>
+                {timeSpanLabel(...timeSpan)}
+              </StatNumber>
             </Stat>
           )}
         </Flex>

@@ -13,110 +13,20 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/core"
-import { gql } from "apollo-boost"
 import { useQuery } from "@apollo/react-hooks"
 import { SEO } from "../components"
 import { Lemma, Intersection } from "../containers"
-import { yearLabel, countAmbiguousOccurences } from "../utils"
+import {
+  timeSpanLabel,
+  countAmbiguousOccurences,
+  generateGroup,
+} from "../utils"
+import { INTERSECTION_QUERY, LEMMA_QUERY, FORM_QUERY } from "../data"
 
 function ResultsPage({ location }) {
   const {
     state: { authors = "", search = "", timeSpan = [-500, 600] } = {},
   } = location
-  const INTERSECTION_QUERY = gql`
-    query($authors: [String!], $startYear: Int!, $endYear: Int!) {
-      intersection(
-        authors: { list: $authors, useAll: false }
-        restOfLit: {
-          useAll: false
-          span: { startYear: $startYear, endYear: $endYear }
-        }
-      ) {
-        occurrences {
-          ambiguos
-          line
-          source {
-            name
-            author {
-              name
-            }
-          }
-        }
-        lemma
-        count
-        forms {
-          count
-          form
-        }
-      }
-    }
-  `
-  const LEMMA_QUERY = gql`
-    query(
-      $search: String!
-      $authors: [String!]
-      $startYear: Int!
-      $endYear: Int!
-    ) {
-      lemma(
-        lemma: $search
-        authors: { list: $authors, useAll: false }
-        span: {
-          useAll: false
-          span: { startYear: $startYear, endYear: $endYear }
-        }
-      ) {
-        count
-        occurrences {
-          ambiguos
-          line
-          source {
-            name
-            author {
-              name
-              timeSpan {
-                end
-                start
-              }
-            }
-          }
-        }
-      }
-    }
-  `
-  const FORM_QUERY = gql`
-    query(
-      $search: String!
-      $authors: [String!]
-      $startYear: Int!
-      $endYear: Int!
-    ) {
-      form(
-        form: $search
-        authors: { list: $authors, useAll: false }
-        span: {
-          useAll: false
-          span: { startYear: $startYear, endYear: $endYear }
-        }
-      ) {
-        count
-        occurrences {
-          ambiguos
-          line
-          source {
-            name
-            author {
-              name
-              timeSpan {
-                end
-                start
-              }
-            }
-          }
-        }
-      }
-    }
-  `
   // if there's no lemma entered then there must be authors to intersect
   const initialQuery = search ? LEMMA_QUERY : INTERSECTION_QUERY
   const [query, setQuery] = useState(initialQuery)
@@ -181,85 +91,7 @@ function ResultsPage({ location }) {
         setResult({ type: "Empty" })
       }
     }
-  }, [data, search, FORM_QUERY])
-
-  function generateGroup(result) {
-    return result.occurrences.reduce(
-      (x, occurrence) => {
-        const authorName = occurrence.source.author.name
-        const sourceName = occurrence.source.name
-        const start = occurrence.source.author.timeSpan.start
-        const end = occurrence.source.author.timeSpan.end
-
-        const authorsEntry = {
-          line: occurrence.line,
-          source: sourceName,
-          ambiguous: occurrence.ambiguos,
-        }
-
-        // authors
-        if (x.authors[authorName]) {
-          x.authors[authorName].occurrences.push(authorsEntry)
-          if (!x.authors[authorName].sources.includes(sourceName)) {
-            x.authors[authorName].sources.push(sourceName)
-          }
-        } else {
-          x.authors[authorName] = {}
-          x.authors[authorName].occurrences = [authorsEntry]
-          x.authors[authorName].sources = [sourceName]
-        }
-
-        const sourceEntry = {
-          line: occurrence.line,
-          ambiguous: occurrence.ambiguos,
-        }
-
-        // sources
-        if (x.sources[sourceName]) {
-          x.sources[sourceName].occurrences.push(sourceEntry)
-        } else {
-          x.sources[sourceName] = {}
-          x.sources[sourceName].occurrences = [sourceEntry]
-          x.sources[sourceName].author = authorName
-        }
-
-        const centuriesEntry = {
-          line: occurrence.line,
-          source: sourceName,
-          ambiguous: occurrence.ambiguos,
-        }
-
-        // centuries (start)
-        if (x.centuries[start] && x.centuries[start][authorName]) {
-          x.centuries[start][authorName].occurrences.push(centuriesEntry)
-          if (!x.centuries[start][authorName].sources.includes(sourceName)) {
-            x.centuries[start][authorName].sources.push(sourceName)
-          }
-        } else {
-          x.centuries[start] = { ...x.centuries[start] }
-          x.centuries[start][authorName] = {}
-          x.centuries[start][authorName].occurrences = [centuriesEntry]
-          x.centuries[start][authorName].sources = [sourceName]
-        }
-
-        // centuries (end)
-        if (x.centuries[end] && x.centuries[end][authorName]) {
-          x.centuries[end][authorName].occurrences.push(centuriesEntry)
-          if (!x.centuries[end][authorName].sources.includes(sourceName)) {
-            x.centuries[end][authorName].sources.push(sourceName)
-          }
-        } else {
-          x.centuries[end] = { ...x.centuries[end] }
-          x.centuries[end][authorName] = {}
-          x.centuries[end][authorName].occurrences = [centuriesEntry]
-          x.centuries[end][authorName].sources = [sourceName]
-        }
-
-        return x
-      },
-      { authors: {}, sources: {}, centuries: {} }
-    )
-  }
+  }, [data, search])
 
   async function handlePopoverOpen(line) {
     setReference(null)
@@ -269,11 +101,6 @@ function ResultsPage({ location }) {
     setReference(data)
     console.log(data)
   }
-
-  const timeSpanLabel =
-    timeSpan && timeSpan.length
-      ? `${yearLabel(timeSpan[0])} - ${yearLabel(timeSpan[1])}`
-      : ""
 
   return (
     <Flex justify="center">
@@ -311,7 +138,7 @@ function ResultsPage({ location }) {
               )}{" "}
               in{" "}
               <Text as="b" wordBreak="break-word">
-                {timeSpanLabel}
+                {timeSpanLabel(...timeSpan)}
               </Text>
             </Text>
           </Stack>
@@ -325,7 +152,6 @@ function ResultsPage({ location }) {
               ambiguous={ambiguous}
               group={group}
               timeSpan={timeSpan}
-              timeSpanLabel={timeSpanLabel}
               reference={reference}
               handlePopoverOpen={handlePopoverOpen}
               setReference={setReference}
@@ -337,7 +163,6 @@ function ResultsPage({ location }) {
             authors={authors}
             result={result}
             timeSpan={timeSpan}
-            timeSpanLabel={timeSpanLabel}
             reference={reference}
             handlePopoverOpen={handlePopoverOpen}
             setReference={setReference}
@@ -371,7 +196,7 @@ function ResultsPage({ location }) {
                 </Text>{" "}
                 in{" "}
                 <Text as="b" wordBreak="break-word">
-                  {timeSpanLabel}
+                  {timeSpanLabel(...timeSpan)}
                 </Text>
                 <Text as="span"> yielded no results in our database.</Text>
               </AlertDescription>

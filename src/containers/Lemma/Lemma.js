@@ -32,7 +32,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from "@chakra-ui/core"
-import { yearLabel } from "../../utils"
+import { yearLabel, timeSpanLabel } from "../../utils"
 
 export default function Lemma({
   search,
@@ -40,7 +40,6 @@ export default function Lemma({
   ambiguous,
   group,
   timeSpan,
-  timeSpanLabel,
   reference,
   handlePopoverOpen,
   setReference,
@@ -89,7 +88,9 @@ export default function Lemma({
           {timeSpan && (
             <Stat mt={3} mb={2} pr={0} textAlign="center" flexBasis="33%">
               <StatLabel>Centuries</StatLabel>
-              <StatNumber fontSize={["lg", "2xl"]}>{timeSpanLabel}</StatNumber>
+              <StatNumber fontSize={["lg", "2xl"]}>
+                {timeSpanLabel(...timeSpan)}
+              </StatNumber>
             </Stat>
           )}
         </Flex>
