@@ -4,7 +4,6 @@ import {
   Flex,
   Box,
   Heading,
-  Spinner,
   Alert,
   AlertIcon,
   AlertTitle,
@@ -14,7 +13,7 @@ import {
   Text,
 } from "@chakra-ui/core"
 import { useQuery } from "@apollo/react-hooks"
-import { SEO } from "../components"
+import { SEO, Loader } from "../components"
 import { Lemma, Intersection } from "../containers"
 import { timeSpanLabel, generateGroup } from "../utils"
 import {
@@ -104,37 +103,7 @@ function ResultsPage({ location }) {
         </Heading>
 
         {(loading || !result) && !error && (
-          <Stack align="center" mt={6} width="100%">
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="xl"
-            />
-            <Text mt={4} textAlign="center">
-              {search ? (
-                <Text as="span">
-                  Searching <Text as="b">{search} </Text>
-                </Text>
-              ) : (
-                "Calculating intersection "
-              )}
-              {authors && authors.length ? (
-                <Text as="span">
-                  by <Text as="b">{authors.join(", ")}</Text>
-                </Text>
-              ) : (
-                <Text as="span">
-                  by <Text as="b">all authors</Text>
-                </Text>
-              )}{" "}
-              in{" "}
-              <Text as="b" wordBreak="break-word">
-                {timeSpanLabel(...timeSpan)}
-              </Text>
-            </Text>
-          </Stack>
+          <Loader search={search} authors={authors} timeSpan={timeSpan} />
         )}
         {result &&
           result.type &&
