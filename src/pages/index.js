@@ -44,14 +44,6 @@ function IndexPage({ data }) {
             </FormHelperText>
           </FormControl>
           <FormControl mt={[1, 3]}>
-            <FormLabel htmlFor="century">Century</FormLabel>
-            <Slider value={timeSpan} setValue={setTimeSpan} />
-            <FormHelperText id="century-helper-text" mt={0}>
-              Search from {yearLabel(timeSpan[0])} until{" "}
-              {yearLabel(timeSpan[1])}.
-            </FormHelperText>
-          </FormControl>
-          <FormControl mt={[1, 3]}>
             <FormLabel htmlFor="lemma">Lemma</FormLabel>
             <Input
               type="email"
@@ -65,6 +57,14 @@ function IndexPage({ data }) {
             <FormHelperText id="lemma-helper-text">
               Search any lemma or form, or leave blank for intersection of
               authors.
+            </FormHelperText>
+          </FormControl>
+          <FormControl mt={[1, 3]}>
+            <FormLabel htmlFor="century">Century</FormLabel>
+            <Slider value={timeSpan} setValue={setTimeSpan} />
+            <FormHelperText id="century-helper-text" mt={0}>
+              Search from {yearLabel(timeSpan[0])} until{" "}
+              {yearLabel(timeSpan[1])}.
             </FormHelperText>
           </FormControl>
         </Stack>
