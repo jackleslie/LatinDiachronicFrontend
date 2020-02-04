@@ -63,7 +63,8 @@ function IndexPage({ data }) {
               isInvalid={clicked}
             />
             <FormHelperText id="lemma-helper-text">
-              Search for any lemma or form.
+              Search any lemma or form, or leave blank for intersection of
+              authors.
             </FormHelperText>
           </FormControl>
         </Stack>
