@@ -103,3 +103,9 @@ export const FORM_QUERY = gql`
     }
   }
 `
+
+export const WORD_TYPE_QUERY = gql`
+  query($search: String!) {
+    wordType(word: $search)
+  }
+`

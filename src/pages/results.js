@@ -17,15 +17,18 @@ import { useQuery } from "@apollo/react-hooks"
 import { SEO } from "../components"
 import { Lemma, Intersection } from "../containers"
 import { timeSpanLabel, generateGroup } from "../utils"
-import { INTERSECTION_QUERY, LEMMA_QUERY, FORM_QUERY } from "../data"
+import {
+  INTERSECTION_QUERY,
+  LEMMA_QUERY,
+  FORM_QUERY,
+  WORD_TYPE_QUERY,
+} from "../data"
 
 function ResultsPage({ location }) {
   const {
     state: { authors = "", search = "", timeSpan = [-500, 600] } = {},
   } = location
-  // if there's no lemma entered then there must be authors to intersect
-  const initialQuery = search ? LEMMA_QUERY : INTERSECTION_QUERY
-  const [query, setQuery] = useState(initialQuery)
+  const [query, setQuery] = useState(WORD_TYPE_QUERY)
   const [result, setResult] = useState()
   const [reference, setReference] = useState()
   const [group, setGroup] = useState()
@@ -40,36 +43,46 @@ function ResultsPage({ location }) {
   })
 
   useEffect(() => {
-    if (data && data.intersection) {
-      if (data.intersection.length) {
-        setResult({
-          intersections: data.intersection,
-          type: "Intersection",
-        })
-      } else {
-        setResult({ type: "Empty" })
-      }
-    } else if (data && data.lemma) {
-      if (!data.lemma.count) {
-        setQuery(FORM_QUERY)
-      } else {
-        setResult({
-          ...data.lemma,
-          type: "Lemma",
-        })
-        const group = generateGroup(data.lemma)
-        setGroup(group)
-      }
-    } else if (data && data.form) {
-      if (data.form.count) {
-        setResult({
-          ...data.form,
-          type: "Form",
-        })
-        const group = generateGroup(data.form)
-        setGroup(group)
-      } else {
-        setResult({ type: "Empty" })
+    if (data) {
+      if (data.wordType) {
+        if (data.wordType === "LEMMA") {
+          setQuery(LEMMA_QUERY)
+        } else if (data.wordType === "FORM") {
+          setQuery(FORM_QUERY)
+        } else {
+          setQuery(INTERSECTION_QUERY)
+        }
+      } else if (data.intersection) {
+        if (data.intersection.length) {
+          setResult({
+            intersections: data.intersection,
+            type: "Intersection",
+          })
+        } else {
+          setResult({ type: "Empty" })
+        }
+      } else if (data.lemma) {
+        if (data.lemma.count) {
+          setResult({
+            ...data.lemma,
+            type: "Lemma",
+          })
+          const group = generateGroup(data.lemma)
+          setGroup(group)
+        } else {
+          setResult({ type: "Empty" })
+        }
+      } else if (data.form) {
+        if (data.form.count) {
+          setResult({
+            ...data.form,
+            type: "Form",
+          })
+          const group = generateGroup(data.form)
+          setGroup(group)
+        } else {
+          setResult({ type: "Empty" })
+        }
       }
     }
   }, [data])
