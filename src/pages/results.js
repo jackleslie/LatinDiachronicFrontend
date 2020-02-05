@@ -49,8 +49,10 @@ function ResultsPage({ location }) {
           setQuery(LEMMA_QUERY)
         } else if (data.wordType === Type.FORM) {
           setQuery(FORM_QUERY)
-        } else {
+        } else if (data.wordType === Type.NOT_FOUND && !search) {
           setQuery(INTERSECTION_QUERY)
+        } else {
+          setResult({ type: Type.EMPTY })
         }
       } else if (data.intersection) {
         if (data.intersection.length) {
@@ -85,7 +87,7 @@ function ResultsPage({ location }) {
         }
       }
     }
-  }, [data])
+  }, [data, search])
 
   async function handlePopoverOpen(line) {
     setReference(null)
