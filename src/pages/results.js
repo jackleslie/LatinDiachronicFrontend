@@ -21,6 +21,7 @@ import {
   LEMMA_QUERY,
   FORM_QUERY,
   WORD_TYPE_QUERY,
+  Type,
 } from "../data"
 
 function ResultsPage({ location }) {
@@ -44,9 +45,9 @@ function ResultsPage({ location }) {
   useEffect(() => {
     if (data) {
       if (data.wordType) {
-        if (data.wordType === "LEMMA") {
+        if (data.wordType === Type.LEMMA) {
           setQuery(LEMMA_QUERY)
-        } else if (data.wordType === "FORM") {
+        } else if (data.wordType === Type.FORM) {
           setQuery(FORM_QUERY)
         } else {
           setQuery(INTERSECTION_QUERY)
@@ -55,32 +56,32 @@ function ResultsPage({ location }) {
         if (data.intersection.length) {
           setResult({
             intersections: data.intersection,
-            type: "Intersection",
+            type: Type.INTERSECTION,
           })
         } else {
-          setResult({ type: "Empty" })
+          setResult({ type: Type.EMPTY })
         }
       } else if (data.lemma) {
         if (data.lemma.count) {
           setResult({
             ...data.lemma,
-            type: "Lemma",
+            type: Type.LEMMA,
           })
           const group = generateGroup(data.lemma)
           setGroup(group)
         } else {
-          setResult({ type: "Empty" })
+          setResult({ type: Type.EMPTY })
         }
       } else if (data.form) {
         if (data.form.count) {
           setResult({
             ...data.form,
-            type: "Form",
+            type: Type.FORM,
           })
           const group = generateGroup(data.form)
           setGroup(group)
         } else {
-          setResult({ type: "Empty" })
+          setResult({ type: Type.EMPTY })
         }
       }
     }
@@ -107,7 +108,7 @@ function ResultsPage({ location }) {
         )}
         {result &&
           result.type &&
-          (result.type === "Lemma" || result.type === "Form") && (
+          (result.type === Type.LEMMA || result.type === Type.FORM) && (
             <Lemma
               search={search}
               result={result}
@@ -118,7 +119,7 @@ function ResultsPage({ location }) {
               setReference={setReference}
             />
           )}
-        {result && result.type && result.type === "Intersection" && (
+        {result && result.type && result.type === Type.INTERSECTION && (
           <Intersection
             search={search}
             authors={authors}
@@ -129,7 +130,7 @@ function ResultsPage({ location }) {
             setReference={setReference}
           />
         )}
-        {result && result.type && result.type === "Empty" && (
+        {result && result.type && result.type === Type.EMPTY && (
           <Stack>
             <Alert
               status="warning"

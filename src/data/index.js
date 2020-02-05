@@ -4,3 +4,5 @@ export {
   FORM_QUERY,
   WORD_TYPE_QUERY,
 } from "./query"
+
+export { Type } from "./type"
