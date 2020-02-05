@@ -24,6 +24,12 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
+  FormControl,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
 } from "@chakra-ui/core"
 import { countAmbiguousOccurences, timeSpanLabel } from "../../utils"
 
@@ -80,87 +86,107 @@ export default function Intersection({
             </Stat>
           )}
         </Flex>
-        <Accordion allowMultiple mt={8}>
-          {result.intersections
-            .sort((a, b) =>
-              a.lemma.toUpperCase() > b.lemma.toUpperCase() ? 1 : -1
-            )
-            .map(({ occurrences, lemma, count, forms }, index) => (
-              <AccordionItem key={index}>
-                <AccordionHeader>
-                  <Box flex="1" textAlign="left">
-                    <Text>
-                      {lemma} ({count})
-                    </Text>
-                    <FormHelperText mt={0}>
-                      in {forms.length} form
-                      {forms.length > 1 ? "s" : ""}
-                    </FormHelperText>
-                  </Box>
-                  <AccordionIcon />
-                </AccordionHeader>
-                <AccordionPanel pb={4}>
-                  {occurrences.map(({ line, source, ambiguos }, index) => (
-                    <Box mt={2} key={index}>
-                      <Popover
-                        onOpen={() => handlePopoverOpen(line)}
-                        onClose={() => setReference(null)}
-                      >
-                        <PopoverTrigger>
-                          <Link
-                            fontSize="sm"
-                            title="Click to retrieve reference"
-                          >
-                            {line}
-                            <Icon name="search" mx="3px" size="0.75em" />
-                          </Link>
-                        </PopoverTrigger>
-                        <PopoverContent zIndex={4}>
-                          <PopoverArrow />
-                          <PopoverCloseButton />
-                          {reference ? (
-                            <PopoverHeader>
-                              <Text as="cite">
-                                {reference.link || "Reference unavailable"}
-                              </Text>
-                            </PopoverHeader>
-                          ) : null}
-                          <PopoverBody>
-                            {reference ? (
-                              <Text
-                                fontSize="sm"
-                                dangerouslySetInnerHTML={{
-                                  __html: reference.extract || reference.msg,
-                                }}
-                              />
-                            ) : (
-                              <Stack align="center" width="100%">
-                                <Spinner
-                                  thickness="4px"
-                                  speed="0.65s"
-                                  emptyColor="gray.200"
-                                  color="blue.500"
-                                  size="xl"
-                                  mt={2}
-                                />
-                                <Text mt={1} textAlign="center">
-                                  Loading reference...
-                                </Text>
-                              </Stack>
-                            )}
-                          </PopoverBody>
-                        </PopoverContent>
-                      </Popover>
-                      <FormHelperText mt={0}>
-                        in {source.name} by {source.author.name}{" "}
-                        {ambiguos ? "(Ambiguous)" : "(Certain)"}
-                      </FormHelperText>
-                    </Box>
-                  ))}
-                </AccordionPanel>
-              </AccordionItem>
-            ))}
-        </Accordion>
+        <FormControl mt={6}>
+          <Tabs isFitted variant="soft-rounded" variantColor="gray" mt={1}>
+            <TabList>
+              <Tab fontSize={["sm", "md"]}>By lemma</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <Accordion allowMultiple mt={8}>
+                  {result.intersections
+                    .sort((a, b) =>
+                      a.lemma.toUpperCase() > b.lemma.toUpperCase() ? 1 : -1
+                    )
+                    .map(({ occurrences, lemma, count, forms }, index) => (
+                      <AccordionItem key={index}>
+                        <AccordionHeader>
+                          <Box flex="1" textAlign="left">
+                            <Text>
+                              {lemma} ({count})
+                            </Text>
+                            <FormHelperText mt={0}>
+                              in {forms.length} form
+                              {forms.length > 1 ? "s" : ""}
+                            </FormHelperText>
+                          </Box>
+                          <AccordionIcon />
+                        </AccordionHeader>
+                        <AccordionPanel pb={4}>
+                          {occurrences.map(
+                            ({ line, source, ambiguos }, index) => (
+                              <Box mt={2} key={index}>
+                                <Popover
+                                  onOpen={() => handlePopoverOpen(line)}
+                                  onClose={() => setReference(null)}
+                                >
+                                  <PopoverTrigger>
+                                    <Link
+                                      fontSize="sm"
+                                      title="Click to retrieve reference"
+                                    >
+                                      {line}
+                                      <Icon
+                                        name="search"
+                                        mx="3px"
+                                        size="0.75em"
+                                      />
+                                    </Link>
+                                  </PopoverTrigger>
+                                  <PopoverContent zIndex={4}>
+                                    <PopoverArrow />
+                                    <PopoverCloseButton />
+                                    {reference ? (
+                                      <PopoverHeader>
+                                        <Text as="cite">
+                                          {reference.link ||
+                                            "Reference unavailable"}
+                                        </Text>
+                                      </PopoverHeader>
+                                    ) : null}
+                                    <PopoverBody>
+                                      {reference ? (
+                                        <Text
+                                          fontSize="sm"
+                                          dangerouslySetInnerHTML={{
+                                            __html:
+                                              reference.extract ||
+                                              reference.msg,
+                                          }}
+                                        />
+                                      ) : (
+                                        <Stack align="center" width="100%">
+                                          <Spinner
+                                            thickness="4px"
+                                            speed="0.65s"
+                                            emptyColor="gray.200"
+                                            color="blue.500"
+                                            size="xl"
+                                            mt={2}
+                                          />
+                                          <Text mt={1} textAlign="center">
+                                            Loading reference...
+                                          </Text>
+                                        </Stack>
+                                      )}
+                                    </PopoverBody>
+                                  </PopoverContent>
+                                </Popover>
+                                <FormHelperText mt={0}>
+                                  in {source.name} by {source.author.name}{" "}
+                                  {ambiguos ? "(Ambiguous)" : "(Certain)"}
+                                </FormHelperText>
+                              </Box>
+                            )
+                          )}
+                        </AccordionPanel>
+                      </AccordionItem>
+                    ))}
+                </Accordion>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </FormControl>
       </Box>
     </Box>
   )
