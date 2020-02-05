@@ -2,5 +2,6 @@ export const Type = {
   LEMMA: "LEMMA",
   FORM: "FORM",
   INTERSECTION: "INTERSECTION",
+  NOT_FOUND: "NOT_FOUND",
   EMPTY: "EMPTY",
 }
