@@ -92,10 +92,6 @@ export default function Intersection({
                     <Text>
                       {lemma} ({count})
                     </Text>
-                    <FormHelperText mt={0}>
-                      in {forms.length} form
-                      {forms.length > 1 ? "s" : ""}
-                    </FormHelperText>
                   </Box>
                   <AccordionIcon />
                 </AccordionHeader>

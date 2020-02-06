@@ -26,10 +26,6 @@ export const INTERSECTION_QUERY = gql`
       }
       lemma
       count
-      forms {
-        count
-        form
-      }
     }
   }
 `
