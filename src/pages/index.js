@@ -10,7 +10,7 @@ import {
   Heading,
   Button,
 } from "@chakra-ui/core"
-import { Link, graphql } from "gatsby"
+import { Link, graphql, navigate } from "gatsby"
 
 import { AuthorSearch, Slider, SEO } from "../components"
 import { yearLabel } from "../utils"
@@ -69,25 +69,25 @@ function IndexPage({ data }) {
           </FormControl>
         </Stack>
         <Flex justify="center">
-          {lemmaToSearch || authorsToSearch.length ? (
-            <Link
-              to="/results"
-              state={{
-                authors: authorsToSearch,
-                search: lemmaToSearch,
-                timeSpan,
-              }}
-              style={{ width: "100%" }}
-            >
-              <Button mt={[6, 8]} width="100%">
-                Search
-              </Button>
-            </Link>
-          ) : (
-            <Button mt={[6, 8]} width="100%" onClick={() => setClicked(true)}>
-              Search
-            </Button>
-          )}
+          <Button
+            mt={[6, 8]}
+            width="100%"
+            onClick={() => {
+              if (lemmaToSearch || authorsToSearch.length) {
+                navigate("/results/", {
+                  state: {
+                    authors: authorsToSearch,
+                    search: lemmaToSearch,
+                    timeSpan,
+                  },
+                })
+              } else {
+                setClicked(true)
+              }
+            }}
+          >
+            Search
+          </Button>
         </Flex>
       </Box>
     </Flex>
