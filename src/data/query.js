@@ -3,8 +3,8 @@ import { gql } from "apollo-boost"
 export const INTERSECTION_QUERY = gql`
   query(
     $authors: [String!]
-    $startYear: Int!
-    $endYear: Int!
+    $startYear: NaiveDate!
+    $endYear: NaiveDate!
     $useAll: Boolean!
   ) {
     intersection(
@@ -34,8 +34,8 @@ export const LEMMA_QUERY = gql`
   query(
     $search: String!
     $authors: [String!]
-    $startYear: Int!
-    $endYear: Int!
+    $startYear: NaiveDate!
+    $endYear: NaiveDate!
     $useAll: Boolean!
   ) {
     lemma(
@@ -69,8 +69,8 @@ export const FORM_QUERY = gql`
   query(
     $search: String!
     $authors: [String!]
-    $startYear: Int!
-    $endYear: Int!
+    $startYear: NaiveDate!
+    $endYear: NaiveDate!
     $useAll: Boolean!
   ) {
     form(

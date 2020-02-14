@@ -36,8 +36,8 @@ function ResultsPage({ location }) {
     variables: {
       search,
       authors,
-      startYear: timeSpan[0],
-      endYear: timeSpan[1],
+      startYear: `${timeSpan[0]}-01-01`,
+      endYear: `${timeSpan[1]}-01-01`,
       useAll: authors.length === 0,
     },
   })
