@@ -283,9 +283,7 @@ export default function Lemma({
               <TabPanel>
                 <Accordion allowMultiple mt={8}>
                   {Object.entries(group.centuries)
-                    .sort(([a], [b]) =>
-                      a.toUpperCase() > b.toUpperCase() ? 1 : -1
-                    )
+                    .sort(([a], [b]) => a - b)
                     .map(([key, value], index) => (
                       <Box key={key}>
                         <Heading size="sm" m={2} mt={6}>
