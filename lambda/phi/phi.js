@@ -9,10 +9,10 @@ exports.handler = async function(event, context) {
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath,
-      // headless: chromium.headless,
+      headless: chromium.headless,
     })
     const page = await browser.newPage()
-    await page.goto(`https://latin.packhum.org/search?q=${line}`, {
+    await page.goto(`${process.env.PHI_URL}${line}`, {
       waitUntil: ["domcontentloaded", "networkidle0"],
     })
     const link = await page.$eval("#match .tlink", elem => elem.innerText)
