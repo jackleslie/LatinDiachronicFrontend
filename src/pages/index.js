@@ -9,18 +9,32 @@ import {
   FormHelperText,
   Heading,
   Button,
+  Breadcrumb,
+  BreadcrumbItem,
 } from "@chakra-ui/core"
 import { Link, graphql, navigate } from "gatsby"
 
 import { AuthorSearch, Slider, SEO } from "../components"
 import { yearLabel } from "../utils"
+import { Type } from "../data"
 
 function IndexPage({ data }) {
   const { authors } = data.latin
   const [authorsToSearch, setAuthorsToSearch] = useState([])
-  const [lemmaToSearch, setLemmaToSearch] = useState("")
+  const [wordToSearch, setWordToSearch] = useState("")
   const [clicked, setClicked] = useState(false)
   const [timeSpan, setTimeSpan] = useState([-500, 600])
+  const [searchType, setSearchType] = useState(Type.LEMMA)
+
+  const isLemma = searchType === Type.LEMMA
+  const isForm = searchType === Type.FORM
+  const isIntersection = searchType === Type.INTERSECTION
+
+  const canSearch =
+    (isIntersection && authorsToSearch.length > 0) ||
+    ((isLemma || isForm) && wordToSearch)
+
+  const inputId = searchType.toLowerCase()
 
   return (
     <Flex justify="center">
@@ -35,12 +49,15 @@ function IndexPage({ data }) {
             <AuthorSearch
               authors={authors}
               onUpdate={setAuthorsToSearch}
-              isInvalid={clicked}
+              isInvalid={
+                clicked && isIntersection && authorsToSearch.length === 0
+              }
               onFocus={() => setClicked(false)}
             />
             <FormHelperText id="author-helper-text">
-              Enter as many authors as you like, or leave blank to search all
-              authors.
+              {isIntersection
+                ? "Enter at least one author."
+                : "Enter as many authors as you like, or leave blank to search all authors."}
             </FormHelperText>
           </FormControl>
           <FormControl mt={[1, 3]}>
@@ -52,19 +69,56 @@ function IndexPage({ data }) {
             </FormHelperText>
           </FormControl>
           <FormControl mt={[1, 3]}>
-            <FormLabel htmlFor="lemma">Lemma</FormLabel>
+            <FormLabel htmlFor={inputId}>
+              <Breadcrumb>
+                <BreadcrumbItem>
+                  <Button
+                    aria-current={isLemma}
+                    onClick={() => setSearchType(Type.LEMMA)}
+                    color={isLemma || "gray.500"}
+                    variant="link"
+                  >
+                    Lemma
+                  </Button>
+                </BreadcrumbItem>
+
+                <BreadcrumbItem>
+                  <Button
+                    aria-current={isForm}
+                    onClick={() => setSearchType(Type.FORM)}
+                    color={isForm || "gray.500"}
+                    variant="link"
+                  >
+                    Form
+                  </Button>
+                </BreadcrumbItem>
+
+                <BreadcrumbItem>
+                  <Button
+                    aria-current={isIntersection}
+                    onClick={() => setSearchType(Type.INTERSECTION)}
+                    color={isIntersection || "gray.500"}
+                    variant="link"
+                  >
+                    Intersection
+                  </Button>
+                </BreadcrumbItem>
+              </Breadcrumb>
+            </FormLabel>
             <Input
               type="email"
-              id="lemma"
-              aria-describedby="lemma-helper-text"
-              value={lemmaToSearch}
-              onChange={e => setLemmaToSearch(e.target.value)}
+              id={inputId}
+              aria-describedby={`${inputId}-helper-text`}
+              value={wordToSearch}
+              onChange={e => setWordToSearch(e.target.value)}
               onFocus={() => setClicked(false)}
-              isInvalid={clicked}
+              isInvalid={clicked && !isIntersection}
+              isDisabled={isIntersection}
             />
-            <FormHelperText id="lemma-helper-text">
-              Search any lemma or form, or leave blank for intersection of
-              authors.
+            <FormHelperText id={`${inputId}-helper-text`}>
+              {isIntersection
+                ? "Search the intersection of authors."
+                : `Search any ${isLemma ? "lemma" : "form"}.`}
             </FormHelperText>
           </FormControl>
         </Stack>
@@ -73,11 +127,12 @@ function IndexPage({ data }) {
             mt={[6, 8]}
             width="100%"
             onClick={() => {
-              if (lemmaToSearch || authorsToSearch.length) {
+              if (canSearch) {
                 navigate("/results/", {
                   state: {
                     authors: authorsToSearch,
-                    search: lemmaToSearch,
+                    search: wordToSearch,
+                    searchType,
                     timeSpan,
                   },
                 })
