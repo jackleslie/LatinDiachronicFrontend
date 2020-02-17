@@ -51,9 +51,7 @@ function IndexPage({ data }) {
               authors={authors}
               onUpdate={setAuthorsToSearch}
               isInvalid={
-                clicked &&
-                ((!isIntersection && authorsToSearch.length === 0) ||
-                  (isIntersection && authorsToSearch.length === 0))
+                clicked && isIntersection && authorsToSearch.length === 0
               }
               onFocus={() => setClicked(false)}
             />
