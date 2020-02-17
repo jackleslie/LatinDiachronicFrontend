@@ -39,7 +39,7 @@ function IndexPage({ data }) {
   return (
     <Flex justify="center">
       <SEO title="Search" />
-      <Box p={8} maxWidth="500px">
+      <Box p={8} maxWidth="500px" width="100%">
         <Heading mb={6} textAlign="center" fontSize={["24px", "36px"]}>
           <Link to="/">Latin Diachronic Analysis</Link>
         </Heading>
