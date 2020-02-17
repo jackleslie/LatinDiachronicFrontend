@@ -26,9 +26,26 @@ import {
 
 function ResultsPage({ location }) {
   const {
-    state: { authors = "", search = "", timeSpan = [-500, 600] } = {},
+    state: {
+      authors = "",
+      search = "",
+      timeSpan = [-500, 600],
+      searchType = "",
+    } = {},
   } = location
-  const [query, setQuery] = useState(WORD_TYPE_QUERY)
+
+  let INITIAL_QUERY
+  if (searchType === Type.LEMMA) {
+    INITIAL_QUERY = LEMMA_QUERY
+  } else if (searchType === Type.FORM) {
+    INITIAL_QUERY = FORM_QUERY
+  } else if (searchType === Type.INTERSECTION) {
+    INITIAL_QUERY = INTERSECTION_QUERY
+  } else {
+    INITIAL_QUERY = WORD_TYPE_QUERY
+  }
+
+  const [query, setQuery] = useState(INITIAL_QUERY)
   const [result, setResult] = useState()
   const [reference, setReference] = useState()
   const [group, setGroup] = useState()
