@@ -50,7 +50,11 @@ function IndexPage({ data }) {
             <AuthorSearch
               authors={authors}
               onUpdate={setAuthorsToSearch}
-              isInvalid={clicked}
+              isInvalid={
+                clicked &&
+                ((!isIntersection && authorsToSearch.length === 0) ||
+                  (isIntersection && authorsToSearch.length === 0))
+              }
               onFocus={() => setClicked(false)}
             />
             <FormHelperText id="author-helper-text">
