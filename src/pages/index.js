@@ -11,7 +11,6 @@ import {
   Button,
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
 } from "@chakra-ui/core"
 import { Link, graphql, navigate } from "gatsby"
 
@@ -73,33 +72,36 @@ function IndexPage({ data }) {
             <FormLabel htmlFor={inputId}>
               <Breadcrumb>
                 <BreadcrumbItem>
-                  <BreadcrumbLink
-                    isCurrentPage={isLemma}
+                  <Button
+                    aria-current={isLemma}
                     onClick={() => setSearchType(Type.LEMMA)}
                     color={isLemma || "gray.500"}
+                    variant="link"
                   >
                     Lemma
-                  </BreadcrumbLink>
+                  </Button>
                 </BreadcrumbItem>
 
                 <BreadcrumbItem>
-                  <BreadcrumbLink
-                    isCurrentPage={isForm}
+                  <Button
+                    aria-current={isForm}
                     onClick={() => setSearchType(Type.FORM)}
                     color={isForm || "gray.500"}
+                    variant="link"
                   >
                     Form
-                  </BreadcrumbLink>
+                  </Button>
                 </BreadcrumbItem>
 
                 <BreadcrumbItem>
-                  <BreadcrumbLink
-                    isCurrentPage={isIntersection}
+                  <Button
+                    aria-current={isIntersection}
                     onClick={() => setSearchType(Type.INTERSECTION)}
                     color={isIntersection || "gray.500"}
+                    variant="link"
                   >
                     Intersection
-                  </BreadcrumbLink>
+                  </Button>
                 </BreadcrumbItem>
               </Breadcrumb>
             </FormLabel>
