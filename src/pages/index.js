@@ -75,8 +75,9 @@ function IndexPage({ data }) {
                   <Button
                     aria-current={isLemma}
                     onClick={() => setSearchType(Type.LEMMA)}
-                    color={isLemma || "gray.500"}
+                    color={isLemma || "gray.400"}
                     variant="link"
+                    fontWeight="500"
                   >
                     Lemma
                   </Button>
@@ -86,8 +87,9 @@ function IndexPage({ data }) {
                   <Button
                     aria-current={isForm}
                     onClick={() => setSearchType(Type.FORM)}
-                    color={isForm || "gray.500"}
+                    color={isForm || "gray.400"}
                     variant="link"
+                    fontWeight="500"
                   >
                     Form
                   </Button>
@@ -97,8 +99,9 @@ function IndexPage({ data }) {
                   <Button
                     aria-current={isIntersection}
                     onClick={() => setSearchType(Type.INTERSECTION)}
-                    color={isIntersection || "gray.500"}
+                    color={isIntersection || "gray.400"}
                     variant="link"
+                    fontWeight="500"
                   >
                     Intersection
                   </Button>
