@@ -74,7 +74,10 @@ function IndexPage({ data }) {
                 <BreadcrumbItem>
                   <Button
                     aria-current={isLemma}
-                    onClick={() => setSearchType(Type.LEMMA)}
+                    onClick={() => {
+                      setSearchType(Type.LEMMA)
+                      setClicked(false)
+                    }}
                     color={isLemma || "gray.400"}
                     variant="link"
                     fontWeight="500"
@@ -86,7 +89,10 @@ function IndexPage({ data }) {
                 <BreadcrumbItem>
                   <Button
                     aria-current={isForm}
-                    onClick={() => setSearchType(Type.FORM)}
+                    onClick={() => {
+                      setSearchType(Type.FORM)
+                      setClicked(false)
+                    }}
                     color={isForm || "gray.400"}
                     variant="link"
                     fontWeight="500"
@@ -98,7 +104,10 @@ function IndexPage({ data }) {
                 <BreadcrumbItem>
                   <Button
                     aria-current={isIntersection}
-                    onClick={() => setSearchType(Type.INTERSECTION)}
+                    onClick={() => {
+                      setSearchType(Type.INTERSECTION)
+                      setClicked(false)
+                    }}
                     color={isIntersection || "gray.400"}
                     variant="link"
                     fontWeight="500"
@@ -121,7 +130,7 @@ function IndexPage({ data }) {
             <FormHelperText id={`${inputId}-helper-text`}>
               {isIntersection
                 ? "Search the intersection of authors."
-                : `Search any ${isLemma ? "lemma" : "form"}.`}
+                : `Enter any ${isLemma ? "lemma" : "form"}.`}
             </FormHelperText>
           </FormControl>
         </Stack>
