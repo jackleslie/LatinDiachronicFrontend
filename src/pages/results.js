@@ -55,7 +55,7 @@ function ResultsPage({ location }) {
       authors,
       startYear: `${timeSpan[0]}-01-01`,
       endYear: `${timeSpan[1]}-01-01`,
-      useAll: authors.length === 0,
+      useAll: authors.length === 0 || (authors.length === 1 && authors[0] === "EPIGRAPHS"),
     },
   })
 
