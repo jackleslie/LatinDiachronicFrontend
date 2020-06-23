@@ -11,6 +11,9 @@ import {
   Button,
   Breadcrumb,
   BreadcrumbItem,
+  Checkbox,
+  Tooltip,
+  Icon
 } from "@chakra-ui/core"
 import { Link, graphql, navigate } from "gatsby"
 
@@ -25,6 +28,7 @@ function IndexPage({ data }) {
   const [clicked, setClicked] = useState(false)
   const [timeSpan, setTimeSpan] = useState([-500, 600])
   const [searchType, setSearchType] = useState(Type.LEMMA)
+  const [epigraph, setEpigraph] = useState(false)
 
   const isLemma = searchType === Type.LEMMA
   const isForm = searchType === Type.FORM
@@ -59,6 +63,17 @@ function IndexPage({ data }) {
                 ? "Enter at least one author."
                 : "Enter as many authors as you like, or leave blank to search all authors."}
             </FormHelperText>
+            <Checkbox 
+              mt={2} 
+              size="sm" 
+              isChecked={epigraph} 
+              onChange={() => setEpigraph(!epigraph)}
+            >
+              Include epigraphs
+              <Tooltip label="Search by author(s) and include results found in epigraphs.">
+                <Icon name="question-outline" ml="4px" />
+              </Tooltip>
+            </Checkbox>
           </FormControl>
           <FormControl mt={[1, 3]}>
             <FormLabel htmlFor="century">Century</FormLabel>
@@ -139,10 +154,11 @@ function IndexPage({ data }) {
             mt={[6, 8]}
             width="100%"
             onClick={() => {
+              const authorsToSend = epigraph ? [...authorsToSearch, 'EPIGRAPHS'] : authorsToSearch
               if (canSearch) {
                 navigate("/results/", {
                   state: {
-                    authors: authorsToSearch,
+                    authors: authorsToSend,
                     search: wordToSearch,
                     searchType,
                     timeSpan,

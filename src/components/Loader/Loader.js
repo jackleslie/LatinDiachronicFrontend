@@ -12,10 +12,13 @@ export default function Loader({ search, authors, timeSpan, ...props }) {
     "Calculating intersection"
   )
 
+  const withEpigraphs = authors.includes('EPIGRAPHS');
+  const authorsFiltered = authors.filter(author => author !== "EPIGRAPHS")
+
   const authorsText =
     authors && authors.length ? (
       <Text as="span">
-        {search ? "by" : "of"} <Text as="b">{authors.join(", ")}</Text>
+        {search ? "by" : "of"} <Text as="b">{withEpigraphs ? authorsFiltered.join(", ") : authors.join(", ")}</Text>
       </Text>
     ) : (
       <Text as="span">

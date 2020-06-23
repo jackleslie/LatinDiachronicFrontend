@@ -27,7 +27,7 @@ import {
 function ResultsPage({ location }) {
   const {
     state: {
-      authors = "",
+      authors = [],
       search = "",
       timeSpan = [-500, 600],
       searchType = "",
@@ -172,7 +172,7 @@ function ResultsPage({ location }) {
                     by{" "}
                   </Text>
                   {authors && authors.length
-                    ? authors.join(", ")
+                    ? authors.filter(author => author !== "EPIGRAPHS").join(", ")
                     : "all authors"}
                 </Text>{" "}
                 in{" "}

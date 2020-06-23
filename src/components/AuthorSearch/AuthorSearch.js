@@ -24,7 +24,7 @@ function getSuggestions(data, value) {
       return {
         title: section.title,
         data: section.data
-          .filter(element => element.name.toLowerCase().includes(escapedValue))
+          .filter(element => element.name.toLowerCase().includes(escapedValue) && element.name !== "EPIGRAPHS")
           .slice(0, 10),
       }
     })
