@@ -66,7 +66,7 @@ function IndexPage({ data }) {
                 ? "Enter at least one author."
                 : "Enter as many authors as you like, or leave blank to search all authors."}
             </FormHelperText>
-            <Button p={3} mt={3} leftIcon={`triangle-${showAdvanced ? 'up' : 'down'}`} size="xs" onClick={() => setShowAdvanced(!showAdvanced)}>Advanced</Button>
+            <Button mt={3} leftIcon={`triangle-${showAdvanced ? 'up' : 'down'}`} size="xs" onClick={() => setShowAdvanced(!showAdvanced)}>Advanced</Button>
             <Collapse mt={2} isOpen={showAdvanced}>
               <RadioGroup spacing={[0, 1]} onChange={e => setEpigraph(e.target.value)} value={epigraph}>
                 <Radio 
