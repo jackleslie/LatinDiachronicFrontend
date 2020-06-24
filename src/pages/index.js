@@ -11,15 +11,17 @@ import {
   Button,
   Breadcrumb,
   BreadcrumbItem,
-  Checkbox,
+  Radio,
+  RadioGroup,
   Tooltip,
-  Icon
+  Icon,
+  Collapse
 } from "@chakra-ui/core"
 import { Link, graphql, navigate } from "gatsby"
 
 import { AuthorSearch, Slider, SEO } from "../components"
 import { yearLabel } from "../utils"
-import { Type } from "../data"
+import { Type, Advanced } from "../data"
 
 function IndexPage({ data }) {
   const { authors } = data.latin
@@ -28,7 +30,8 @@ function IndexPage({ data }) {
   const [clicked, setClicked] = useState(false)
   const [timeSpan, setTimeSpan] = useState([-500, 600])
   const [searchType, setSearchType] = useState(Type.LEMMA)
-  const [epigraph, setEpigraph] = useState(false)
+  const [epigraph, setEpigraph] = useState(Advanced.EXCLUDE)
+  const [showAdvanced, setShowAdvanced] = useState(false)
 
   const isLemma = searchType === Type.LEMMA
   const isForm = searchType === Type.FORM
@@ -63,17 +66,38 @@ function IndexPage({ data }) {
                 ? "Enter at least one author."
                 : "Enter as many authors as you like, or leave blank to search all authors."}
             </FormHelperText>
-            <Checkbox 
-              mt={2} 
-              size="sm" 
-              isChecked={epigraph} 
-              onChange={() => setEpigraph(!epigraph)}
-            >
-              Include epigraphs
-              <Tooltip label="Search by author(s) and include results found in epigraphs.">
-                <Icon name="question-outline" ml="4px" />
-              </Tooltip>
-            </Checkbox>
+            <Button p={3} mt={3} leftIcon={`triangle-${showAdvanced ? 'up' : 'down'}`} size="xs" onClick={() => setShowAdvanced(!showAdvanced)}>Advanced</Button>
+            <Collapse mt={2} isOpen={showAdvanced}>
+              <RadioGroup spacing={[0, 1]} onChange={e => setEpigraph(e.target.value)} value={epigraph}>
+                <Radio 
+                  size="sm" 
+                  value={Advanced.EXCLUDE}
+                >
+                  Exclude epigraphs
+                  <Tooltip label="Search by author(s) without results found in epigraphs.">
+                    <Icon name="question-outline" ml="4px" />
+                  </Tooltip>
+                </Radio>
+                <Radio 
+                  size="sm" 
+                  value={Advanced.INCLUDE}
+                >
+                  Include epigraphs
+                  <Tooltip label="Search by author(s) and include results found in epigraphs.">
+                    <Icon name="question-outline" ml="4px" />
+                  </Tooltip>
+                </Radio>
+                <Radio 
+                  size="sm" 
+                  value={Advanced.ONLY}
+                >
+                  Epigraphs only
+                  <Tooltip label="Only include results found in epigraphs.">
+                    <Icon name="question-outline" ml="4px" />
+                  </Tooltip>
+                </Radio>
+              </RadioGroup>
+            </Collapse>
           </FormControl>
           <FormControl mt={[1, 3]}>
             <FormLabel htmlFor="century">Century</FormLabel>
@@ -154,7 +178,14 @@ function IndexPage({ data }) {
             mt={[6, 8]}
             width="100%"
             onClick={() => {
-              const authorsToSend = epigraph ? [...authorsToSearch, 'EPIGRAPHS'] : authorsToSearch
+              let authorsToSend;
+              if (epigraph === Advanced.EXCLUDE) {
+                authorsToSend = authorsToSearch
+              } else if (epigraph === Advanced.INCLUDE) {
+                authorsToSend = [...authorsToSearch, 'EPIGRAPHS']
+              } else {
+                authorsToSend = ['EPIGRAPHS']
+              }
               if (canSearch) {
                 navigate("/results/", {
                   state: {
@@ -162,6 +193,7 @@ function IndexPage({ data }) {
                     search: wordToSearch,
                     searchType,
                     timeSpan,
+                    epigraph
                   },
                 })
               } else {

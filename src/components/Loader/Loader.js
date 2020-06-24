@@ -1,7 +1,7 @@
 import React from "react"
 import { Stack, Spinner, Text } from "@chakra-ui/core"
 import PropTypes from "prop-types"
-import { timeSpanLabel } from "../../utils"
+import { timeSpanLabel, prettifyAuthors } from "../../utils"
 
 export default function Loader({ search, authors, timeSpan, ...props }) {
   const prefix = search ? (
@@ -12,13 +12,10 @@ export default function Loader({ search, authors, timeSpan, ...props }) {
     "Calculating intersection"
   )
 
-  const withEpigraphs = authors.includes('EPIGRAPHS');
-  const authorsFiltered = authors.filter(author => author !== "EPIGRAPHS")
-
   const authorsText =
     authors && authors.length ? (
       <Text as="span">
-        {search ? "by" : "of"} <Text as="b">{withEpigraphs ? authorsFiltered.join(", ") : authors.join(", ")}</Text>
+        {search ? "by" : "of"} <Text as="b">{prettifyAuthors(authors)}</Text>
       </Text>
     ) : (
       <Text as="span">

@@ -95,3 +95,12 @@ export function generateGroup(result) {
     }
   )
 }
+
+export function prettifyAuthors(authors) {
+  return authors.map(author => {
+    if (author === "EPIGRAPHS") {
+      return "Epigraph authors"
+    }
+    return author
+  }).join(", ")
+}
