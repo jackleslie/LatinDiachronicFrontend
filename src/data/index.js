@@ -6,3 +6,5 @@ export {
 } from "./query"
 
 export { Type } from "./type"
+
+export { Advanced } from "./advanced"

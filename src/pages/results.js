@@ -15,22 +15,24 @@ import {
 import { useQuery } from "@apollo/react-hooks"
 import { SEO, Loader } from "../components"
 import { Lemma, Intersection } from "../containers"
-import { timeSpanLabel, generateGroup } from "../utils"
+import { timeSpanLabel, generateGroup, prettifyAuthors } from "../utils"
 import {
   INTERSECTION_QUERY,
   LEMMA_QUERY,
   FORM_QUERY,
   WORD_TYPE_QUERY,
   Type,
+  Advanced
 } from "../data"
 
 function ResultsPage({ location }) {
   const {
     state: {
-      authors = "",
+      authors = [],
       search = "",
       timeSpan = [-500, 600],
       searchType = "",
+      epigraph = ""
     } = {},
   } = location
 
@@ -49,13 +51,15 @@ function ResultsPage({ location }) {
   const [result, setResult] = useState()
   const [reference, setReference] = useState()
   const [group, setGroup] = useState()
+
+  const useAll = authors.length === 0 || (authors.length === 1 && epigraph === Advanced.INCLUDE)
   const { loading, error, data } = useQuery(query, {
     variables: {
       search,
       authors,
       startYear: `${timeSpan[0]}-01-01`,
       endYear: `${timeSpan[1]}-01-01`,
-      useAll: authors.length === 0,
+      useAll,
     },
   })
 
@@ -171,9 +175,9 @@ function ResultsPage({ location }) {
                   <Text fontWeight="normal" as="span">
                     by{" "}
                   </Text>
-                  {authors && authors.length
-                    ? authors.join(", ")
-                    : "all authors"}
+                  {useAll
+                    ? "all authors"
+                    : prettifyAuthors(authors)}
                 </Text>{" "}
                 in{" "}
                 <Text as="b" wordBreak="break-word">
